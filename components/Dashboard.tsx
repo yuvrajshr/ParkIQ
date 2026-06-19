@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useSimStore } from "@/store/useSimStore";
 import { getHotspots } from "@/lib/hotspots";
@@ -23,6 +23,13 @@ import EffectivenessGauge from "./EffectivenessGauge";
 import PredictionPanel from "./PredictionPanel";
 import Toast from "./Toast";
 import AiInsights from "./AiInsights";
+import { createClient as createSupabaseClient } from "@/lib/supabase/client";
+import {
+  createSession,
+  writeDispatchEvent,
+  updateDispatchOutcome,
+  writeKpiSnapshot,
+} from "@/lib/db/history-write";
 
 const MapView = dynamic(() => import("./MapView"), {
   ssr: false,
@@ -40,12 +47,35 @@ export default function Dashboard() {
   const select = useSimStore((s) => s.select);
   const dispatchTo = useSimStore((s) => s.dispatchTo);
   const [aiOpen, setAiOpen] = useState(false);
+  const [sessionId] = useState<string>(() => crypto.randomUUID());
+  const supabaseRef = useRef(createSupabaseClient());
 
   useEffect(() => {
     if (!playing) return;
     const id = setInterval(() => advanceSim(speed * 0.2), 200);
     return () => clearInterval(id);
   }, [playing, speed, advanceSim]);
+
+  useEffect(() => {
+    createSession(sessionId, supabaseRef.current).catch(() => {
+      // Silently fail — session tracking is non-critical
+    });
+  }, [sessionId]);
+
+  const syncedDispatchIds = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    for (const d of dispatches) {
+      if (!syncedDispatchIds.current.has(d.id)) {
+        syncedDispatchIds.current.add(d.id);
+        writeDispatchEvent(sessionId, d, supabaseRef.current).catch(() => {});
+      }
+    }
+  }, [dispatches, sessionId]);
+
+  const syncedOutcomes = useRef<Map<string, { arrived: boolean; relapsed: boolean }>>(new Map());
+
+  const lastKpiSnapMin = useRef<number>(-1);
 
   const interventions = useMemo(() => toInterventions(dispatches), [dispatches]);
   const allHotspots = useMemo(() => getHotspots(simMin, interventions), [simMin, interventions]);
@@ -77,6 +107,42 @@ export default function Dashboard() {
       ),
     [allHotspots],
   );
+
+  useEffect(() => {
+    for (const o of eff.outcomes) {
+      const prev = syncedOutcomes.current.get(o.id);
+      const changed =
+        !prev ||
+        prev.arrived !== o.arrived ||
+        prev.relapsed !== o.relapsed;
+
+      if (changed && (o.arrived || o.relapsed)) {
+        syncedOutcomes.current.set(o.id, { arrived: o.arrived, relapsed: o.relapsed });
+        updateDispatchOutcome(
+          o.id,
+          o.arrived,
+          o.recoveredKmph,
+          o.relapsed,
+          supabaseRef.current,
+        ).catch(() => {});
+      }
+    }
+  }, [eff.outcomes]);
+
+  useEffect(() => {
+    const bucket = Math.floor(simMin / 5) * 5;
+    if (bucket !== lastKpiSnapMin.current) {
+      lastKpiSnapMin.current = bucket;
+      writeKpiSnapshot(
+        sessionId,
+        bucket,
+        kpis.kmph,
+        kpis.parked,
+        kpis.rupees,
+        supabaseRef.current,
+      ).catch(() => {});
+    }
+  }, [simMin, sessionId, kpis]);
 
   const outcomeByRoad = useMemo(() => {
     const m = new Map<string, DispatchOutcome>();
@@ -159,7 +225,7 @@ export default function Dashboard() {
       <AiInsights
         open={aiOpen}
         onClose={() => setAiOpen(false)}
-        sessionId=""
+        sessionId={sessionId}
         simMin={simMin}
         hotspots={hotspots}
         predictions={predictions}
