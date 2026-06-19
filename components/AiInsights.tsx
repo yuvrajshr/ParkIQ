@@ -1,19 +1,28 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useDragControls } from "framer-motion";
 import { SIM_START_MIN_OF_DAY } from "@/lib/sim/engine";
 import type { Hotspot, PredictedHotspot, Warden, Dispatch } from "@/lib/types";
 import type { ChatMessage, SimSnapshot } from "@/lib/ai/types";
+import type { DispatchOutcome } from "@/lib/derive";
+import { useTranslation } from "@/lib/hooks/useTranslation";
 
 interface Props {
+  open: boolean;
+  onClose: () => void;
+  sessionId: string;
   simMin: number;
   hotspots: Hotspot[];
   predictions: PredictedHotspot[];
   wardens: Warden[];
   dispatches: Dispatch[];
   kpis: { kmph: number; parked: number; rupees: number };
-  eff: { totalRecovered: number; relapsed: { length: number } };
+  eff: {
+    totalRecovered: number;
+    relapsed: { length: number };
+    outcomes: DispatchOutcome[];
+  };
 }
 
 function buildWallClock(simMin: number): string {
@@ -23,7 +32,7 @@ function buildWallClock(simMin: number): string {
   return `${hh}:${String(mm).padStart(2, "0")}`;
 }
 
-function buildSnapshot(props: Props): SimSnapshot {
+function buildSnapshot(props: Omit<Props, "open" | "onClose" | "sessionId">): SimSnapshot {
   const { simMin, hotspots, predictions, wardens, dispatches, kpis, eff } = props;
   return {
     simMin,
@@ -64,6 +73,16 @@ function buildSnapshot(props: Props): SimSnapshot {
       etaMin: d.etaMin,
       cisBefore: d.cisBefore,
     })),
+    outcomes: eff.outcomes.map((o) => ({
+      roadName: o.roadName,
+      wardenName: o.wardenName,
+      dispatchedAtMin: o.dispatchedAtMin,
+      etaMin: o.etaMin,
+      cisBefore: o.cisBefore,
+      arrived: o.arrived,
+      recoveredKmph: o.recoveredKmph,
+      relapsed: o.relapsed,
+    })),
     kpis: {
       totalKmphLost: kpis.kmph,
       totalParkedVehicles: kpis.parked,
@@ -77,20 +96,21 @@ function buildSnapshot(props: Props): SimSnapshot {
 }
 
 export default function AiInsights(props: Props) {
-  const [open, setOpen] = useState(false);
+  const { open, onClose, sessionId, ...simProps } = props;
+  const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const constraintsRef = useRef<HTMLDivElement>(null);
+  const dragControls = useDragControls();
 
-  // Auto-scroll to bottom on new content
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Focus input when panel opens
   useEffect(() => {
     if (open) setTimeout(() => inputRef.current?.focus(), 120);
   }, [open]);
@@ -99,7 +119,7 @@ export default function AiInsights(props: Props) {
     const text = input.trim();
     if (!text || streaming) return;
 
-    const snapshot = buildSnapshot(props);
+    const snapshot = buildSnapshot(simProps);
     const userMsg: ChatMessage = { role: "user", text };
 
     setMessages((prev) => [...prev, userMsg, { role: "model", text: "" }]);
@@ -113,7 +133,7 @@ export default function AiInsights(props: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: text,
-          history: messages, // history before this turn
+          history: messages,
           snapshot,
         }),
       });
@@ -140,8 +160,8 @@ export default function AiInsights(props: Props) {
         });
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
-      setMessages((prev) => prev.slice(0, -1)); // remove empty placeholder
+      setError(err instanceof Error ? err.message : t("ai.error"));
+      setMessages((prev) => prev.slice(0, -1));
     } finally {
       setStreaming(false);
     }
@@ -156,44 +176,30 @@ export default function AiInsights(props: Props) {
 
   return (
     <>
-      {/* Floating action button */}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Close AI insights" : "Open AI insights"}
-        className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-ink text-white transition-transform hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-        style={{
-          boxShadow: "0 2px 6px rgba(27,95,176,0.25), 0 8px 24px -8px rgba(27,95,176,0.55), inset 0 1px 0 rgba(255,255,255,0.25)",
-        }}
-      >
-        <motion.span
-          animate={{ rotate: open ? 45 : 0 }}
-          transition={{ type: "spring", stiffness: 400, damping: 28 }}
-          className="flex items-center justify-center"
-        >
-          {open ? (
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M3 3l12 12M15 3L3 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          ) : (
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M3 5.5h14M3 10h10M3 14.5h7" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-            </svg>
-          )}
-        </motion.span>
-      </button>
+      {/* Viewport boundary for drag constraints */}
+      <div ref={constraintsRef} className="fixed inset-0 pointer-events-none z-[9998]" />
 
       {/* Chat panel */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 16, scale: 0.97 }}
+            drag
+            dragControls={dragControls}
+            dragListener={false}
+            dragConstraints={constraintsRef}
+            dragMomentum={false}
+            dragElastic={0.05}
+            initial={{ opacity: 0, y: -12, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.97 }}
+            exit={{ opacity: 0, y: -12, scale: 0.97 }}
             transition={{ type: "spring", stiffness: 420, damping: 32 }}
-            className="glass fixed bottom-[88px] right-6 z-40 flex w-[380px] max-h-[520px] flex-col overflow-hidden rounded-2xl"
+            className="glass fixed top-[130px] right-6 z-[9999] flex w-[560px] max-h-[720px] flex-col overflow-hidden rounded-2xl"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-line px-4 py-3">
+            {/* Header — drag handle */}
+            <div
+              className="flex items-center justify-between border-b border-line px-4 py-3 cursor-grab active:cursor-grabbing select-none"
+              onPointerDown={(e) => dragControls.start(e)}
+            >
               <div className="flex items-center gap-2">
                 <span className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10">
                   <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
@@ -202,12 +208,13 @@ export default function AiInsights(props: Props) {
                     <circle cx="7" cy="10" r=".7" fill="var(--color-primary)" />
                   </svg>
                 </span>
-                <span className="eyebrow">AI Insights</span>
+                <span className="eyebrow">{t("ai.title")}</span>
               </div>
               <button
-                onClick={() => setOpen(false)}
+                onClick={onClose}
+                onPointerDown={(e) => e.stopPropagation()}
                 className="flex h-7 w-7 items-center justify-center rounded-lg text-faint hover:bg-surface-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-primary"
-                aria-label="Close"
+                aria-label={t("ai.close")}
               >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
@@ -219,7 +226,7 @@ export default function AiInsights(props: Props) {
             <div className="scroll-quiet flex-1 overflow-y-auto px-3 py-3 space-y-2">
               {messages.length === 0 && (
                 <p className="px-1 py-2 text-[12.5px] leading-relaxed text-muted italic">
-                  Ask anything about the current situation — hotspots, dispatches, what to prioritise next.
+                  {t("ai.placeholder")}
                 </p>
               )}
 
@@ -236,7 +243,6 @@ export default function AiInsights(props: Props) {
                     }`}
                   >
                     {m.text || (
-                      // Loading dots for empty streaming placeholder
                       <span className="flex items-center gap-1 py-0.5">
                         {[0, 1, 2].map((i) => (
                           <span
@@ -268,7 +274,7 @@ export default function AiInsights(props: Props) {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask a question…"
+                placeholder={t("ai.inputPlaceholder")}
                 rows={1}
                 className="scroll-quiet flex-1 resize-none rounded-xl border border-line bg-surface-2 px-3 py-2 text-[13px] text-ink placeholder:text-faint focus-visible:outline-2 focus-visible:outline-primary"
                 style={{ maxHeight: 96 }}
@@ -276,7 +282,7 @@ export default function AiInsights(props: Props) {
               <button
                 onClick={sendMessage}
                 disabled={!input.trim() || streaming}
-                aria-label="Send"
+                aria-label={t("ai.send")}
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-white transition-opacity focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-40"
                 style={{
                   boxShadow: "0 2px 8px -4px rgba(27,95,176,0.6)",

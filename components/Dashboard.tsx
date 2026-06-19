@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useSimStore } from "@/store/useSimStore";
 import { getHotspots } from "@/lib/hotspots";
@@ -13,12 +13,11 @@ import {
   type DispatchOutcome,
 } from "@/lib/derive";
 import { kmphLostTrend } from "@/lib/trend";
-import NavRail from "./NavRail";
-import TopBar from "./TopBar";
-import KpiChips from "./KpiChips";
+import DashboardHeader from "./DashboardHeader";
 import HeatLegend from "./HeatLegend";
+import LeftSidebar from "./LeftSidebar";
+import RecentActivity from "./RecentActivity";
 import PriorityQueue, { type QueueItem, type QueueStatus } from "./PriorityQueue";
-import WardenStrip from "./WardenStrip";
 import SelectedHotspot from "./SelectedHotspot";
 import EffectivenessGauge from "./EffectivenessGauge";
 import PredictionPanel from "./PredictionPanel";
@@ -40,8 +39,8 @@ export default function Dashboard() {
   const selectedRoadId = useSimStore((s) => s.selectedRoadId);
   const select = useSimStore((s) => s.select);
   const dispatchTo = useSimStore((s) => s.dispatchTo);
+  const [aiOpen, setAiOpen] = useState(false);
 
-  // The live clock: advance `speed` sim-minutes per real second while playing.
   useEffect(() => {
     if (!playing) return;
     const id = setInterval(() => advanceSim(speed * 0.2), 200);
@@ -114,39 +113,53 @@ export default function Dashboard() {
   const clearedNow = Math.max(0, eff.arrivedCount - eff.relapsed.length);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden">
-      <NavRail />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <TopBar />
-        <main className="flex min-h-0 flex-1 gap-3 p-3">
-          <div className="flex min-w-0 flex-1 flex-col gap-3">
-            <div className="panel relative min-h-0 flex-1 overflow-hidden rounded-2xl">
-              <KpiChips kmphLost={kpis.kmph} activeViolations={kpis.parked} rupeesPerMin={kpis.rupees} />
-              <HeatLegend />
-              <MapView
-                hotspots={hotspots}
-                predictions={predictions}
-                wardens={wardens}
-                selectedId={selectedRoadId}
-                onSelect={select}
-              />
-            </div>
+    <div className="flex h-screen w-screen flex-col overflow-hidden">
+      <DashboardHeader aiOpen={aiOpen} onAiToggle={() => setAiOpen((v) => !v)} />
+      <main className="grid min-h-0 flex-1 grid-cols-[320px_minmax(0,1fr)_360px] gap-6 overflow-hidden px-8 py-6">
+        {/* Left — KPI stats + Zone breakdown + WardenStrip */}
+        <aside className="scroll-quiet flex min-h-0 flex-col gap-4 overflow-y-auto">
+          <LeftSidebar kpis={kpis} allHotspots={allHotspots} wardens={wardens} clearedNow={clearedNow} />
+        </aside>
 
-            <div className="grid h-[210px] shrink-0 grid-cols-3 gap-3">
-              <SelectedHotspot hotspot={selected} />
-              <EffectivenessGauge recovered={eff.totalRecovered} cleared={clearedNow} relapsed={eff.relapsed.length} />
-              <PredictionPanel predictions={predictions} simMin={simMin} onSelect={select} />
-            </div>
+        {/* Center — Leaflet map + bottom stats row */}
+        <section className="flex min-h-0 min-w-0 flex-col gap-4">
+          <div className="panel relative min-h-0 flex-1 overflow-hidden rounded-2xl">
+            <HeatLegend />
+            <MapView
+              hotspots={hotspots}
+              predictions={predictions}
+              wardens={wardens}
+              selectedId={selectedRoadId}
+              onSelect={select}
+            />
           </div>
+          <div className="grid h-[210px] shrink-0 grid-cols-3 gap-4">
+            <SelectedHotspot hotspot={selected} />
+            <EffectivenessGauge
+              recovered={eff.totalRecovered}
+              cleared={clearedNow}
+              relapsed={eff.relapsed.length}
+            />
+            <PredictionPanel predictions={predictions} simMin={simMin} onSelect={select} />
+          </div>
+        </section>
 
-          <aside className="flex w-[348px] shrink-0 flex-col gap-3">
-            <PriorityQueue items={queueItems} selectedId={selectedRoadId} onSelect={select} onDispatch={dispatchTo} />
-            <WardenStrip wardens={wardens} />
-          </aside>
-        </main>
-      </div>
+        {/* Right — Priority queue + Recent activity */}
+        <aside className="flex min-h-0 flex-col gap-4">
+          <PriorityQueue
+            items={queueItems}
+            selectedId={selectedRoadId}
+            onSelect={select}
+            onDispatch={dispatchTo}
+          />
+          <RecentActivity dispatches={dispatches} outcomes={eff.outcomes} />
+        </aside>
+      </main>
       <Toast />
       <AiInsights
+        open={aiOpen}
+        onClose={() => setAiOpen(false)}
+        sessionId=""
         simMin={simMin}
         hotspots={hotspots}
         predictions={predictions}

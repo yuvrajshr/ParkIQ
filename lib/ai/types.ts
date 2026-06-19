@@ -40,6 +40,17 @@ export interface SnapshotDispatch {
   cisBefore: number;
 }
 
+export interface SnapshotOutcome {
+  roadName: string;
+  wardenName: string;
+  dispatchedAtMin: number;
+  etaMin: number;
+  cisBefore: number;
+  arrived: boolean;
+  recoveredKmph: number;
+  relapsed: boolean;
+}
+
 export interface SimSnapshot {
   simMin: number;
   wallClock: string;
@@ -47,6 +58,7 @@ export interface SimSnapshot {
   predictions: SnapshotPrediction[];
   wardens: SnapshotWarden[];
   dispatches: SnapshotDispatch[];
+  outcomes: SnapshotOutcome[];
   kpis: { totalKmphLost: number; totalParkedVehicles: number; totalRupeesPerMin: number };
   effectiveness: { totalRecovered: number; relapsedCount: number };
 }
@@ -60,4 +72,5 @@ export interface ChatRequest {
   message: string;
   history: ChatMessage[];
   snapshot: SimSnapshot;
+  sessionId?: string;
 }
