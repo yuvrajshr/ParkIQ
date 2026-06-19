@@ -7,6 +7,8 @@ import type { Hotspot, PredictedHotspot, Warden, Dispatch } from "@/lib/types";
 import type { ChatMessage, SimSnapshot } from "@/lib/ai/types";
 import type { DispatchOutcome } from "@/lib/derive";
 import { useTranslation } from "@/lib/hooks/useTranslation";
+import { createClient as createSupabaseClient } from "@/lib/supabase/client";
+import { writeChatMessage } from "@/lib/db/history-write";
 
 interface Props {
   open: boolean;
@@ -105,6 +107,7 @@ export default function AiInsights(props: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const constraintsRef = useRef<HTMLDivElement>(null);
+  const supabaseRef = useRef(createSupabaseClient());
   const dragControls = useDragControls();
 
   useEffect(() => {
@@ -135,6 +138,7 @@ export default function AiInsights(props: Props) {
           message: text,
           history: messages,
           snapshot,
+          sessionId,
         }),
       });
 
@@ -159,6 +163,16 @@ export default function AiInsights(props: Props) {
           return updated;
         });
       }
+
+      // Persist both turns to Supabase (fire-and-forget)
+      writeChatMessage(sessionId, "user", text, supabaseRef.current).catch(() => {});
+      setMessages((prev) => {
+        const aiText = prev[prev.length - 1]?.text ?? "";
+        if (aiText) {
+          writeChatMessage(sessionId, "model", aiText, supabaseRef.current).catch(() => {});
+        }
+        return prev;
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : t("ai.error"));
       setMessages((prev) => prev.slice(0, -1));
