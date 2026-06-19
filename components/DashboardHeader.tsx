@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { LayoutDashboard, Plus, Moon, Sun, LogOut } from "lucide-react";
+import Link from "next/link";
+import { LayoutDashboard, Plus, Moon, Sun, LogOut, Camera } from "lucide-react";
 import SimClock from "./SimClock";
 import LanguageDropdown from "./LanguageDropdown";
 import { useTranslation } from "@/lib/hooks/useTranslation";
+import { useNewReportsCount } from "@/lib/hooks/useNewReportsCount";
 
 interface Props {
   aiOpen: boolean;
@@ -30,6 +32,7 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
   const isDark = useSyncExternalStore(subscribeDark, getDarkSnapshot, getDarkServerSnapshot);
   const [loggingOut, setLoggingOut] = useState(false);
   const { t } = useTranslation();
+  const newReports = useNewReportsCount();
 
   const NAV_ITEMS = [
     { id: "command", label: t("nav.command") },
@@ -140,7 +143,7 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
           <button
             onClick={onAiToggle}
             aria-label={aiOpen ? t("ai.closeInsights") : t("ai.openInsights")}
-            className="flex items-center gap-2 rounded-full px-4 h-9 font-medium text-sm transition-all"
+            className="flex items-center gap-2 rounded-full px-4 h-9 font-medium text-sm transition-colors"
             style={{
               background: "var(--hdr-ai-bg)",
               backdropFilter: "blur(14px) saturate(1.6)",
@@ -222,6 +225,21 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
               </button>
             );
           })}
+
+          {/* Real destination — the public reporting channel, with a live new-count badge. */}
+          <Link
+            href="/reports"
+            className="ml-auto flex items-center gap-2 rounded-full px-4 py-2 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-primary"
+            style={{ color: "var(--hdr-nav-inactive)" }}
+          >
+            <Camera className="size-4" />
+            {t("nav.reports")}
+            {newReports > 0 && (
+              <span className="tnum flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[11px] font-bold text-white">
+                {newReports}
+              </span>
+            )}
+          </Link>
         </div>
       </div>
     </header>

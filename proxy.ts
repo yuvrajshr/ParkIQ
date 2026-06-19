@@ -2,7 +2,10 @@ import { type NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { createServerClient } from "@supabase/ssr";
 
-const PUBLIC_PATHS = ["/login", "/api/auth"];
+// `/report` = public citizen portal; `/api/citizen` = its OTP + submit endpoints.
+// The controller's `/reports` page and `/api/reports/*` are intentionally NOT here, so
+// they stay behind auth.
+const PUBLIC_PATHS = ["/login", "/api/auth", "/report", "/api/citizen"];
 
 function isPublic(pathname: string) {
   return PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"));
@@ -54,10 +57,12 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // 3. Not authenticated — redirect to login
-  const loginUrl = request.nextUrl.clone();
-  loginUrl.pathname = "/login";
-  return NextResponse.redirect(loginUrl);
+  // 3. Not authenticated — mobile goes to citizen portal, desktop to login
+  const ua = request.headers.get("user-agent") ?? "";
+  const isMobile = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(ua);
+  const redirectUrl = request.nextUrl.clone();
+  redirectUrl.pathname = isMobile ? "/report" : "/login";
+  return NextResponse.redirect(redirectUrl);
 }
 
 export const config = {

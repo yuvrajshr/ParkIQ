@@ -125,12 +125,7 @@ export default function LoginPage() {
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 max-w-[520px] w-full"
-        >
+        <div className="relative z-10 max-w-[520px] w-full">
           {/* Logo + title */}
           <div className="flex mb-8 justify-center items-center">
             <div className="flex items-center gap-3">
@@ -313,7 +308,7 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

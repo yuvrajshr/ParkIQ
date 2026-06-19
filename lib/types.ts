@@ -90,3 +90,37 @@ export interface Warden {
   status: WardenStatus;
   assignedRoadId?: string;
 }
+
+/** The kind of parking violation a citizen reports. */
+export type ViolationType =
+  | "wrong_parking"
+  | "double_parking"
+  | "footpath"
+  | "driveway"
+  | "bus_stop_junction";
+
+/** Triage state of a citizen report, set by the controller. */
+export type ReportStatus = "new" | "reviewed" | "resolved" | "dismissed";
+
+/** A violation reported by a citizen from the public portal: a live geo-tagged photo
+ *  plus the device's GPS fix at capture time. Identity is verified app-side via phone
+ *  OTP; only a masked phone is persisted (no raw PII). Shape mirrors the
+ *  `public.citizen_reports` table (snake_case columns mapped to camelCase here). */
+export interface CitizenReport {
+  id: string;
+  createdAt: string; // ISO timestamp
+  violationType: ViolationType;
+  note: string | null;
+  lat: number;
+  lng: number;
+  accuracyM: number | null;
+  photoUrl: string;
+  /** Nearest seeded road within range, else null (free-floating report). */
+  snappedRoadId: string | null;
+  snappedRoadName: string | null;
+  snappedZone: string | null;
+  snappedDistanceM: number | null;
+  reporterMasked: string; // e.g. "+91 ●●●●● ●210"
+  status: ReportStatus;
+  dispatchId: string | null;
+}
