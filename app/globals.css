@@ -52,32 +52,32 @@
 /* Dark mode — command room at night. All semantic tokens override here;
    heat ramp is data and stays unchanged in both modes. */
 html.dark {
-  --color-bg: #0b111d;
-  --color-surface: #101823;
-  --color-surface-2: #16202e;
-  --color-ink: #dce6f0;
-  --color-ink-soft: #90a8c0;
-  --color-muted: #5e7a94;
-  --color-faint: #405870;
-  --color-line: #192536;
-  --color-line-strong: #213044;
+  --color-bg: #0a0a0a;
+  --color-surface: #171717;
+  --color-surface-2: #262626;
+  --color-surface-3: #2a2a2a;
+  --color-ink: #fafafa;
+  --color-ink-soft: #a1a1a1;
+  --color-muted: #737373;
+  --color-faint: #525252;
+  --color-line: rgba(255, 255, 255, 0.10);
+  --color-line-strong: rgba(255, 255, 255, 0.15);
   --color-primary: #3b82d4;
   --color-primary-ink: #5a9be0;
   --color-primary-wash: #0e1e38;
   --color-accent: #f2a900;
   --color-accent-wash: #241a00;
-  --color-surface-3: #1b2738;
   --shadow-rest:
-    0 1px 2px rgba(0, 0, 0, 0.2), 0 6px 18px -12px rgba(0, 0, 0, 0.5);
+    0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 18px -12px rgba(0, 0, 0, 0.6);
   --shadow-raised:
-    0 2px 8px rgba(0, 0, 0, 0.28), 0 16px 34px -16px rgba(0, 0, 0, 0.55);
+    0 2px 8px rgba(0, 0, 0, 0.4), 0 16px 34px -16px rgba(0, 0, 0, 0.65);
   --shadow-panel:
-    0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 12px -8px rgba(0, 0, 0, 0.4);
+    0 20px 60px -20px rgba(0, 0, 0, 0.8);
   --shadow-float:
-    0 2px 8px rgba(0, 0, 0, 0.3), 0 16px 36px -16px rgba(0, 0, 0, 0.5);
-  --glass-bg: rgba(16, 24, 35, 0.62);
+    0 2px 8px rgba(0, 0, 0, 0.4), 0 16px 36px -16px rgba(0, 0, 0, 0.6);
+  --glass-bg: rgba(23, 23, 23, 0.80);
   --glass-blur: blur(14px) saturate(1.3);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.10);
   --glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
@@ -291,7 +291,7 @@ html.dark body {
 
 /* Desaturate the basemap so congestion heat is the only saturated thing on screen. */
 .leaflet-tile-pane {
-  filter: saturate(15) contrast(1.05) brightness(1.01);
+  filter: saturate(15) contrast(0.75) brightness(1.01);
 }
 
 /* Restyle Leaflet's default +/- control into the civic glass chrome. */
@@ -338,4 +338,72 @@ html.dark body {
 }
 .leaflet-control-attribution a {
   color: var(--color-muted) !important;
+}
+
+/* ── Language-driven font switching ────────────────────────────────────────── */
+html[lang="hi"] body,
+html[lang="hi"] input,
+html[lang="hi"] textarea,
+html[lang="hi"] button,
+html[lang="hi"] select {
+  font-family: var(--font-noto-devanagari), system-ui, sans-serif;
+}
+
+html[lang="kn"] body,
+html[lang="kn"] input,
+html[lang="kn"] textarea,
+html[lang="kn"] button,
+html[lang="kn"] select {
+  font-family: var(--font-noto-kannada), system-ui, sans-serif;
+}
+
+/* ── Dashboard header theming ──────────────────────────────────────────────────
+   Class-driven (not React-state-driven) so the pre-paint `.dark` script themes
+   the header on the first paint with no flash. */
+:root {
+  --hdr-top-bg: rgba(255, 255, 255, 0.82);
+  --hdr-nav-bg: rgba(255, 255, 255, 0.62);
+  --hdr-nav-border: var(--color-line);
+  --hdr-accent-bg: var(--color-primary);
+  --hdr-accent-fg: #ffffff;
+  --hdr-eyebrow: var(--color-faint);
+  --hdr-title: var(--color-ink);
+  --hdr-btn-bg: var(--color-surface-2);
+  --hdr-btn-fg: var(--color-faint);
+  --hdr-btn-border: var(--color-line);
+  --hdr-nav-inactive: var(--color-ink-soft);
+  --hdr-ai-bg: rgba(27, 95, 176, 0.10);
+  --hdr-ai-border: rgba(27, 95, 176, 0.22);
+  --hdr-ai-fg: var(--color-primary);
+  --hdr-ai-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+html.dark {
+  --hdr-top-bg: rgba(23, 23, 23, 0.85);
+  --hdr-nav-bg: rgba(23, 23, 23, 0.65);
+  --hdr-nav-border: rgba(255, 255, 255, 0.10);
+  --hdr-accent-bg: #e5e5e5;
+  --hdr-accent-fg: #171717;
+  --hdr-eyebrow: #a1a1a1;
+  --hdr-title: #fafafa;
+  --hdr-btn-bg: rgba(255, 255, 255, 0.08);
+  --hdr-btn-fg: #a1a1a1;
+  --hdr-btn-border: rgba(255, 255, 255, 0.10);
+  --hdr-nav-inactive: #a1a1a1;
+  --hdr-ai-bg: rgba(255, 255, 255, 0.10);
+  --hdr-ai-border: rgba(255, 255, 255, 0.18);
+  --hdr-ai-fg: #fafafa;
+  --hdr-ai-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Theme-conditional elements (e.g. sun/moon icon) — both render server-side,
+   CSS reveals the correct one based on the `.dark` class. No JS, no flash. */
+.theme-dark-only {
+  display: none;
+}
+html.dark .theme-dark-only {
+  display: block;
+}
+html.dark .theme-light-only {
+  display: none;
 }

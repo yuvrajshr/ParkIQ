@@ -1,6 +1,7 @@
 "use client";
 
 import { useCountUp } from "@/lib/hooks/useCountUp";
+import { useTranslation } from "@/lib/hooks/useTranslation";
 
 interface Props {
   recovered: number;
@@ -16,12 +17,13 @@ const C = 2 * Math.PI * R;
 const SWEEP = 0.75; // 270° gauge, open at the bottom
 
 export default function EffectivenessGauge({ recovered, cleared, relapsed }: Props) {
+  const { t } = useTranslation();
   const frac = Math.max(0, Math.min(1, recovered / MAX));
   const shown = useCountUp(recovered, { startAtZero: true });
 
   return (
     <section className="panel flex flex-col rounded-2xl p-4">
-      <div className="eyebrow">Effectiveness</div>
+      <div className="eyebrow">{t("gauge.effectiveness")}</div>
 
       <div className="relative mx-auto mt-1" style={{ width: 140, height: 116 }}>
         <svg width="140" height="140" viewBox="0 0 140 132">
@@ -62,23 +64,23 @@ export default function EffectivenessGauge({ recovered, cleared, relapsed }: Pro
             <span className="text-[15px] font-semibold text-heat-low">+</span>
             <span className="tnum font-display text-[34px] font-bold leading-none text-ink">{Math.round(shown)}</span>
           </div>
-          <span className="text-[10.5px] font-medium text-faint">km/h recovered</span>
+          <span className="text-[10.5px] font-medium text-faint">{t("gauge.kmhRecovered")}</span>
         </div>
       </div>
 
       <div className="mt-1 text-center">
         {cleared === 0 ? (
           <p className="text-[12px] leading-relaxed text-muted">
-            Send a warden — then watch whether traffic actually speeds back up.
+            {t("gauge.sendWarden")}
           </p>
         ) : (
           <div className="space-y-0.5">
             <p className="text-[12px] text-muted">
-              <span className="tnum font-semibold text-ink">{cleared}</span> spot{cleared > 1 ? "s" : ""} cleared
+              {t(cleared > 1 ? "gauge.spotsCleared" : "gauge.spotCleared", { count: cleared })}
             </p>
             {relapsed > 0 && (
               <p className="text-[11.5px] font-semibold text-heat-critical">
-                {relapsed} relapsed · needs standing patrol
+                {t("gauge.relapsedPatrol", { count: relapsed })}
               </p>
             )}
           </div>

@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import type { Hotspot } from "@/lib/types";
 import { heatColor, LEVEL_LABEL } from "@/lib/heat";
-import Sparkline from "./Sparkline";
+import { useTranslation } from "@/lib/hooks/useTranslation";
 
 export type QueueStatus = "none" | "en_route" | "cleared" | "relapsed";
 
@@ -23,12 +23,14 @@ interface Props {
 }
 
 export default function PriorityQueue({ items, selectedId, onSelect, onDispatch }: Props) {
+  const { t } = useTranslation();
+
   return (
     <section className="panel flex min-h-0 flex-1 flex-col rounded-2xl">
       <div className="flex items-center justify-between border-b border-line px-4 py-3">
         <div>
-          <div className="eyebrow !text-primary">Priority Dispatch</div>
-          <div className="text-[12px] text-muted">Ranked by live congestion impact</div>
+          <div className="eyebrow !text-primary">{t("queue.priorityDispatch")}</div>
+          <div className="text-[12px] text-muted">{t("queue.rankedByCIS")}</div>
         </div>
         <span className="tnum rounded-full bg-surface-2 px-2 py-0.5 text-xs font-semibold text-muted ring-1 ring-line">
           {items.length}
@@ -68,7 +70,8 @@ function QueueCard({
   onSelect: (id: string) => void;
   onDispatch: (id: string) => void;
 }) {
-  const { h, trend, status } = item;
+  const { t } = useTranslation();
+  const { h, status } = item;
   const color = heatColor(h.cis);
   const isTop = rank === 1;
   const enterDelay = Math.min(rank - 1, 8) * 0.04;
@@ -141,13 +144,12 @@ function QueueCard({
           <div className="flex items-center gap-2.5">
             <div className="leading-none">
               <div className="tnum text-[13px] font-semibold text-ink">{h.parkedVehicles}</div>
-              <div className="text-[9.5px] text-faint">parked</div>
+              <div className="text-[9.5px] text-faint">{t("queue.parked")}</div>
             </div>
             <div className="leading-none">
               <div className="tnum text-[13px] font-semibold text-ink">−{h.kmphLost}</div>
               <div className="text-[9.5px] text-faint">km/h</div>
             </div>
-            <Sparkline values={trend} color={color} />
           </div>
 
           <Action item={item} status={status} primary={isTop} onDispatch={onDispatch} />
@@ -168,6 +170,8 @@ function Action({
   primary: boolean;
   onDispatch: (id: string) => void;
 }) {
+  const { t } = useTranslation();
+
   const send = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDispatch(item.h.roadId);
@@ -177,7 +181,7 @@ function Action({
     return (
       <span className="flex items-center gap-1.5 rounded-lg bg-accent-wash px-2.5 py-1.5 text-[11.5px] font-semibold text-[#9a6a00]">
         <span className="live-dot h-1.5 w-1.5 rounded-full bg-accent" />
-        En route · {item.etaIn}m
+        {t("queue.enRoute", { time: item.etaIn ?? 0 })}
       </span>
     );
   }
@@ -185,7 +189,7 @@ function Action({
     return (
       <span className="flex items-center gap-1 rounded-lg bg-[#e6f4ec] px-2.5 py-1.5 text-[11.5px] font-semibold text-heat-low">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 5 8.5 9.5 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        +{item.recovered} km/h
+        {t("queue.recovered", { recovered: item.recovered ?? 0 })}
       </span>
     );
   }
@@ -195,12 +199,11 @@ function Action({
         onClick={send}
         className="flex items-center gap-1 rounded-lg bg-[#fdeceb] px-2.5 py-1.5 text-[11.5px] font-semibold text-heat-critical hover:bg-[#fbdedc]"
       >
-        ↻ Relapsed · re-send
+        {t("queue.relapsedResend")}
       </button>
     );
   }
   // Button discipline: only the top-priority card gets the filled blue CTA.
-  // Every other row is a quiet outline that fills on hover — far less repetitive blue.
   const base =
     "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold transition-[transform,background,color,border-color] active:scale-[0.96]";
   const cls = primary
@@ -208,7 +211,7 @@ function Action({
     : `${base} border border-line-strong bg-surface text-primary hover:border-primary hover:bg-primary hover:text-white`;
   return (
     <button onClick={send} suppressHydrationWarning className={cls}>
-      Send warden
+      {t("queue.sendWarden")}
       <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h7m0 0L7 4m3 3-3 3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>
     </button>
   );

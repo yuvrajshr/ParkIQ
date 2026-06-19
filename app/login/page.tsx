@@ -2,7 +2,26 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  KeyRound,
+  Loader2,
+  Mail,
+  ShieldCheck,
+  Layers3,
+} from "lucide-react";
+import LanguageDropdown from "@/components/LanguageDropdown";
+import { useTranslation } from "@/lib/hooks/useTranslation";
+
+const BLOBS = [
+  { color: "#1b5fb0", opacity: 0.30, size: 750, x: [-60, 80],  y: [-40, 60],  scale: [1, 1.15],   dur: 34, left: "10%",  top: "15%" },
+  { color: "#3b82d4", opacity: 0.22, size: 600, x: [40, -90],  y: [60, -50],  scale: [1.1, 0.9],  dur: 46, left: "65%",  top: "65%" },
+  { color: "#1b5fb0", opacity: 0.25, size: 850, x: [80, -40],  y: [-70, 30],  scale: [0.95, 1.1], dur: 28, left: "75%",  top: "10%" },
+  { color: "#5a9be0", opacity: 0.18, size: 550, x: [-30, 70],  y: [50, -60],  scale: [1, 1.2],    dur: 52, left: "25%",  top: "75%" },
+];
 
 interface Errors {
   email?: string;
@@ -14,16 +33,19 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function LoginPage() {
   const router = useRouter();
+  const shouldReduce = useReducedMotion();
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
 
   function validate(): boolean {
     const next: Errors = {};
-    if (!EMAIL_RE.test(email)) next.email = "Enter a valid email address.";
-    if (password.length < 8) next.password = "Password must be at least 8 characters.";
+    if (!EMAIL_RE.test(email)) next.email = t("login.errEmail");
+    if (password.length < 6) next.password = t("login.errPassword");
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -36,8 +58,10 @@ export default function LoginPage() {
     setErrors({});
 
     try {
-      // 1. Supabase Auth (primary) — only if env vars are present
-      if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      if (
+        process.env.NEXT_PUBLIC_SUPABASE_URL &&
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      ) {
         const { createClient } = await import("@/lib/supabase/client");
         const supabase = createClient();
         const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -47,7 +71,6 @@ export default function LoginPage() {
         }
       }
 
-      // 2. Hardcoded credentials fallback
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -57,330 +80,241 @@ export default function LoginPage() {
       if (res.ok) {
         router.replace("/");
       } else {
-        setErrors({ general: "Invalid email or password." });
+        setErrors({ general: t("login.errInvalid") });
       }
     } catch {
-      setErrors({ general: "Something went wrong. Please try again." });
+      setErrors({ general: t("login.errGeneral") });
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <main
-      className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: "var(--color-bg)" }}
-    >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="panel w-full max-w-[400px] rounded-2xl"
-        style={{ padding: "40px" }}
+    <div className="bg-neutral-950 text-neutral-50 min-h-screen w-full">
+      <div
+        className="relative min-h-screen flex p-12 justify-center items-center w-full"
+        style={{
+          background:
+            "radial-gradient(circle at top, oklch(0.205 0 0), transparent 30%), linear-gradient(180deg, oklch(0.145 0 0), oklch(0.12 0 0))",
+        }}
       >
-        {/* Logo + heading */}
-        <div className="flex flex-col items-center text-center mb-8">
-          <ShieldIcon />
-          <h1
-            className="font-display mt-4 text-[26px] font-extrabold tracking-[-0.03em]"
-            style={{ color: "var(--color-ink)", lineHeight: 1.2 }}
-          >
-            ASTRaM Commander Portal
-          </h1>
-          <p className="eyebrow mt-2">Bengaluru Traffic Police · ParkIQ</p>
-        </div>
-
-        <div
-          style={{
-            height: "1px",
-            background: "var(--color-line)",
-            marginBottom: "28px",
-          }}
-        />
-
-        <form onSubmit={handleSubmit} noValidate>
-          {/* Email */}
-          <div className="mb-5">
-            <label
-              htmlFor="email"
-              className="block text-[13px] font-medium mb-1.5"
-              style={{ color: "var(--color-ink-soft)" }}
-            >
-              Email address
-            </label>
-            <input
-              id="email"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={() => {
-                if (email && !EMAIL_RE.test(email)) {
-                  setErrors((prev) => ({ ...prev, email: "Enter a valid email address." }));
-                } else {
-                  setErrors((prev) => ({ ...prev, email: undefined }));
-                }
-              }}
-              placeholder="you@gov.in"
-              disabled={isSubmitting}
+        {/* Ambient background blobs */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          {BLOBS.map((b, i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full"
               style={{
-                width: "100%",
-                padding: "10px 14px",
-                borderRadius: "8px",
-                border: `1px solid ${errors.email ? "#b3261e" : "var(--color-line)"}`,
-                background: "var(--color-surface)",
-                color: "var(--color-ink)",
-                fontSize: "14px",
-                fontFamily: "var(--font-sans)",
-                outline: "none",
-                transition: "border-color 0.15s ease, box-shadow 0.15s ease",
+                width: b.size,
+                height: b.size,
+                left: b.left,
+                top: b.top,
+                translate: "-50% -50%",
+                background: `radial-gradient(circle, ${b.color} 0%, transparent 70%)`,
+                opacity: b.opacity,
+                filter: "blur(60px)",
               }}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = "var(--color-primary)";
-                e.currentTarget.style.boxShadow =
-                  "0 0 0 3px rgba(27, 95, 176, 0.12)";
-              }}
-              onBlurCapture={(e) => {
-                e.currentTarget.style.borderColor = errors.email
-                  ? "#b3261e"
-                  : "var(--color-line)";
-                e.currentTarget.style.boxShadow = "none";
+              animate={shouldReduce ? {} : { x: b.x, y: b.y, scale: b.scale }}
+              transition={{
+                duration: b.dur,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
               }}
             />
-            <FieldError message={errors.email} />
-          </div>
+          ))}
+        </div>
 
-          {/* Password */}
-          <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-[13px] font-medium mb-1.5"
-              style={{ color: "var(--color-ink-soft)" }}
-            >
-              Password
-            </label>
-            <div style={{ position: "relative" }}>
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                disabled={isSubmitting}
-                style={{
-                  width: "100%",
-                  padding: "10px 44px 10px 14px",
-                  borderRadius: "8px",
-                  border: `1px solid ${errors.password ? "#b3261e" : "var(--color-line)"}`,
-                  background: "var(--color-surface)",
-                  color: "var(--color-ink)",
-                  fontSize: "14px",
-                  fontFamily: "var(--font-sans)",
-                  outline: "none",
-                  transition: "border-color 0.15s ease, box-shadow 0.15s ease",
-                  boxSizing: "border-box",
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = "var(--color-primary)";
-                  e.currentTarget.style.boxShadow =
-                    "0 0 0 3px rgba(27, 95, 176, 0.12)";
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = errors.password
-                    ? "#b3261e"
-                    : "var(--color-line)";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-                style={{
-                  position: "absolute",
-                  right: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: "2px",
-                  color: "var(--color-faint)",
-                  display: "flex",
-                  alignItems: "center",
-                  transition: "color 0.15s ease",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = "var(--color-ink-soft)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "var(--color-faint)")
-                }
-              >
-                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-              </button>
-            </div>
-            <FieldError message={errors.password} />
-          </div>
-
-          {/* General error */}
-          <AnimatePresence>
-            {errors.general && (
-              <motion.p
-                key="general-error"
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.18 }}
-                style={{
-                  color: "#b3261e",
-                  fontSize: "13px",
-                  marginBottom: "16px",
-                  padding: "10px 12px",
-                  background: "rgba(179, 38, 30, 0.06)",
-                  borderRadius: "6px",
-                  border: "1px solid rgba(179, 38, 30, 0.15)",
-                }}
-              >
-                {errors.general}
-              </motion.p>
-            )}
-          </AnimatePresence>
-
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            style={{
-              width: "100%",
-              padding: "11px 0",
-              borderRadius: "8px",
-              background: isSubmitting
-                ? "var(--color-primary-wash)"
-                : "var(--color-primary)",
-              color: isSubmitting ? "var(--color-primary)" : "#ffffff",
-              fontSize: "14px",
-              fontFamily: "var(--font-display)",
-              fontWeight: 600,
-              border: "none",
-              cursor: isSubmitting ? "not-allowed" : "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-              transition: "background 0.2s ease, transform 0.1s ease",
-            }}
-            onMouseEnter={(e) => {
-              if (!isSubmitting)
-                e.currentTarget.style.background = "var(--color-primary-ink)";
-            }}
-            onMouseLeave={(e) => {
-              if (!isSubmitting)
-                e.currentTarget.style.background = "var(--color-primary)";
-            }}
-            onMouseDown={(e) => {
-              if (!isSubmitting) e.currentTarget.style.transform = "scale(0.98)";
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-            }}
-          >
-            {isSubmitting ? (
-              <>
-                <SpinnerIcon />
-                Signing in…
-              </>
-            ) : (
-              "Sign in"
-            )}
-          </button>
-        </form>
-      </motion.div>
-    </main>
-  );
-}
-
-// ── Sub-components ────────────────────────────────────────────────────────────
-
-function FieldError({ message }: { message?: string }) {
-  return (
-    <AnimatePresence>
-      {message && (
-        <motion.p
-          initial={{ opacity: 0, y: -4 }}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.15 }}
-          style={{
-            color: "#b3261e",
-            fontSize: "12px",
-            marginTop: "5px",
-          }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10 max-w-[520px] w-full"
         >
-          {message}
-        </motion.p>
-      )}
-    </AnimatePresence>
-  );
-}
+          {/* Logo + title */}
+          <div className="flex mb-8 justify-center items-center">
+            <div className="flex items-center gap-3">
+              <div
+                className="size-12 rounded-2xl bg-neutral-200 text-neutral-900 flex justify-center items-center flex-shrink-0"
+                style={{ boxShadow: "0 20px 60px -24px rgba(250,250,250,0.45)" }}
+              >
+                <Layers3 className="size-6" />
+              </div>
+              <div className="space-y-1">
+                <div className="font-medium uppercase text-[#a1a1a1] text-xs leading-4 tracking-[3.84px]">
+                  ASTRaM
+                </div>
+                <div className="font-semibold text-neutral-50 text-2xl leading-8 tracking-tight">
+                  {t("login.portal")}
+                </div>
+              </div>
+            </div>
+          </div>
 
-function ShieldIcon() {
-  return (
-    <svg width="44" height="50" viewBox="0 0 44 50" fill="none" aria-hidden="true">
-      <path
-        d="M22 2L3 9v16c0 10.5 8.2 20.3 19 22.9C32.8 45.3 41 35.5 41 25V9L22 2z"
-        fill="var(--color-primary)"
-        fillOpacity="0.12"
-      />
-      <path
-        d="M22 2L3 9v16c0 10.5 8.2 20.3 19 22.9C32.8 45.3 41 35.5 41 25V9L22 2z"
-        stroke="var(--color-primary)"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M14 25l5.5 5.5L30 19"
-        stroke="var(--color-primary)"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+          {/* Card */}
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="rounded-3xl bg-neutral-900 border border-white/10 p-8 flex flex-col gap-6"
+            style={{ boxShadow: "0 30px 100px -50px rgba(0,0,0,0.8)" }}
+          >
+            {/* Card header */}
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <div className="inline-flex font-medium rounded-full bg-neutral-800 text-[#a1a1a1] text-xs border border-white/10 px-3 py-1 items-center gap-2">
+                  <ShieldCheck className="size-4 text-[#00bc7d]" />
+                  {t("login.secureAccess")}
+                </div>
+                <LanguageDropdown isDark={true} />
+              </div>
+              <div className="space-y-2">
+                <h1 className="font-semibold text-neutral-50 text-3xl leading-9 tracking-tight">
+                  {t("login.heading")}
+                </h1>
+                <p className="max-w-md text-[#a1a1a1] text-sm leading-6">
+                  {t("login.subheading")}
+                </p>
+              </div>
+            </div>
 
-function EyeIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  );
-}
+            {/* Fields */}
+            <div className="grid gap-4">
+              {/* Email */}
+              <div className="grid gap-2">
+                <label
+                  htmlFor="email"
+                  className="font-medium text-neutral-50 text-sm leading-5"
+                >
+                  {t("login.emailLabel")}
+                </label>
+                <div className="relative">
+                  <Mail className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#a1a1a1]" />
+                  <input
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={t("login.emailPlaceholder")}
+                    disabled={isSubmitting}
+                    className="w-full rounded-2xl bg-neutral-950 text-neutral-50 border border-white/15 pl-11 pr-4 h-12 text-sm placeholder:text-neutral-600 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-colors disabled:opacity-50"
+                  />
+                </div>
+                <AnimatePresence>
+                  {errors.email && (
+                    <motion.p
+                      key="email-err"
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-red-400 text-xs"
+                    >
+                      {errors.email}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
 
-function EyeOffIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
-      <line x1="1" y1="1" x2="23" y2="23" />
-    </svg>
-  );
-}
+              {/* Password */}
+              <div className="grid gap-2">
+                <label
+                  htmlFor="password"
+                  className="font-medium text-neutral-50 text-sm leading-5"
+                >
+                  {t("login.passwordLabel")}
+                </label>
+                <div className="relative">
+                  <KeyRound className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#a1a1a1]" />
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={t("login.passwordPlaceholder")}
+                    disabled={isSubmitting}
+                    className="w-full rounded-2xl bg-neutral-950 text-neutral-50 border border-white/15 pl-11 pr-12 h-12 text-sm placeholder:text-neutral-600 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-colors disabled:opacity-50"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? t("login.hidePassword") : t("login.showPassword")}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a1a1a1] hover:text-neutral-200 transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                </div>
+                <AnimatePresence>
+                  {errors.password && (
+                    <motion.p
+                      key="pw-err"
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-red-400 text-xs"
+                    >
+                      {errors.password}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
 
-function SpinnerIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-      style={{ animation: "spin 0.75s linear infinite" }}
-    >
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="2" strokeOpacity="0.25" />
-      <path d="M8 2a6 6 0 0 1 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
+              {/* Remember me + forgot password */}
+              <div className="flex justify-between items-center">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="size-4 rounded border-white/10 bg-neutral-800 accent-neutral-200 cursor-pointer"
+                  />
+                  <span className="text-[#a1a1a1] text-sm leading-5">{t("login.rememberMe")}</span>
+                </label>
+                <button
+                  type="button"
+                  className="text-neutral-200 text-sm leading-5 hover:text-white transition-colors"
+                >
+                  {t("login.forgotPassword")}
+                </button>
+              </div>
+            </div>
+
+            {/* General error */}
+            <AnimatePresence>
+              {errors.general && (
+                <motion.div
+                  key="general-err"
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-red-400 text-sm"
+                >
+                  {errors.general}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="rounded-2xl bg-neutral-200 text-neutral-900 w-full h-12 flex items-center justify-center gap-2 font-medium text-sm hover:bg-white transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  {t("login.signingIn")}
+                </>
+              ) : (
+                <>
+                  <ArrowRight className="size-4" />
+                  {t("login.signIn")}
+                </>
+              )}
+            </button>
+          </form>
+        </motion.div>
+      </div>
+    </div>
   );
 }

@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
-import { Hanken_Grotesk, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import {
+  Hanken_Grotesk,
+  IBM_Plex_Sans,
+  IBM_Plex_Mono,
+  Noto_Sans_Devanagari,
+  Noto_Sans_Kannada,
+} from "next/font/google";
 import "./globals.css";
+import LangBootstrap from "@/components/LangBootstrap";
 
 const display = Hanken_Grotesk({
   subsets: ["latin"],
@@ -20,6 +27,20 @@ const mono = IBM_Plex_Mono({
   variable: "--font-mono",
 });
 
+const notoDevanagari = Noto_Sans_Devanagari({
+  subsets: ["devanagari"],
+  weight: ["400", "500", "600"],
+  variable: "--font-noto-devanagari",
+  display: "swap",
+});
+
+const notoKannada = Noto_Sans_Kannada({
+  subsets: ["kannada"],
+  weight: ["400", "500", "600"],
+  variable: "--font-noto-kannada",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "ParkIQ — Bengaluru Traffic Command",
   description:
@@ -30,14 +51,21 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
+      className={`${display.variable} ${body.variable} ${mono.variable} ${notoDevanagari.variable} ${notoKannada.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
-        {/* Runs before paint — sets dark class from localStorage to prevent flash */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{if(localStorage.getItem('parkiq-dark')==='true')document.documentElement.classList.add('dark')}catch(e){}})()` }} />
+        {/* Runs before paint — sets dark class and language from localStorage */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(localStorage.getItem('parkiq-dark')==='true')document.documentElement.classList.add('dark')}catch(e){}try{var l=localStorage.getItem('parkiq-lang');if(l==='hi'||l==='kn'||l==='en')document.documentElement.lang=l}catch(e){}})()`,
+          }}
+        />
       </head>
-      <body className="min-h-full" suppressHydrationWarning>{children}</body>
+      <body className="min-h-full" suppressHydrationWarning>
+        <LangBootstrap />
+        {children}
+      </body>
     </html>
   );
 }

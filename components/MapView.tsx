@@ -14,7 +14,7 @@ interface Props {
   predictions: PredictedHotspot[];
   wardens: Warden[];
   selectedId: string | null;
-  onSelect: (roadId: string) => void;
+  onSelect: (roadId: string | null) => void;
 }
 
 export default function MapView({ hotspots, predictions, wardens, selectedId, onSelect }: Props) {
@@ -76,6 +76,7 @@ export default function MapView({ hotspots, predictions, wardens, selectedId, on
 
       const bump = () => setTick((t) => t + 1);
       m.on("move zoom", bump);
+      m.on("click", () => onSelect(null));
 
       roRef.current = new ResizeObserver(() => {
         m.invalidateSize();
@@ -175,7 +176,7 @@ export default function MapView({ hotspots, predictions, wardens, selectedId, on
                 key={h.roadId}
                 onClick={() => onSelect(h.roadId)}
                 className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full"
-                style={{ left: x, top: y }}
+                style={{ left: x, top: y, zIndex: selected ? 20 : 1 }}
                 aria-label={`${h.name}, impact score ${h.cis}`}
               >
                 {isTop && (
@@ -197,10 +198,14 @@ export default function MapView({ hotspots, predictions, wardens, selectedId, on
                     boxShadow: `0 0 0 ${selected ? 5 : 2}px rgba(255,255,255,0.92), 0 0 0 ${selected ? 7 : 2}px ${color}55, 0 6px 14px -4px ${color}aa`,
                   }}
                 />
-                {(selected || h.cis >= 78) && (
+                {selected && (
                   <span
-                    className="tnum absolute left-1/2 top-full mt-1 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/95 px-1.5 py-0.5 text-[10px] font-semibold shadow-sm"
-                    style={{ color: "var(--color-ink)" }}
+                    className="tnum absolute left-1/2 top-full mt-1 -translate-x-1/2 whitespace-nowrap rounded-md px-1.5 py-0.5 text-[10px] font-semibold shadow-sm"
+                    style={{
+                      background: "var(--color-surface)",
+                      color: "var(--color-ink)",
+                      border: "1px solid color-mix(in srgb, var(--color-ink) 12%, transparent)",
+                    }}
                   >
                     {h.name} · {h.cis}
                   </span>

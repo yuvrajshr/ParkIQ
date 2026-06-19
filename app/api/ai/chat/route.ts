@@ -100,7 +100,8 @@ RULES
 - Flag any chronic relapsed spot or imminent forecast (< 10 min away).
 - Keep answers under 120 words unless the question needs a list.
 - Plain language only — no markdown headers or asterisks.
-- If you need deeper history, use the available tools.`;
+- If you need deeper history, use the available tools — but call each tool at most once.
+- If a tool returns no rows, tell the user plainly that no past data is recorded yet. Do NOT keep calling tools hoping for data.`;
 }
 
 const FUNCTION_DECLARATIONS: FunctionDeclaration[] = [
@@ -161,13 +162,12 @@ const FUNCTION_DECLARATIONS: FunctionDeclaration[] = [
 async function executeFunction(
   name: string,
   args: Record<string, unknown>,
-  sessionId: string | undefined,
 ): Promise<unknown> {
   const supabase = await createClient();
 
   if (name === 'get_dispatch_history') {
     return queryDispatchHistory(
-      sessionId,
+      undefined, // cross-session: AI tools always query all history
       {
         limit: typeof args.limit === 'number' ? args.limit : 20,
         roadName: typeof args.road_name === 'string' ? args.road_name : undefined,
@@ -179,7 +179,7 @@ async function executeFunction(
 
   if (name === 'get_kpi_history') {
     return queryKpiHistory(
-      sessionId,
+      undefined, // cross-session
       typeof args.limit === 'number' ? args.limit : 10,
       supabase,
     );
@@ -187,7 +187,7 @@ async function executeFunction(
 
   if (name === 'get_chat_history') {
     return queryChatHistory(
-      sessionId,
+      undefined, // cross-session
       typeof args.limit === 'number' ? args.limit : 20,
       supabase,
     );
@@ -218,28 +218,26 @@ export async function POST(req: Request) {
 
   // Fetch the last 20 dispatch events to inject as a always-present summary
   let historySummary = '  (no history yet)';
-  if (body.sessionId) {
-    try {
-      const supabase = await createClient();
-      const rows = await queryDispatchHistory(body.sessionId, { limit: HISTORY_SUMMARY_LIMIT }, supabase);
-      if (rows.length > 0) {
-        historySummary = rows
-          .map((r) => {
-            const outcome = r.relapsed
-              ? 'RELAPSED'
-              : r.arrived
-                ? `cleared +${r.recovered_kmph.toFixed(1)} km/h`
-                : 'en route';
-            const date = new Date(r.created_at).toLocaleString('en-IN', {
-              month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
-            });
-            return `  - [${date}] ${r.warden_name} → ${r.road_name} (CIS ${r.cis_before}) · ${outcome}`;
-          })
-          .join('\n');
-      }
-    } catch {
-      // Non-critical — proceed without history
+  try {
+    const supabase = await createClient();
+    const rows = await queryDispatchHistory(undefined, { limit: HISTORY_SUMMARY_LIMIT }, supabase);
+    if (rows.length > 0) {
+      historySummary = rows
+        .map((r) => {
+          const outcome = r.relapsed
+            ? 'RELAPSED'
+            : r.arrived
+              ? `cleared +${r.recovered_kmph.toFixed(1)} km/h`
+              : 'en route';
+          const date = new Date(r.created_at).toLocaleString('en-IN', {
+            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+          });
+          return `  - [${date}] ${r.warden_name} → ${r.road_name} (CIS ${r.cis_before}) · ${outcome}`;
+        })
+        .join('\n');
     }
+  } catch {
+    // Non-critical — proceed without history
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
@@ -263,13 +261,19 @@ export async function POST(req: Request) {
 
   const encoder = new TextEncoder();
 
-  // First call — non-streaming so we can detect function calls
-  let firstResult;
-  try {
-    firstResult = await chat.sendMessage(body.message);
-  } catch (err) {
+  // Multi-round function-calling loop. Gemini frequently chains tool calls —
+  // it may call get_kpi_history, see the result, then call get_dispatch_history
+  // before producing any prose. Each of those turns has NO text part, so reading
+  // .text() too early returns "" and the client hangs on an empty bubble forever.
+  // We keep feeding tool results back until the model returns text (no more
+  // function calls) or we hit the round cap, then always emit a non-empty answer.
+  const MAX_FUNCTION_ROUNDS = 6;
+
+  // Helper: turn a Gemini SDK error into a JSON error Response with the right status.
+  function geminiErrorResponse(err: unknown): Response {
     const msg = err instanceof Error ? err.message : 'Gemini request failed';
-    const isQuota = msg.includes('429') || msg.includes('quota') || msg.includes('Too Many Requests');
+    const isQuota =
+      msg.includes('429') || msg.includes('quota') || msg.includes('Too Many Requests');
     return NextResponse.json(
       {
         error: isQuota
@@ -280,62 +284,59 @@ export async function POST(req: Request) {
     );
   }
 
-  const funcCalls = firstResult.response.functionCalls?.() ?? [];
-
-  // If Gemini requested a function call — execute it and stream the final answer
-  if (funcCalls.length > 0) {
-    const fc = funcCalls[0];
-    let fnResult: unknown;
-    try {
-      fnResult = await executeFunction(fc.name, (fc.args ?? {}) as Record<string, unknown>, body.sessionId);
-    } catch {
-      fnResult = { error: 'Query failed' };
-    }
-
-    let streamResult;
-    try {
-      streamResult = await chat.sendMessageStream([
-        {
-          functionResponse: {
-            name: fc.name,
-            response: { data: fnResult },
-          },
-        },
-      ]);
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Gemini stream failed';
-      return NextResponse.json({ error: msg }, { status: 502 });
-    }
-
-    const stream = new ReadableStream({
-      async start(controller) {
-        try {
-          for await (const chunk of streamResult.stream) {
-            const text = chunk.text();
-            if (text) controller.enqueue(encoder.encode(text));
-          }
-        } catch (err) {
-          controller.error(err);
-        } finally {
-          controller.close();
-        }
-      },
-    });
-
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'no-cache',
-        'X-Content-Type-Options': 'nosniff',
-      },
-    });
+  let result;
+  try {
+    result = await chat.sendMessage(body.message);
+  } catch (err) {
+    return geminiErrorResponse(err);
   }
 
-  // No function call — wrap the text we already have in a ReadableStream
-  const directText = firstResult.response.text();
+  let rounds = 0;
+  while (rounds < MAX_FUNCTION_ROUNDS) {
+    const calls = result.response.functionCalls?.() ?? [];
+    if (calls.length === 0) break;
+
+    // Execute every function the model requested this round, in parallel.
+    const responseParts = await Promise.all(
+      calls.map(async (fc) => {
+        let fnResult: unknown;
+        try {
+          fnResult = await executeFunction(
+            fc.name,
+            (fc.args ?? {}) as Record<string, unknown>,
+          );
+        } catch {
+          fnResult = { error: 'Query failed' };
+        }
+        return { functionResponse: { name: fc.name, response: { data: fnResult } } };
+      }),
+    );
+
+    try {
+      result = await chat.sendMessage(responseParts);
+    } catch (err) {
+      return geminiErrorResponse(err);
+    }
+    rounds++;
+  }
+
+  // The model may still be requesting tools after the cap (e.g. repeatedly
+  // querying empty history). Reading .text() then throws or returns "", so guard
+  // it and fall back to an honest message — the client must always get prose.
+  let finalText = '';
+  try {
+    finalText = result.response.text();
+  } catch {
+    finalText = '';
+  }
+  if (!finalText.trim()) {
+    finalText =
+      "I couldn't pull that from the historical record — there may be no past session data stored yet. Ask me about the live situation and I can help right now.";
+  }
+
   const stream = new ReadableStream({
     start(controller) {
-      if (directText) controller.enqueue(encoder.encode(directText));
+      controller.enqueue(encoder.encode(finalText));
       controller.close();
     },
   });

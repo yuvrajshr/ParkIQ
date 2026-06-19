@@ -1,6 +1,7 @@
 "use client";
 
 import type { Warden, WardenStatus } from "@/lib/types";
+import { useTranslation } from "@/lib/hooks/useTranslation";
 
 const DOT: Record<WardenStatus, string> = {
   available: "var(--color-heat-low)",
@@ -9,27 +10,29 @@ const DOT: Record<WardenStatus, string> = {
   off: "var(--color-faint)",
 };
 
-const STATUS_LABEL: Record<WardenStatus, string> = {
-  available: "Available",
-  en_route: "En route",
-  on_site: "On site",
-  off: "Off duty",
-};
-
 export default function WardenStrip({ wardens }: { wardens: Warden[] }) {
+  const { t } = useTranslation();
+
+  const STATUS_LABEL: Record<WardenStatus, string> = {
+    available: t("wardens.statusAvailable"),
+    en_route: t("wardens.statusEnRoute"),
+    on_site: t("wardens.statusOnSite"),
+    off: t("wardens.statusOff"),
+  };
+
   const available = wardens.filter((w) => w.status === "available").length;
   const active = wardens.filter((w) => w.status === "en_route" || w.status === "on_site").length;
 
   return (
     <section className="panel shrink-0 rounded-2xl p-3">
       <div className="mb-2.5 flex items-center justify-between">
-        <div className="eyebrow">Field Wardens</div>
+        <div className="eyebrow">{t("wardens.title")}</div>
         <div className="text-[11.5px] text-muted">
-          <span className="tnum font-semibold text-heat-low">{available}</span> available
+          <span className="tnum font-semibold text-heat-low">{available}</span> {t("wardens.available")}
           {active > 0 && (
             <>
               {" · "}
-              <span className="tnum font-semibold text-primary">{active}</span> deployed
+              <span className="tnum font-semibold text-primary">{active}</span> {t("wardens.deployed")}
             </>
           )}
         </div>
