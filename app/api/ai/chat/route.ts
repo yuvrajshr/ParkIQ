@@ -17,11 +17,6 @@ function minDiff(now: number, eta: number): number {
   return Math.max(1, Math.round(eta - now));
 }
 
-function wallClock(simMin: number, startMin: number): string {
-  const total = (startMin + Math.round(simMin)) % (24 * 60);
-  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
-}
-
 function buildOutcomesSection(outcomes: SnapshotOutcome[]): string {
   if (outcomes.length === 0) return '  (no dispatches yet this session)';
   return outcomes
@@ -223,26 +218,28 @@ export async function POST(req: Request) {
 
   // Fetch the last 20 dispatch events to inject as a always-present summary
   let historySummary = '  (no history yet)';
-  try {
-    const supabase = await createClient();
-    const rows = await queryDispatchHistory(body.sessionId, { limit: HISTORY_SUMMARY_LIMIT }, supabase);
-    if (rows.length > 0) {
-      historySummary = rows
-        .map((r) => {
-          const outcome = r.relapsed
-            ? 'RELAPSED'
-            : r.arrived
-              ? `cleared +${r.recovered_kmph.toFixed(1)} km/h`
-              : 'en route';
-          const date = new Date(r.created_at).toLocaleString('en-IN', {
-            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
-          });
-          return `  - [${date}] ${r.warden_name} → ${r.road_name} (CIS ${r.cis_before}) · ${outcome}`;
-        })
-        .join('\n');
+  if (body.sessionId) {
+    try {
+      const supabase = await createClient();
+      const rows = await queryDispatchHistory(body.sessionId, { limit: HISTORY_SUMMARY_LIMIT }, supabase);
+      if (rows.length > 0) {
+        historySummary = rows
+          .map((r) => {
+            const outcome = r.relapsed
+              ? 'RELAPSED'
+              : r.arrived
+                ? `cleared +${r.recovered_kmph.toFixed(1)} km/h`
+                : 'en route';
+            const date = new Date(r.created_at).toLocaleString('en-IN', {
+              month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+            });
+            return `  - [${date}] ${r.warden_name} → ${r.road_name} (CIS ${r.cis_before}) · ${outcome}`;
+          })
+          .join('\n');
+      }
+    } catch {
+      // Non-critical — proceed without history
     }
-  } catch {
-    // Non-critical — proceed without history
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
@@ -290,7 +287,7 @@ export async function POST(req: Request) {
     const fc = funcCalls[0];
     let fnResult: unknown;
     try {
-      fnResult = await executeFunction(fc.name, fc.args as Record<string, unknown>, body.sessionId);
+      fnResult = await executeFunction(fc.name, (fc.args ?? {}) as Record<string, unknown>, body.sessionId);
     } catch {
       fnResult = { error: 'Query failed' };
     }

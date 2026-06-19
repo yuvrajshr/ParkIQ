@@ -6,7 +6,7 @@ type BrowserClient = SupabaseClient;
 export async function createSession(id: string, supabase: BrowserClient): Promise<void> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return;
-  await supabase.from("sim_sessions").insert({ id, user_id: user.id });
+  await supabase.from("sim_sessions").upsert({ id, user_id: user.id }, { onConflict: 'id', ignoreDuplicates: true });
 }
 
 export async function writeDispatchEvent(
