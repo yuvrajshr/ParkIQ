@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { LayoutDashboard, Plus, Moon, Sun, LogOut, Camera } from "lucide-react";
+import { LayoutDashboard, Plus, LogOut, Camera } from "lucide-react";
 import SimClock from "./SimClock";
-import LanguageDropdown from "./LanguageDropdown";
+import SettingsMenu from "./SettingsMenu";
 import { useTranslation } from "@/lib/hooks/useTranslation";
 import { useNewReportsCount } from "@/lib/hooks/useNewReportsCount";
 
@@ -13,23 +13,8 @@ interface Props {
   onAiToggle: () => void;
 }
 
-// Dark mode lives in the DOM (`.dark` on <html>), set pre-paint and toggled
-// imperatively. Subscribe to it rather than mirroring it into an effect so the
-// aria-labels stay correct without a setState-in-effect cascade.
-function subscribeDark(onChange: () => void) {
-  const observer = new MutationObserver(onChange);
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["class"],
-  });
-  return () => observer.disconnect();
-}
-const getDarkSnapshot = () => document.documentElement.classList.contains("dark");
-const getDarkServerSnapshot = () => false;
-
 export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
   const [active, setActive] = useState("command");
-  const isDark = useSyncExternalStore(subscribeDark, getDarkSnapshot, getDarkServerSnapshot);
   const [loggingOut, setLoggingOut] = useState(false);
   const { t } = useTranslation();
   const newReports = useNewReportsCount();
@@ -45,14 +30,6 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
     setLoggingOut(true);
     await fetch("/api/auth/logout", { method: "POST" });
     window.location.href = "/login";
-  }
-
-  function toggleDark() {
-    const next = !document.documentElement.classList.contains("dark");
-    document.documentElement.classList.toggle("dark", next);
-    try {
-      localStorage.setItem("parkiq-dark", String(next));
-    } catch {}
   }
 
   return (
@@ -98,47 +75,7 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
         <div className="flex items-center gap-3">
           <SimClock />
 
-          <LanguageDropdown isDark={isDark} />
-
-          <button
-            onClick={toggleDark}
-            role="switch"
-            aria-checked={isDark}
-            title={isDark ? t("header.toLightMode") : t("header.toDarkMode")}
-            aria-label={isDark ? t("header.toLightMode") : t("header.toDarkMode")}
-            className="relative shrink-0 rounded-full"
-            style={{
-              width: 72,
-              height: 36,
-              background: "var(--hdr-btn-bg)",
-              border: "1px solid var(--hdr-btn-border)",
-            }}
-          >
-            {/* Sun — left zone; visible when in dark mode (knob is on right) */}
-            <Sun
-              className="absolute top-1/2 -translate-y-1/2 size-3.5"
-              style={{ left: 11, color: "var(--color-accent)", zIndex: 0 }}
-            />
-            {/* Moon — right zone; visible when in light mode (knob is on left) */}
-            <Moon
-              className="absolute top-1/2 -translate-y-1/2 size-3.5"
-              style={{ right: 11, color: "var(--color-primary)", zIndex: 0 }}
-            />
-            {/* Sliding knob — covers the active-mode icon, reveals the other */}
-            <span
-              className="absolute top-1/2 rounded-full"
-              style={{
-                width: 28,
-                height: 28,
-                left: 4,
-                zIndex: 10,
-                background: "#ffffff",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06)",
-                transform: `translateY(-50%) translateX(${isDark ? 36 : 0}px)`,
-                transition: "transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1)",
-              }}
-            />
-          </button>
+          <SettingsMenu variant="header" />
 
           <button
             onClick={onAiToggle}

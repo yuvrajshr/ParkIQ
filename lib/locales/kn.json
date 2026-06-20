@@ -35,6 +35,7 @@
   "queue.relapsedResend": "↻ ಮರಳಿ ಉಲ್ಲಂಘನೆ · ಮತ್ತೆ ಕಳುಹಿಸಿ",
   "queue.dispatch": "ಕಳುಹಿಸಿ",
   "queue.parked": "ನಿಲ್ಲಿಸಲಾಗಿದೆ",
+  "queue.violations": "ಉಲ್ಲಂಘನೆಗಳು",
   "queue.kmh": "ಕಿಮೀ/ಗಂ",
 
   "prediction.title": "ಮುನ್ಸೂಚನೆ · ಮುಂದಿನ 45 ನಿಮಿಷ",
@@ -104,6 +105,14 @@
   "wardens.statusOff": "ಕರ್ತವ್ಯ ಇಲ್ಲ",
 
   "nav.reports": "ನಾಗರಿಕ ವರದಿಗಳು",
+  "map.seeViolations": "ಉಲ್ಲಂಘನೆಗಳನ್ನು ನೋಡಿ",
+  "violations.eyebrow": "ಲೈವ್ ಕ್ಯಾಮೆರಾ ಫೀಡ್",
+  "violations.all": "ಎಲ್ಲಾ",
+  "violations.cctv": "ಸಿಸಿಟಿವಿ",
+  "violations.citizen": "ನಾಗರಿಕ",
+  "violations.flagged": "ಗುರುತಿಸಲಾಗಿದೆ",
+  "violations.vehiclesSeen": "{n} ವಾಹನಗಳು",
+  "violations.empty": "ಈ ಪ್ರದೇಶಕ್ಕೆ ಇನ್ನೂ ಯಾವುದೇ ಉಲ್ಲಂಘನೆ ಪತ್ತೆಯಾಗಿಲ್ಲ.",
 
   "report.eyebrow": "ನಾಗರಿಕ ವರದಿ",
   "report.title": "ಪಾರ್ಕಿಂಗ್ ಉಲ್ಲಂಘನೆ ವರದಿ ಮಾಡಿ",
@@ -140,6 +149,9 @@
   "report.submitting": "ಕಳುಹಿಸಲಾಗುತ್ತಿದೆ…",
   "report.needPhotoLocation": "ಕಳುಹಿಸಲು ಫೋಟೋ ತೆಗೆದು ಸ್ಥಳ ಅನುಮತಿ ನೀಡಿ.",
   "report.errSubmit": "ನಿಮ್ಮ ವರದಿ ಕಳುಹಿಸಲಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "report.noteRejectedProfanity": "ಕಳುಹಿಸುವ ಮೊದಲು ನಿಮ್ಮ ಟಿಪ್ಪಣಿಯಿಂದ ಅಸಭ್ಯ ಭಾಷೆಯನ್ನು ತೆಗೆದುಹಾಕಿ.",
+  "report.noteRejectedIrrelevant": "ನಿಮ್ಮ ಟಿಪ್ಪಣಿ ಪಾರ್ಕಿಂಗ್ ಉಲ್ಲಂಘನೆಗೆ ಸಂಬಂಧಿಸಿಲ್ಲ ಎಂದು ತೋರುತ್ತದೆ. ದಯವಿಟ್ಟು ಉಲ್ಲಂಘನೆಯನ್ನು ವಿವರಿಸಿ ಅಥವಾ ಟಿಪ್ಪಣಿಯನ್ನು ಖಾಲಿ ಬಿಡಿ.",
+  "report.noVehicle": "ಈ ಫೋಟೋದಲ್ಲಿ ಯಾವುದೇ ವಾಹನ ಕಂಡುಬಂದಿಲ್ಲ. ಕ್ಯಾಮೆರಾವನ್ನು ನಿಲ್ಲಿಸಿದ ವಾಹನದ ಕಡೆಗೆ ತೋರಿಸಿ ಮತ್ತೆ ಫೋಟೋ ತೆಗೆಯಿರಿ.",
   "report.errPhone": "ಮಾನ್ಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ.",
   "report.errOtp": "ಆ ಕೋಡ್ ಕೆಲಸ ಮಾಡಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
   "report.doneTitle": "ವರದಿ ಸ್ವೀಕರಿಸಲಾಗಿದೆ",
@@ -182,5 +194,9 @@
   "reports.minAgo": "{n}ನಿ ಹಿಂದೆ",
   "reports.hrAgo": "{n}ಗಂ ಹಿಂದೆ",
   "reports.dayAgo": "{n}ದಿ ಹಿಂದೆ",
-  "reports.newReportToast": "ಹೊಸ ವರದಿ · {road}"
+  "reports.newReportToast": "ಹೊಸ ವರದಿ · {road}",
+  "reports.newViolationAlert": "ಹೊಸ ಉಲ್ಲಂಘನೆ ವರದಿಯಾಗಿದೆ",
+  "reports.viewReport": "ವರದಿ ನೋಡಿ",
+  "reports.aiViolation": "AI · ಸಂಭವನೀಯ ಉಲ್ಲಂಘನೆ",
+  "reports.aiUnverified": "AI · ದೃಢೀಕರಿಸಿಲ್ಲ"
 }

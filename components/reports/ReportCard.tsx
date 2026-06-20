@@ -4,6 +4,7 @@ import type { CitizenReport } from "@/lib/types";
 import { STATUS_COLOR, STATUS_I18N } from "@/lib/citizen/reportStatus";
 import { relativeTime } from "@/lib/citizen/timeAgo";
 import { useTranslation } from "@/lib/hooks/useTranslation";
+import AiVerdictChip from "./AiVerdictChip";
 
 interface Props {
   report: CitizenReport;
@@ -38,7 +39,10 @@ export default function ReportCard({ report: r, selected, onSelect }: Props) {
         <div className="mt-0.5 truncate text-[11.5px] text-muted">
           {r.snappedRoadName ? t("reports.nearRoad", { road: r.snappedRoadName }) : t("reports.unmatched")}
         </div>
-        <div className="tnum mt-0.5 text-[10.5px] text-faint">{t(ago.key as Parameters<typeof t>[0], { n: ago.n })}</div>
+        <div className="mt-0.5 flex items-center gap-1.5">
+          <span className="tnum text-[10.5px] text-faint">{t(ago.key as Parameters<typeof t>[0], { n: ago.n })}</span>
+          <AiVerdictChip verdict={r.aiVerdict} confidence={r.aiConfidence} />
+        </div>
       </div>
       <span
         className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"

@@ -1,4 +1,4 @@
-import type { CitizenReport, ReportStatus, ViolationType } from "@/lib/types";
+import type { AiVerdict, CitizenReport, ReportStatus, ViolationType } from "@/lib/types";
 
 /** Shape of a `public.citizen_reports` row as returned by Supabase (snake_case). */
 export interface CitizenReportRow {
@@ -17,6 +17,9 @@ export interface CitizenReportRow {
   reporter_masked: string;
   status: string;
   dispatch_id: string | null;
+  ai_verdict: string | null;
+  ai_confidence: number | null;
+  ai_label: string | null;
 }
 
 /** Map a DB row to the camelCase domain type the UI uses. */
@@ -37,5 +40,8 @@ export function mapReport(row: CitizenReportRow): CitizenReport {
     reporterMasked: row.reporter_masked,
     status: row.status as ReportStatus,
     dispatchId: row.dispatch_id,
+    aiVerdict: (row.ai_verdict as AiVerdict | null) ?? null,
+    aiConfidence: row.ai_confidence,
+    aiLabel: row.ai_label,
   };
 }

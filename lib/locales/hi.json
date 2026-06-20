@@ -35,6 +35,7 @@
   "queue.relapsedResend": "↻ पुनः उल्लंघन · फिर भेजें",
   "queue.dispatch": "भेजें",
   "queue.parked": "पार्क",
+  "queue.violations": "उल्लंघन",
   "queue.kmh": "किमी/घंटा",
 
   "prediction.title": "पूर्वानुमान · अगले 45 मिनट",
@@ -104,6 +105,14 @@
   "wardens.statusOff": "ड्यूटी पर नहीं",
 
   "nav.reports": "नागरिक रिपोर्ट",
+  "map.seeViolations": "उल्लंघन देखें",
+  "violations.eyebrow": "लाइव कैमरा फ़ीड",
+  "violations.all": "सभी",
+  "violations.cctv": "सीसीटीवी",
+  "violations.citizen": "नागरिक",
+  "violations.flagged": "चिह्नित",
+  "violations.vehiclesSeen": "{n} वाहन",
+  "violations.empty": "इस क्षेत्र के लिए अभी तक कोई उल्लंघन नहीं मिला।",
 
   "report.eyebrow": "नागरिक रिपोर्टिंग",
   "report.title": "पार्किंग उल्लंघन की रिपोर्ट करें",
@@ -140,6 +149,9 @@
   "report.submitting": "भेजा जा रहा है…",
   "report.needPhotoLocation": "भेजने के लिए फ़ोटो लें और स्थान की अनुमति दें।",
   "report.errSubmit": "आपकी रिपोर्ट नहीं भेजी जा सकी। कृपया पुनः प्रयास करें।",
+  "report.noteRejectedProfanity": "कृपया भेजने से पहले अपने नोट से आपत्तिजनक भाषा हटाएँ।",
+  "report.noteRejectedIrrelevant": "आपका नोट पार्किंग उल्लंघन से असंबंधित लगता है। कृपया उल्लंघन का वर्णन करें या नोट खाली छोड़ दें।",
+  "report.noVehicle": "इस फ़ोटो में कोई वाहन नहीं मिला। कैमरे को खड़े वाहन की ओर करके दोबारा फ़ोटो लें।",
   "report.errPhone": "एक वैध मोबाइल नंबर दर्ज करें।",
   "report.errOtp": "वह कोड काम नहीं आया। पुनः प्रयास करें।",
   "report.doneTitle": "रिपोर्ट प्राप्त हुई",
@@ -182,5 +194,9 @@
   "reports.minAgo": "{n}मि पहले",
   "reports.hrAgo": "{n}घं पहले",
   "reports.dayAgo": "{n}दि पहले",
-  "reports.newReportToast": "नई रिपोर्ट · {road}"
+  "reports.newReportToast": "नई रिपोर्ट · {road}",
+  "reports.newViolationAlert": "नया उल्लंघन दर्ज हुआ",
+  "reports.viewReport": "रिपोर्ट देखें",
+  "reports.aiViolation": "AI · संभावित उल्लंघन",
+  "reports.aiUnverified": "AI · असत्यापित"
 }

@@ -7,11 +7,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Radio, Inbox } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { mapReport, type CitizenReportRow } from "@/lib/citizen/mapReport";
-import { REPORT_STATUSES } from "@/lib/citizen/reportStatus";
+import { REPORT_STATUSES, canTransition } from "@/lib/citizen/reportStatus";
 import type { CitizenReport, ReportStatus } from "@/lib/types";
 import ReportCard from "@/components/reports/ReportCard";
 import ReportDetail from "@/components/reports/ReportDetail";
-import LanguageDropdown from "@/components/LanguageDropdown";
+import SettingsMenu from "@/components/SettingsMenu";
 import { useTranslation } from "@/lib/hooks/useTranslation";
 
 const ReportsMap = dynamic(() => import("@/components/reports/ReportsMap"), {
@@ -19,14 +19,14 @@ const ReportsMap = dynamic(() => import("@/components/reports/ReportsMap"), {
   loading: () => <div className="h-full w-full bg-surface-2" />,
 });
 
-type Filter = ReportStatus | "all";
+type Filter = ReportStatus;
 
 export default function ReportsPage() {
   const { t } = useTranslation();
   const supabaseRef = useRef(createClient());
   const [reports, setReports] = useState<CitizenReport[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [filter, setFilter] = useState<Filter>("all");
+  const [filter, setFilter] = useState<Filter>("new");
   const [toast, setToast] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -75,12 +75,16 @@ export default function ReportsPage() {
 
   const newCount = useMemo(() => reports.filter((r) => r.status === "new").length, [reports]);
   const filtered = useMemo(
-    () => (filter === "all" ? reports : reports.filter((r) => r.status === filter)),
+    () => reports.filter((r) => r.status === filter),
     [reports, filter],
   );
   const selected = useMemo(() => reports.find((r) => r.id === selectedId) ?? null, [reports, selectedId]);
 
   async function patchStatus(id: string, status: ReportStatus) {
+    // Forward-only pipeline: ignore any illegal/stale transition (backward move or a
+    // change on an already-terminal report) so the status can never regress.
+    const current = reports.find((r) => r.id === id);
+    if (!current || !canTransition(current.status, status)) return;
     setBusy(true);
     setReports((prev) => prev.map((r) => (r.id === id ? { ...r, status } : r))); // optimistic
     await fetch(`/api/reports/${id}`, {
@@ -144,7 +148,7 @@ export default function ReportsPage() {
             <Radio className="live-dot size-3.5" />
             {t("reports.live")}
           </span>
-          <LanguageDropdown />
+          <SettingsMenu />
         </div>
       </header>
 
@@ -152,7 +156,6 @@ export default function ReportsPage() {
         {/* Left — filters + list */}
         <aside className="flex min-h-0 flex-col border-r border-line">
           <div className="flex items-center gap-1.5 overflow-x-auto border-b border-line px-3 py-2.5">
-            <FilterChip active={filter === "all"} onClick={() => setFilter("all")} label={t("reports.filterAll")} />
             {REPORT_STATUSES.map((s) => (
               <FilterChip
                 key={s}
@@ -201,11 +204,11 @@ export default function ReportsPage() {
             {selected && (
               <motion.div
                 key={selected.id}
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: -12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 12 }}
+                exit={{ opacity: 0, y: -12 }}
                 transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                className="absolute bottom-4 left-4 z-[1100]"
+                className="absolute top-4 left-4 z-[1100]"
               >
                 <ReportDetail
                   report={selected}

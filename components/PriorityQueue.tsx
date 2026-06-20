@@ -141,15 +141,11 @@ function QueueCard({
         </div>
 
         <div className="mt-2.5 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5">
-            <div className="leading-none">
-              <div className="tnum text-[13px] font-semibold text-ink">{h.parkedVehicles}</div>
-              <div className="text-[9.5px] text-faint">{t("queue.parked")}</div>
-            </div>
-            <div className="leading-none">
-              <div className="tnum text-[13px] font-semibold text-ink">−{h.kmphLost}</div>
-              <div className="text-[9.5px] text-faint">km/h</div>
-            </div>
+          <div className="flex items-center gap-1 text-[12.5px]">
+            <span className="tnum font-mono font-semibold text-ink">{h.parkedVehicles}</span>
+            <span className="font-medium text-muted">{t("queue.violations")}</span>
+            <span className="mx-0.5 text-faint">·</span>
+            <span className="tnum font-mono font-semibold text-ink">−{h.kmphLost} km/h</span>
           </div>
 
           <Action item={item} status={status} primary={isTop} onDispatch={onDispatch} />

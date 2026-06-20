@@ -14,7 +14,6 @@ import {
 } from "@/lib/derive";
 import { kmphLostTrend } from "@/lib/trend";
 import DashboardHeader from "./DashboardHeader";
-import HeatLegend from "./HeatLegend";
 import LeftSidebar from "./LeftSidebar";
 import RecentActivity from "./RecentActivity";
 import PriorityQueue, { type QueueItem, type QueueStatus } from "./PriorityQueue";
@@ -23,6 +22,7 @@ import EffectivenessGauge from "./EffectivenessGauge";
 import PredictionPanel from "./PredictionPanel";
 import Toast from "./Toast";
 import AiInsights from "./AiInsights";
+import NewReportAlert from "./reports/NewReportAlert";
 import { createClient as createSupabaseClient } from "@/lib/supabase/client";
 import {
   createSession,
@@ -187,10 +187,9 @@ export default function Dashboard() {
           <LeftSidebar kpis={kpis} allHotspots={allHotspots} wardens={wardens} clearedNow={clearedNow} />
         </aside>
 
-        {/* Center — Leaflet map + bottom stats row */}
+        {/* Center — Google map + bottom stats row */}
         <section className="flex min-h-0 min-w-0 flex-col gap-4">
           <div className="panel relative min-h-0 flex-1 overflow-hidden rounded-2xl">
-            <HeatLegend />
             <MapView
               hotspots={hotspots}
               predictions={predictions}
@@ -222,6 +221,7 @@ export default function Dashboard() {
         </aside>
       </main>
       <Toast />
+      <NewReportAlert />
       <AiInsights
         open={aiOpen}
         onClose={() => setAiOpen(false)}

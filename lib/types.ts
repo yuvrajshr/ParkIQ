@@ -102,6 +102,26 @@ export type ViolationType =
 /** Triage state of a citizen report, set by the controller. */
 export type ReportStatus = "new" | "reviewed" | "resolved" | "dismissed";
 
+/** Roboflow workflow verdict on the submitted photo. `violation` = illegal-parking model fired;
+ *  `no_violation` = a vehicle is present but unflagged; `no_vehicle` = nothing vehicle-like (the
+ *  only verdict that blocks submission); `skipped` = check disabled or failed open. */
+export type AiVerdict = "violation" | "no_violation" | "no_vehicle" | "skipped";
+
+/** A CCTV frame analysed by the Roboflow workflow, attached to a road. `confidence` > 0 means
+ *  the illegal-parking model flagged it; 0 means a vehicle was seen but not flagged (monitoring).
+ *  Pre-seeded today; a future updater rewrites these as live counts change. */
+export interface CctvViolation {
+  id: string;
+  roadId: string;
+  roadName: string | null;
+  zone: string | null;
+  cameraLabel: string | null;
+  photoUrl: string;
+  confidence: number | null;
+  vehicleCount: number | null;
+  detectedAt: string;
+}
+
 /** A violation reported by a citizen from the public portal: a live geo-tagged photo
  *  plus the device's GPS fix at capture time. Identity is verified app-side via phone
  *  OTP; only a masked phone is persisted (no raw PII). Shape mirrors the
@@ -123,4 +143,10 @@ export interface CitizenReport {
   reporterMasked: string; // e.g. "+91 ●●●●● ●210"
   status: ReportStatus;
   dispatchId: string | null;
+  /** AI photo-verification verdict (Roboflow workflow), null on legacy rows. */
+  aiVerdict: AiVerdict | null;
+  /** Max illegal-parking detection confidence 0..1 (0/null when none). */
+  aiConfidence: number | null;
+  /** Top class label for display (violation or top vehicle class). */
+  aiLabel: string | null;
 }

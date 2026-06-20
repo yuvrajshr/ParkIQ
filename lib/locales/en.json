@@ -35,6 +35,7 @@
   "queue.relapsedResend": "↻ Relapsed · re-send",
   "queue.dispatch": "Dispatch",
   "queue.parked": "parked",
+  "queue.violations": "violations",
   "queue.kmh": "km/h",
 
   "prediction.title": "Forecast · next 45 min",
@@ -104,6 +105,14 @@
   "wardens.statusOff": "Off duty",
 
   "nav.reports": "Citizen Reports",
+  "map.seeViolations": "See violations",
+  "violations.eyebrow": "Live Camera Feed",
+  "violations.all": "All",
+  "violations.cctv": "CCTV",
+  "violations.citizen": "Citizen",
+  "violations.flagged": "Flagged",
+  "violations.vehiclesSeen": "{n} vehicles",
+  "violations.empty": "No violations detected for this area yet.",
 
   "report.eyebrow": "Citizen Reporting",
   "report.title": "Report a parking violation",
@@ -140,6 +149,9 @@
   "report.submitting": "Sending…",
   "report.needPhotoLocation": "Capture a photo and allow location to send.",
   "report.errSubmit": "Couldn't send your report. Please try again.",
+  "report.noteRejectedProfanity": "Please remove offensive language from your note before sending.",
+  "report.noteRejectedIrrelevant": "Your note seems unrelated to a parking violation. Please describe the violation or leave the note blank.",
+  "report.noVehicle": "We couldn't find a vehicle in this photo. Point the camera at the parked vehicle and retake.",
   "report.errPhone": "Enter a valid mobile number.",
   "report.errOtp": "That code didn't work. Try again.",
   "report.doneTitle": "Report received",
@@ -182,5 +194,9 @@
   "reports.minAgo": "{n}m ago",
   "reports.hrAgo": "{n}h ago",
   "reports.dayAgo": "{n}d ago",
-  "reports.newReportToast": "New report · {road}"
+  "reports.newReportToast": "New report · {road}",
+  "reports.newViolationAlert": "New violation reported",
+  "reports.viewReport": "View report",
+  "reports.aiViolation": "AI · Likely violation",
+  "reports.aiUnverified": "AI · Unverified"
 }

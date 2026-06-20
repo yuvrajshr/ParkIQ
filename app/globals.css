@@ -289,57 +289,6 @@ html.dark body {
   display: none;
 }
 
-/* Desaturate the basemap so congestion heat is the only saturated thing on screen. */
-.leaflet-tile-pane {
-  filter: saturate(15) contrast(0.75) brightness(1.01);
-}
-
-/* Restyle Leaflet's default +/- control into the civic glass chrome. */
-.leaflet-control-zoom {
-  border: none !important;
-  border-radius: 12px !important;
-  overflow: hidden;
-  background: var(--glass-bg) !important;
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--shadow-float), var(--glass-edge) !important;
-}
-.leaflet-control-zoom a {
-  width: 30px !important;
-  height: 30px !important;
-  line-height: 30px !important;
-  color: var(--color-ink) !important;
-  background: transparent !important;
-  border: none !important;
-  font-size: 16px !important;
-  font-weight: 600;
-  transition:
-    background 0.15s ease,
-    color 0.15s ease;
-}
-.leaflet-control-zoom a:hover {
-  background: rgba(27, 95, 176, 0.1) !important;
-  color: var(--color-primary) !important;
-}
-.leaflet-control-zoom a:first-child {
-  border-bottom: 1px solid var(--color-line) !important;
-}
-.leaflet-bar a:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: -2px;
-}
-.leaflet-control-attribution {
-  font-size: 9px !important;
-  background: rgba(255, 255, 255, 0.72) !important;
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  border-radius: 6px 0 0 0;
-  color: var(--color-faint) !important;
-}
-.leaflet-control-attribution a {
-  color: var(--color-muted) !important;
-}
-
 /* ── Language-driven font switching ────────────────────────────────────────── */
 html[lang="hi"] body,
 html[lang="hi"] input,

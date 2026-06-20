@@ -4,6 +4,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { CITIZEN_COOKIE, verifyCitizenToken } from "@/lib/citizen/session";
 import { snapToNearestRoad } from "@/lib/citizen/snapRoad";
 import { isViolationType } from "@/lib/citizen/violations";
+import { moderateNote } from "@/lib/citizen/moderateNote";
+import { analyzeReportPhoto } from "@/lib/vision/roboflow";
 
 const BUCKET = "violation-photos";
 const MAX_BYTES = 8 * 1024 * 1024;
@@ -46,6 +48,41 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Unknown violation type" }, { status: 400 });
   }
 
+  // 2b. Moderate the optional note BEFORE uploading anything (so a rejected note never leaves
+  //     an orphaned photo in Storage). Abusive or off-topic notes reject the whole report.
+  const verdict = await moderateNote(note);
+  if (!verdict.ok) {
+    return NextResponse.json(
+      {
+        ok: false,
+        code: "note_rejected",
+        reason: verdict.reason,
+        error:
+          verdict.reason === "profanity"
+            ? "Please remove offensive language from your note."
+            : "Your note seems unrelated to a parking violation. Please describe the violation or leave it blank.",
+      },
+      { status: 422 },
+    );
+  }
+
+  // 2c. AI photo verification (Roboflow workflow), BEFORE upload so a junk photo never leaves an
+  //     orphaned object. Read the bytes once and reuse for both the vision call and the upload.
+  //     Only "no vehicle at all" blocks the report; a present-but-unflagged vehicle still goes
+  //     through (the controller sees an "unverified" chip). Fails open (verdict "skipped").
+  const bytes = new Uint8Array(await photo.arrayBuffer());
+  const vision = await analyzeReportPhoto(bytes);
+  if (vision.verdict === "no_vehicle") {
+    return NextResponse.json(
+      {
+        ok: false,
+        code: "no_vehicle",
+        error: "We couldn't find a vehicle in this photo. Point the camera at the parked vehicle and retake.",
+      },
+      { status: 422 },
+    );
+  }
+
   // 3. Service-role client (writes bypass RLS).
   const admin = createAdminClient();
   if (!admin) {
@@ -59,7 +96,6 @@ export async function POST(req: Request) {
   const id = crypto.randomUUID();
   const ext = photo.type === "image/png" ? "png" : photo.type === "image/webp" ? "webp" : "jpg";
   const path = `${id}.${ext}`;
-  const bytes = new Uint8Array(await photo.arrayBuffer());
 
   const { error: uploadError } = await admin.storage
     .from(BUCKET)
@@ -88,6 +124,9 @@ export async function POST(req: Request) {
     snapped_distance_m: snapped?.distanceM ?? null,
     reporter_masked: claims.maskedPhone,
     status: "new",
+    ai_verdict: vision.verdict,
+    ai_confidence: vision.violationConfidence,
+    ai_label: vision.label,
   });
   if (insertError) {
     return NextResponse.json({ ok: false, error: `Save failed: ${insertError.message}` }, { status: 502 });

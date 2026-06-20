@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Map as LeafletMap } from "leaflet";
+import Link from "next/link";
+import { Camera } from "lucide-react";
 import type { Hotspot, PredictedHotspot, Warden } from "@/lib/types";
-import { heatColor } from "@/lib/heat";
+import { heatColor, LEVEL_COLOR, LEVEL_LABEL } from "@/lib/heat";
 import { ROAD_BY_ID } from "@/lib/seed/roads";
-
-const BENGALURU_CENTER: [number, number] = [12.955, 77.64];
-const BENGALURU_ZOOM = 12;
+import { useTranslation } from "@/lib/hooks/useTranslation";
+import { useIsDark } from "@/lib/hooks/useIsDark";
+import { loadGoogleMaps, SHARED_MAP_OPTIONS, mapStyleFor } from "@/lib/maps/googleMaps";
+import MapZoomControls from "@/components/MapZoomControls";
 
 interface Props {
   hotspots: Hotspot[];
@@ -18,92 +20,84 @@ interface Props {
 }
 
 export default function MapView({ hotspots, predictions, wardens, selectedId, onSelect }: Props) {
+  const { t } = useTranslation();
+  const isDark = useIsDark();
   const containerRef = useRef<HTMLDivElement>(null);
-  const instanceRef = useRef<LeafletMap | null>(null);
+  const instanceRef = useRef<google.maps.Map | null>(null);
+  // hidden OverlayView — the only way to get a latLng → container-pixel projection
+  const overlayRef = useRef<google.maps.OverlayView | null>(null);
   const roRef = useRef<ResizeObserver | null>(null);
   // map stored in state so React re-renders when it becomes available
-  const [map, setMap] = useState<LeafletMap | null>(null);
+  const [map, setMap] = useState<google.maps.Map | null>(null);
   // tick increments on every pan/zoom to force overlay reproject
   const [, setTick] = useState(0);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
+    let cancelled = false;
+    const bump = () => setTick((t) => t + 1);
 
-    // Guard against double-invocation in React StrictMode
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((containerRef.current as any)._leaflet_id) return;
+    loadGoogleMaps().then((maps) => {
+      if (cancelled) return;
 
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-    document.head.appendChild(link);
-
-    import("leaflet").then((mod) => {
-      if (!containerRef.current) return;
-      // Double-check after async gap
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if ((containerRef.current as any)._leaflet_id) return;
-
-      const L = mod.default ?? mod;
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      delete (L.Icon.Default.prototype as any)._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-        shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-      });
-
-      const m = L.map(containerRef.current, {
-        center: BENGALURU_CENTER,
-        zoom: BENGALURU_ZOOM,
-        minZoom: 10,
+      const initialDark = document.documentElement.classList.contains("dark");
+      const m = new maps.Map(container, {
+        ...SHARED_MAP_OPTIONS,
         maxZoom: 16,
-        maxBounds: [[12.7, 77.4], [13.2, 77.9]],
-        maxBoundsViscosity: 1.0,
-        zoomControl: false,
-        attributionControl: true,
+        styles: mapStyleFor(initialDark),
       });
 
-      // Top-right so it never collides with the KPI band top-left.
-      L.control.zoom({ position: "topright" }).addTo(m);
+      // A no-op overlay attached to the map exposes getProjection() for our DOM markers.
+      // Its first draw() fires once projection is ready so markers never render at (-9999).
+      class ProjectionOverlay extends maps.OverlayView {
+        onAdd() {}
+        draw() {
+          bump();
+        }
+        onRemove() {}
+      }
+      const overlay = new ProjectionOverlay();
+      overlay.setMap(m);
+      overlayRef.current = overlay;
 
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-        attribution: "© OpenStreetMap contributors © CARTO",
-        subdomains: "abcd",
-        maxZoom: 19,
-      }).addTo(m);
+      // bounds_changed fires continuously through pan + zoom (replaces Leaflet "move zoom").
+      m.addListener("bounds_changed", bump);
+      m.addListener("click", () => onSelect(null));
 
-      const bump = () => setTick((t) => t + 1);
-      m.on("move zoom", bump);
-      m.on("click", () => onSelect(null));
-
-      roRef.current = new ResizeObserver(() => {
-        m.invalidateSize();
-        bump();
-      });
-      roRef.current.observe(containerRef.current);
+      roRef.current = new ResizeObserver(() => bump());
+      roRef.current.observe(container);
 
       instanceRef.current = m;
       setMap(m);
     });
 
     return () => {
+      cancelled = true;
       roRef.current?.disconnect();
       roRef.current = null;
+      overlayRef.current?.setMap(null);
+      overlayRef.current = null;
       if (instanceRef.current) {
-        instanceRef.current.remove();
+        google.maps.event.clearInstanceListeners(instanceRef.current);
         instanceRef.current = null;
-        setMap(null);
       }
+      container.innerHTML = "";
+      setMap(null);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Re-style the basemap when the app theme flips.
+  useEffect(() => {
+    map?.setOptions({ styles: mapStyleFor(isDark) });
+  }, [isDark, map]);
+
   // project [lng, lat] → {x, y} pixel coords in the container
   const project = (point: [number, number]) => {
-    if (!map) return { x: -9999, y: -9999 };
-    const px = map.latLngToContainerPoint([point[1], point[0]]);
-    return { x: px.x, y: px.y };
+    const proj = overlayRef.current?.getProjection();
+    if (!proj) return { x: -9999, y: -9999 };
+    const px = proj.fromLatLngToContainerPixel(new google.maps.LatLng(point[1], point[0]));
+    return px ? { x: px.x, y: px.y } : { x: -9999, y: -9999 };
   };
 
   const activePredictions = predictions.filter(
@@ -119,6 +113,8 @@ export default function MapView({ hotspots, predictions, wardens, selectedId, on
   return (
     <div className="relative h-full w-full overflow-hidden">
       <div ref={containerRef} className="h-full w-full" />
+
+      <MapZoomControls map={map} />
 
       {map && (
         <div className="pointer-events-none absolute inset-0 z-[1000]">
@@ -172,47 +168,88 @@ export default function MapView({ hotspots, predictions, wardens, selectedId, on
             const isTop = h.roadId === topId;
             const color = heatColor(h.cis);
             return (
-              <button
+              <div
                 key={h.roadId}
-                onClick={() => onSelect(h.roadId)}
-                className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full"
+                className="absolute -translate-x-1/2 -translate-y-1/2"
                 style={{ left: x, top: y, zIndex: selected ? 20 : 1 }}
-                aria-label={`${h.name}, impact score ${h.cis}`}
               >
-                {isTop && (
+                <button
+                  onClick={() => onSelect(h.roadId)}
+                  className="pointer-events-auto relative block cursor-pointer rounded-full"
+                  aria-label={`${h.name}, impact score ${h.cis}`}
+                >
+                  {isTop && (
+                    <span
+                      className="heat-bloom pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                      style={{
+                        width: size * 3.2,
+                        height: size * 3.2,
+                        background: `radial-gradient(circle, ${color}66 0%, ${color}00 70%)`,
+                      }}
+                    />
+                  )}
                   <span
-                    className="heat-bloom pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                    className="block rounded-full transition-[width,height,background-color,box-shadow] duration-700 ease-out"
                     style={{
-                      width: size * 3.2,
-                      height: size * 3.2,
-                      background: `radial-gradient(circle, ${color}66 0%, ${color}00 70%)`,
+                      width: size,
+                      height: size,
+                      background: color,
+                      boxShadow: `0 0 0 ${selected ? 5 : 2}px rgba(255,255,255,0.92), 0 0 0 ${selected ? 7 : 2}px ${color}55, 0 6px 14px -4px ${color}aa`,
                     }}
                   />
-                )}
-                <span
-                  className="block rounded-full transition-[width,height,background-color,box-shadow] duration-700 ease-out"
-                  style={{
-                    width: size,
-                    height: size,
-                    background: color,
-                    boxShadow: `0 0 0 ${selected ? 5 : 2}px rgba(255,255,255,0.92), 0 0 0 ${selected ? 7 : 2}px ${color}55, 0 6px 14px -4px ${color}aa`,
-                  }}
-                />
+                </button>
                 {selected && (
-                  <span
-                    className="tnum absolute left-1/2 top-full mt-1 -translate-x-1/2 whitespace-nowrap rounded-md px-1.5 py-0.5 text-[10px] font-semibold shadow-sm"
-                    style={{
-                      background: "var(--color-surface)",
-                      color: "var(--color-ink)",
-                      border: "1px solid color-mix(in srgb, var(--color-ink) 12%, transparent)",
-                    }}
-                  >
-                    {h.name} · {h.cis}
-                  </span>
+                  <div className="absolute left-1/2 top-full mt-1.5 flex -translate-x-1/2 flex-col items-center gap-1">
+                    <span
+                      className="tnum whitespace-nowrap rounded-md px-1.5 py-0.5 text-[10px] font-semibold shadow-sm"
+                      style={{
+                        background: "var(--color-surface)",
+                        color: "var(--color-ink)",
+                        border: "1px solid color-mix(in srgb, var(--color-ink) 12%, transparent)",
+                      }}
+                    >
+                      {h.name} · {h.cis}
+                    </span>
+                    <Link
+                      href={`/violations/${h.roadId}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="pointer-events-auto flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm transition-[transform,background-color] hover:bg-primary-ink active:scale-95 focus-visible:outline-2 focus-visible:outline-primary"
+                      style={{ background: "var(--color-primary)" }}
+                    >
+                      <Camera className="size-3" />
+                      {t("map.seeViolations")}
+                    </Link>
+                  </div>
                 )}
-              </button>
+              </div>
             );
           })}
+
+          {/* Legend */}
+          <div
+            className="pointer-events-none absolute bottom-6 right-3 z-[1001] rounded-xl px-3 py-2.5"
+            style={{
+              background: "var(--color-surface)",
+              border: "1px solid color-mix(in srgb, var(--color-ink) 10%, transparent)",
+              boxShadow: "0 4px 12px -4px rgba(0,0,0,0.18)",
+              minWidth: 148,
+            }}
+          >
+            <div className="mb-1.5 text-[9.5px] font-semibold uppercase tracking-widest text-muted">
+              Congestion Impact
+            </div>
+            <div className="flex flex-col gap-1">
+              {(["low", "mid", "high", "critical"] as const).map((level) => (
+                <div key={level} className="flex items-center gap-2">
+                  <span
+                    className="h-2.5 w-2.5 shrink-0 rounded-full"
+                    style={{ background: LEVEL_COLOR[level] }}
+                  />
+                  <span className="text-[11px] font-medium text-ink">{LEVEL_LABEL[level]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* Wardens */}
           {wardens

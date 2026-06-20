@@ -2,9 +2,10 @@
 
 import { X, MapPin, Send, Check, Loader2, Ban } from "lucide-react";
 import type { CitizenReport, ReportStatus } from "@/lib/types";
-import { STATUS_COLOR } from "@/lib/citizen/reportStatus";
+import { STATUS_COLOR, canTransition, isTerminalStatus } from "@/lib/citizen/reportStatus";
 import { relativeTime } from "@/lib/citizen/timeAgo";
 import { useTranslation } from "@/lib/hooks/useTranslation";
+import AiVerdictChip from "./AiVerdictChip";
 
 interface Props {
   report: CitizenReport;
@@ -19,9 +20,10 @@ export default function ReportDetail({ report: r, busy, onStatus, onDispatch, on
   const ago = relativeTime(r.createdAt);
   const typeLabel = t(`report.type.${r.violationType}` as Parameters<typeof t>[0]);
   const dispatched = Boolean(r.dispatchId);
+  const terminal = isTerminalStatus(r.status);
 
   return (
-    <div className="glass scroll-quiet max-h-[calc(100%-2rem)] w-[340px] overflow-y-auto rounded-2xl p-3.5">
+    <div className="glass scroll-quiet max-h-[calc(100vh-7rem)] w-[340px] overflow-y-auto rounded-2xl p-3.5">
       <div className="mb-2.5 flex items-start justify-between gap-2">
         <div className="min-w-0">
           <div className="eyebrow !text-primary">{typeLabel}</div>
@@ -56,6 +58,11 @@ export default function ReportDetail({ report: r, busy, onStatus, onDispatch, on
           <span>{t("reports.reportedBy", { phone: r.reporterMasked })}</span>
           <span className="tnum">{t(ago.key as Parameters<typeof t>[0], { n: ago.n })}</span>
         </div>
+        {(r.aiVerdict === "violation" || r.aiVerdict === "no_violation") && (
+          <div className="pt-0.5">
+            <AiVerdictChip verdict={r.aiVerdict} confidence={r.aiConfidence} />
+          </div>
+        )}
         {r.note && <p className="rounded-lg bg-surface-2 px-2.5 py-2 text-[12.5px] leading-relaxed text-ink-soft">“{r.note}”</p>}
       </div>
 
@@ -64,17 +71,22 @@ export default function ReportDetail({ report: r, busy, onStatus, onDispatch, on
         {(["new", "reviewed", "resolved"] as ReportStatus[]).map((s) => {
           const active = r.status === s;
           const color = STATUS_COLOR[s];
+          // Forward-only: the current status reads as locked/active, backward moves and any
+          // change on a terminal report are disabled. Only a strictly-forward step is tappable.
+          const allowed = canTransition(r.status, s);
           return (
             <button
               key={s}
               onClick={() => onStatus(s)}
-              disabled={busy}
+              disabled={busy || !allowed}
               aria-pressed={active}
-              className="flex-1 rounded-lg border px-2 py-1.5 text-[11.5px] font-semibold transition-colors disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-primary"
+              className="flex-1 rounded-lg border px-2 py-1.5 text-[11.5px] font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-primary"
               style={{
                 background: active ? `color-mix(in srgb, ${color} 16%, transparent)` : "var(--color-surface)",
                 color: active ? color : "var(--color-muted)",
                 borderColor: active ? color : "var(--color-line)",
+                // The active (current) status keeps full strength even though it's locked.
+                opacity: active ? 1 : undefined,
               }}
             >
               {t(`reports.status.${s}` as Parameters<typeof t>[0])}
@@ -87,7 +99,7 @@ export default function ReportDetail({ report: r, busy, onStatus, onDispatch, on
       <div className="mt-2 flex gap-1.5">
         <button
           onClick={onDispatch}
-          disabled={busy || dispatched || !r.snappedRoadId}
+          disabled={busy || dispatched || !r.snappedRoadId || terminal}
           className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-[12.5px] font-semibold text-white transition-[transform,background-color] active:scale-[0.98] hover:bg-primary-ink disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-primary"
         >
           {busy ? <Loader2 className="size-3.5 animate-spin" /> : dispatched ? <Check className="size-3.5" /> : <Send className="size-3.5" />}
@@ -95,7 +107,7 @@ export default function ReportDetail({ report: r, busy, onStatus, onDispatch, on
         </button>
         <button
           onClick={() => onStatus("dismissed")}
-          disabled={busy}
+          disabled={busy || terminal}
           aria-label={t("reports.dismiss")}
           title={t("reports.dismiss")}
           className="flex items-center justify-center rounded-lg border border-line bg-surface px-3 py-2 text-heat-critical transition-colors hover:border-heat-critical hover:bg-heat-critical/10 disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-primary"

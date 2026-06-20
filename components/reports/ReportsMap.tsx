@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Map as LeafletMap } from "leaflet";
 import type { CitizenReport } from "@/lib/types";
 import { STATUS_COLOR } from "@/lib/citizen/reportStatus";
-
-const BENGALURU_CENTER: [number, number] = [12.955, 77.64];
-const BENGALURU_ZOOM = 12;
+import { useIsDark } from "@/lib/hooks/useIsDark";
+import { loadGoogleMaps, SHARED_MAP_OPTIONS, mapStyleFor } from "@/lib/maps/googleMaps";
+import MapZoomControls from "@/components/MapZoomControls";
 
 interface Props {
   reports: CitizenReport[];
@@ -15,84 +14,87 @@ interface Props {
 }
 
 /**
- * Leaflet map of citizen reports. Same proven technique as MapView (CARTO Positron
- * tiles, a React overlay reprojected on move/zoom, ResizeObserver → invalidateSize) but
+ * Google map of citizen reports. Same proven technique as MapView (muted basemap, a React
+ * overlay reprojected on move/zoom via a hidden OverlayView, ResizeObserver → reproject) but
  * scoped to report pins so MapView stays untouched.
  */
 export default function ReportsMap({ reports, selectedId, onSelect }: Props) {
+  const isDark = useIsDark();
   const containerRef = useRef<HTMLDivElement>(null);
-  const instanceRef = useRef<LeafletMap | null>(null);
+  const instanceRef = useRef<google.maps.Map | null>(null);
+  const overlayRef = useRef<google.maps.OverlayView | null>(null);
   const roRef = useRef<ResizeObserver | null>(null);
-  const [map, setMap] = useState<LeafletMap | null>(null);
+  const [map, setMap] = useState<google.maps.Map | null>(null);
   const [, setTick] = useState(0);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((containerRef.current as any)._leaflet_id) return;
+    const container = containerRef.current;
+    if (!container) return;
+    let cancelled = false;
+    const bump = () => setTick((t) => t + 1);
 
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-    document.head.appendChild(link);
+    loadGoogleMaps().then((maps) => {
+      if (cancelled) return;
 
-    import("leaflet").then((mod) => {
-      if (!containerRef.current) return;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if ((containerRef.current as any)._leaflet_id) return;
-      const L = mod.default ?? mod;
-
-      const m = L.map(containerRef.current, {
-        center: BENGALURU_CENTER,
-        zoom: BENGALURU_ZOOM,
-        minZoom: 10,
+      const initialDark = document.documentElement.classList.contains("dark");
+      const m = new maps.Map(container, {
+        ...SHARED_MAP_OPTIONS,
         maxZoom: 17,
-        maxBounds: [[12.7, 77.4], [13.2, 77.9]],
-        maxBoundsViscosity: 1.0,
-        zoomControl: false,
-        attributionControl: true,
+        styles: mapStyleFor(initialDark),
       });
-      L.control.zoom({ position: "topright" }).addTo(m);
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-        attribution: "© OpenStreetMap contributors © CARTO",
-        subdomains: "abcd",
-        maxZoom: 19,
-      }).addTo(m);
 
-      const bump = () => setTick((t) => t + 1);
-      m.on("move zoom", bump);
-      m.on("click", () => onSelect(null));
+      class ProjectionOverlay extends maps.OverlayView {
+        onAdd() {}
+        draw() {
+          bump();
+        }
+        onRemove() {}
+      }
+      const overlay = new ProjectionOverlay();
+      overlay.setMap(m);
+      overlayRef.current = overlay;
 
-      roRef.current = new ResizeObserver(() => {
-        m.invalidateSize();
-        bump();
-      });
-      roRef.current.observe(containerRef.current);
+      m.addListener("bounds_changed", bump);
+      m.addListener("click", () => onSelect(null));
+
+      roRef.current = new ResizeObserver(() => bump());
+      roRef.current.observe(container);
 
       instanceRef.current = m;
       setMap(m);
     });
 
     return () => {
+      cancelled = true;
       roRef.current?.disconnect();
       roRef.current = null;
+      overlayRef.current?.setMap(null);
+      overlayRef.current = null;
       if (instanceRef.current) {
-        instanceRef.current.remove();
+        google.maps.event.clearInstanceListeners(instanceRef.current);
         instanceRef.current = null;
-        setMap(null);
       }
+      container.innerHTML = "";
+      setMap(null);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    map?.setOptions({ styles: mapStyleFor(isDark) });
+  }, [isDark, map]);
+
   const project = (point: [number, number]) => {
-    if (!map) return { x: -9999, y: -9999 };
-    const px = map.latLngToContainerPoint([point[1], point[0]]);
-    return { x: px.x, y: px.y };
+    const proj = overlayRef.current?.getProjection();
+    if (!proj) return { x: -9999, y: -9999 };
+    const px = proj.fromLatLngToContainerPixel(new google.maps.LatLng(point[1], point[0]));
+    return px ? { x: px.x, y: px.y } : { x: -9999, y: -9999 };
   };
 
   return (
     <div className="relative h-full w-full overflow-hidden">
       <div ref={containerRef} className="h-full w-full" />
+
+      <MapZoomControls map={map} />
 
       {map && (
         <div className="pointer-events-none absolute inset-0 z-[1000]">

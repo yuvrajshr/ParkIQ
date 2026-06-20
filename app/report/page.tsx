@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { ArrowRight, Loader2, Phone, ShieldCheck, CheckCircle2, MapPin, Sun, Moon } from "lucide-react";
-import LanguageDropdown from "@/components/LanguageDropdown";
+import { ArrowRight, Loader2, Phone, ShieldCheck, CheckCircle2, MapPin } from "lucide-react";
+import SettingsMenu from "@/components/SettingsMenu";
 import CameraCapture, { type CaptureValue } from "@/components/citizen/CameraCapture";
 import { VIOLATION_TYPES } from "@/lib/citizen/violations";
 import type { ViolationType } from "@/lib/types";
@@ -11,24 +11,9 @@ import { useTranslation } from "@/lib/hooks/useTranslation";
 
 type Step = "phone" | "otp" | "capture" | "done";
 
-function subscribeDark(cb: () => void) {
-  const obs = new MutationObserver(cb);
-  obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-  return () => obs.disconnect();
-}
-const getDark = () => document.documentElement.classList.contains("dark");
-const getDarkSsr = () => false;
-
 export default function ReportPage() {
   const { t } = useTranslation();
   const reduce = useReducedMotion();
-  const isDark = useSyncExternalStore(subscribeDark, getDark, getDarkSsr);
-
-  function toggleDark() {
-    const next = !document.documentElement.classList.contains("dark");
-    document.documentElement.classList.toggle("dark", next);
-    try { localStorage.setItem("parkiq-dark", String(next)); } catch {}
-  }
 
   const [step, setStep] = useState<Step>("phone");
   const [digits, setDigits] = useState("");
@@ -101,7 +86,23 @@ export default function ReportPage() {
       fd.append("note", note);
       const res = await fetch("/api/citizen/report", { method: "POST", body: fd });
       const data = await res.json();
-      if (!res.ok || !data.ok) throw new Error(data.error ?? "");
+      if (!res.ok || !data.ok) {
+        // Rejected note: keep the user on the capture step with their photo + note intact so
+        // they can edit and resubmit, and show a localized reason.
+        if (data.code === "note_rejected") {
+          setError(
+            data.reason === "irrelevant"
+              ? t("report.noteRejectedIrrelevant")
+              : t("report.noteRejectedProfanity"),
+          );
+          return;
+        }
+        if (data.code === "no_vehicle") {
+          setError(t("report.noVehicle"));
+          return;
+        }
+        throw new Error(data.error ?? "");
+      }
       setDoneRoad(data.snappedRoadName ?? null);
       setStep("done");
     } catch (e) {
@@ -143,43 +144,7 @@ export default function ReportPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={toggleDark}
-              role="switch"
-              aria-checked={isDark}
-              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-              type="button"
-              className="relative shrink-0 rounded-full"
-              style={{
-                width: 56,
-                height: 30,
-                background: "var(--color-surface-2)",
-                border: "1px solid var(--color-line-strong)",
-              }}
-            >
-              <Sun
-                className="absolute top-1/2 -translate-y-1/2 size-3"
-                style={{ left: 8, color: "var(--color-accent)", pointerEvents: "none" }}
-              />
-              <Moon
-                className="absolute top-1/2 -translate-y-1/2 size-3"
-                style={{ right: 8, color: "var(--color-primary)", pointerEvents: "none" }}
-              />
-              <span
-                className="absolute top-1/2 rounded-full"
-                style={{
-                  width: 22,
-                  height: 22,
-                  left: 3,
-                  background: "#ffffff",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06)",
-                  transform: `translateY(-50%) translateX(${isDark ? 26 : 0}px)`,
-                  transition: "transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                  pointerEvents: "none",
-                }}
-              />
-            </button>
-            <LanguageDropdown />
+            <SettingsMenu />
           </div>
         </header>
 
