@@ -108,8 +108,31 @@ def _survivors() -> list[dict[str, Any]]:
 
 
 def clusters() -> list[dict[str, Any]]:
-    """The top-N surfaced hotspots — drives the map, risk list, and dispatch queue."""
-    return _survivors()[: config.TOP_N_CLUSTERS]
+    """Stratified selection across severity tiers so the dispatch queue always shows a full
+    Critical / High / Medium / Low spread rather than only the top-N by score.
+
+    Allocation for TOP_N_CLUSTERS=60: ~20 Critical + 15 High + 15 Medium + 10 Low.
+    Each tier is already sorted by (avg_virs, count) desc from _survivors(), so the
+    most impactful cluster within each tier ranks first.
+    """
+    survivors = _survivors()
+    n = config.TOP_N_CLUSTERS
+
+    tiers = {
+        "critical": [c for c in survivors if c["severity_index"] >= 75],
+        "high":     [c for c in survivors if 50 <= c["severity_index"] < 75],
+        "mid":      [c for c in survivors if 25 <= c["severity_index"] < 50],
+        "low":      [c for c in survivors if c["severity_index"] < 25],
+    }
+
+    # Proportional allocation: 33% critical, 25% high, 25% mid, 17% low
+    alloc = [n // 3, n // 4, n // 4, n // 6]
+
+    result: list[dict[str, Any]] = []
+    for tier_key, slots in zip(["critical", "high", "mid", "low"], alloc):
+        result.extend(tiers[tier_key][: max(1, slots)])
+
+    return result[:n]
 
 
 def cluster_by_id(cluster_id: int) -> dict[str, Any] | None:

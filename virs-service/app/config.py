@@ -26,8 +26,8 @@ CLUSTER_NAMES_PATH = DATA_DIR / "cluster_names.json"
 # that score a saturated ~1.0 and would swamp the map with noise. We drop clusters below a minimum
 # violation count, then surface the top N by avg_virs (count breaks ties so big hotspots rank above
 # tiny ones). Tune these without touching the ranking logic in data.py.
-MIN_CLUSTER_VIOLATIONS = int(os.environ.get("VIRS_MIN_CLUSTER_VIOLATIONS", "10"))
-TOP_N_CLUSTERS = int(os.environ.get("VIRS_TOP_N_CLUSTERS", "40"))
+MIN_CLUSTER_VIOLATIONS = int(os.environ.get("VIRS_MIN_CLUSTER_VIOLATIONS", "3"))
+TOP_N_CLUSTERS = int(os.environ.get("VIRS_TOP_N_CLUSTERS", "60"))
 
 # The Next.js dev origin allowed through CORS (the browser never calls this service directly
 # in production wiring — Next proxies it — but allowing localhost:3000 eases local debugging).

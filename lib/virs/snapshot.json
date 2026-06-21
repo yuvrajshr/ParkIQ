@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-21T13:47:15.564Z",
+  "generatedAt": "2026-06-21T17:05:02.521Z",
   "dataSource": "real",
   "summary": {
     "rows": 119418,
-    "clusters": 1061,
-    "surfaced": 40,
+    "clusters": 1636,
+    "surfaced": 60,
     "mean_virs": 0.3642,
-    "high_risk_clusters": 169,
+    "high_risk_clusters": 278,
     "peak_share": 0.2927,
     "data_source": "real"
   },
@@ -73,7 +73,7 @@
       "lat": 12.982350342815291,
       "lng": 77.56290456746166,
       "avg_virs": 1,
-      "severity_index": 92,
+      "severity_index": 93,
       "max_virs": 1,
       "count": 13,
       "peak_share": 0.0769,
@@ -83,6 +83,104 @@
         "CAR": 0.3077,
         "MAXI-CAB": 0.1538,
         "GOODS AUTO": 0.0769
+      }
+    },
+    {
+      "cluster_id": 2108,
+      "name": null,
+      "lat": 12.856745466666666,
+      "lng": 77.66353045,
+      "avg_virs": 1,
+      "severity_index": 97,
+      "max_virs": 1,
+      "count": 6,
+      "peak_share": 0.3333,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.5,
+        "LGV": 0.1667,
+        "GOODS AUTO": 0.1667,
+        "SCOOTER": 0.1667
+      }
+    },
+    {
+      "cluster_id": 525,
+      "name": "Mysore Road",
+      "lat": 12.95338648,
+      "lng": 77.54212142000002,
+      "avg_virs": 1,
+      "severity_index": 94,
+      "max_virs": 1,
+      "count": 5,
+      "peak_share": 0.6,
+      "top_vehicle": "PASSENGER AUTO",
+      "vehicle_mix": {
+        "PASSENGER AUTO": 0.8,
+        "MAXI-CAB": 0.2
+      }
+    },
+    {
+      "cluster_id": 1250,
+      "name": "Mysore Road",
+      "lat": 12.9557819,
+      "lng": 77.54605652500001,
+      "avg_virs": 1,
+      "severity_index": 94,
+      "max_virs": 1,
+      "count": 4,
+      "peak_share": 0.5,
+      "top_vehicle": "HGV",
+      "vehicle_mix": {
+        "HGV": 0.25,
+        "LGV": 0.25,
+        "CAR": 0.25,
+        "TEMPO": 0.25
+      }
+    },
+    {
+      "cluster_id": 88,
+      "name": "27th Main Road",
+      "lat": 12.9171732,
+      "lng": 77.6517319,
+      "avg_virs": 1,
+      "severity_index": 92,
+      "max_virs": 1,
+      "count": 3,
+      "peak_share": 1,
+      "top_vehicle": "MOTOR CYCLE",
+      "vehicle_mix": {
+        "MOTOR CYCLE": 1
+      }
+    },
+    {
+      "cluster_id": 332,
+      "name": "Swamy Vivekananda Road",
+      "lat": 12.9936557,
+      "lng": 77.66245006666666,
+      "avg_virs": 1,
+      "severity_index": 95,
+      "max_virs": 1,
+      "count": 3,
+      "peak_share": 0,
+      "top_vehicle": "SCOOTER",
+      "vehicle_mix": {
+        "SCOOTER": 0.6667,
+        "MAXI-CAB": 0.3333
+      }
+    },
+    {
+      "cluster_id": 409,
+      "name": "Lalbagh Road",
+      "lat": 12.956316333333334,
+      "lng": 77.58600726666667,
+      "avg_virs": 1,
+      "severity_index": 95,
+      "max_virs": 1,
+      "count": 3,
+      "peak_share": 0.3333,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 1
       }
     },
     {
@@ -111,7 +209,7 @@
       "lat": 12.97725085064935,
       "lng": 77.5707397077922,
       "avg_virs": 0.9999,
-      "severity_index": 86,
+      "severity_index": 87,
       "max_virs": 1,
       "count": 77,
       "peak_share": 0.3636,
@@ -182,7 +280,7 @@
       "lat": 12.99582957696026,
       "lng": 77.69506349913065,
       "avg_virs": 0.9999,
-      "severity_index": 87,
+      "severity_index": 88,
       "max_virs": 0.9999,
       "count": 46,
       "peak_share": 0.1304,
@@ -273,466 +371,754 @@
       }
     },
     {
-      "cluster_id": 1313,
-      "name": "BEL Road",
-      "lat": 13.051600483870965,
-      "lng": 77.55213993548386,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 31,
-      "peak_share": 0.2581,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.6129,
-        "SCOOTER": 0.1935,
-        "MOTOR CYCLE": 0.129,
-        "OTHERS": 0.0323,
-        "PASSENGER AUTO": 0.0323
-      }
-    },
-    {
-      "cluster_id": 400,
-      "name": "Gubbi Thotadappa Road",
-      "lat": 12.977181127586205,
-      "lng": 77.57084956896551,
-      "avg_virs": 0.9999,
-      "severity_index": 90,
-      "max_virs": 1,
-      "count": 29,
-      "peak_share": 0.3448,
-      "top_vehicle": "PASSENGER AUTO",
-      "vehicle_mix": {
-        "PASSENGER AUTO": 0.8966,
-        "CAR": 0.069,
-        "SCOOTER": 0.0345
-      }
-    },
-    {
-      "cluster_id": 877,
-      "name": "Tumkur Road",
-      "lat": 13.030014324000001,
-      "lng": 77.53815191199999,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 25,
-      "peak_share": 0.08,
-      "top_vehicle": "PASSENGER AUTO",
-      "vehicle_mix": {
-        "PASSENGER AUTO": 0.52,
-        "CAR": 0.2,
-        "MOTOR CYCLE": 0.12,
-        "LGV": 0.04,
-        "MINI LORRY": 0.04,
-        "PRIVATE BUS": 0.04,
-        "VAN": 0.04
-      }
-    },
-    {
-      "cluster_id": 1905,
-      "name": "Swamy Vivekananda Road",
-      "lat": 12.984061300000002,
-      "lng": 77.64075735909091,
-      "avg_virs": 0.9999,
-      "severity_index": 87,
-      "max_virs": 0.9999,
-      "count": 22,
+      "cluster_id": 156,
+      "name": "Service Road",
+      "lat": 12.927174466666669,
+      "lng": 77.6784258,
+      "avg_virs": 0.9734,
+      "severity_index": 57,
+      "max_virs": 0.9894,
+      "count": 3,
       "peak_share": 0,
       "top_vehicle": "CAR",
       "vehicle_mix": {
-        "CAR": 0.5,
-        "SCOOTER": 0.2727,
-        "MOTOR CYCLE": 0.1818,
-        "OTHERS": 0.0455
+        "CAR": 0.6667,
+        "PASSENGER AUTO": 0.3333
       }
     },
     {
-      "cluster_id": 12,
-      "name": "Gandhi Marg",
-      "lat": 12.957235152380953,
-      "lng": 77.51862588095238,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 21,
-      "peak_share": 0.2381,
-      "top_vehicle": "SCOOTER",
-      "vehicle_mix": {
-        "SCOOTER": 0.619,
-        "MOTOR CYCLE": 0.2381,
-        "CAR": 0.1429
-      }
-    },
-    {
-      "cluster_id": 402,
-      "name": "Gubbi Thotadappa Road",
-      "lat": 12.977181414285715,
-      "lng": 77.57073318571429,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 21,
-      "peak_share": 0.0952,
-      "top_vehicle": "PASSENGER AUTO",
-      "vehicle_mix": {
-        "PASSENGER AUTO": 0.9048,
-        "MOTOR CYCLE": 0.0476,
-        "CAR": 0.0476
-      }
-    },
-    {
-      "cluster_id": 1254,
-      "name": "Banaswadi Road",
-      "lat": 12.999629347619045,
-      "lng": 77.62520291428571,
-      "avg_virs": 0.9999,
-      "severity_index": 90,
-      "max_virs": 1,
-      "count": 21,
-      "peak_share": 0.2381,
-      "top_vehicle": "PASSENGER AUTO",
-      "vehicle_mix": {
-        "PASSENGER AUTO": 0.7143,
-        "CAR": 0.2857
-      }
-    },
-    {
-      "cluster_id": 762,
+      "cluster_id": 154,
       "name": "Outer Ring Road",
-      "lat": 12.996315640496464,
-      "lng": 77.6685342751578,
-      "avg_virs": 0.9999,
-      "severity_index": 87,
-      "max_virs": 0.9999,
-      "count": 18,
-      "peak_share": 0.3889,
-      "top_vehicle": "SCOOTER",
+      "lat": 12.926905503333332,
+      "lng": 77.67900204444443,
+      "avg_virs": 0.9542,
+      "severity_index": 55,
+      "max_virs": 1,
+      "count": 90,
+      "peak_share": 0.0667,
+      "top_vehicle": "CAR",
       "vehicle_mix": {
-        "SCOOTER": 0.3889,
-        "CAR": 0.3333,
-        "PASSENGER AUTO": 0.1667,
-        "PRIVATE BUS": 0.0556,
-        "MOTOR CYCLE": 0.0556
+        "CAR": 0.2889,
+        "PASSENGER AUTO": 0.2889,
+        "MAXI-CAB": 0.2,
+        "SCOOTER": 0.0889,
+        "MOTOR CYCLE": 0.0667,
+        "MOPED": 0.0333,
+        "OTHERS": 0.0222,
+        "VAN": 0.0111
       }
     },
     {
-      "cluster_id": 334,
-      "name": "Swamy Vivekananda Road",
-      "lat": 12.993470417647059,
-      "lng": 77.66237252352941,
-      "avg_virs": 0.9999,
-      "severity_index": 89,
-      "max_virs": 0.9999,
+      "cluster_id": 157,
+      "name": null,
+      "lat": 12.926761864705883,
+      "lng": 77.67873526470588,
+      "avg_virs": 0.9388,
+      "severity_index": 53,
+      "max_virs": 0.971,
       "count": 17,
-      "peak_share": 0.4118,
-      "top_vehicle": "SCOOTER",
+      "peak_share": 0.2941,
+      "top_vehicle": "MAXI-CAB",
       "vehicle_mix": {
-        "SCOOTER": 0.5294,
-        "MOTOR CYCLE": 0.3529,
-        "PASSENGER AUTO": 0.0588,
+        "MAXI-CAB": 0.4118,
+        "CAR": 0.2353,
+        "PASSENGER AUTO": 0.1765,
+        "MOTOR CYCLE": 0.0588,
+        "SCOOTER": 0.0588,
         "LGV": 0.0588
       }
     },
     {
-      "cluster_id": 1195,
-      "name": "Netta Kalappa Circle",
-      "lat": 12.940250775,
-      "lng": 77.57291892500001,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 16,
-      "peak_share": 0.125,
-      "top_vehicle": "SCOOTER",
+      "cluster_id": 73,
+      "name": "Service Road",
+      "lat": 12.936327643243246,
+      "lng": 77.6924630063063,
+      "avg_virs": 0.8792,
+      "severity_index": 51,
+      "max_virs": 1,
+      "count": 111,
+      "peak_share": 0.009,
+      "top_vehicle": "MAXI-CAB",
       "vehicle_mix": {
-        "SCOOTER": 0.6875,
-        "CAR": 0.3125
+        "MAXI-CAB": 0.2432,
+        "SCOOTER": 0.2342,
+        "PASSENGER AUTO": 0.2342,
+        "MOTOR CYCLE": 0.1712,
+        "CAR": 0.1081,
+        "MOPED": 0.009
       }
     },
     {
-      "cluster_id": 527,
-      "name": "Mysore Road",
-      "lat": 12.953266164285711,
-      "lng": 77.54205889285716,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
+      "cluster_id": 1025,
+      "name": "Devaraj Urs Road",
+      "lat": 12.98101390251903,
+      "lng": 77.58869394964451,
+      "avg_virs": 0.8495,
+      "severity_index": 74,
+      "max_virs": 0.9998,
+      "count": 12,
+      "peak_share": 0.3333,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.6667,
+        "MAXI-CAB": 0.0833,
+        "SCOOTER": 0.0833,
+        "PASSENGER AUTO": 0.0833,
+        "MOTOR CYCLE": 0.0833
+      }
+    },
+    {
+      "cluster_id": 499,
+      "name": "Kengeri Main Road",
+      "lat": 12.909901227359736,
+      "lng": 77.47927482382768,
+      "avg_virs": 0.8467,
+      "severity_index": 71,
+      "max_virs": 1,
+      "count": 18,
+      "peak_share": 0.1667,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.6667,
+        "PASSENGER AUTO": 0.1111,
+        "SCOOTER": 0.1111,
+        "MOTOR CYCLE": 0.0556,
+        "VAN": 0.0556
+      }
+    },
+    {
+      "cluster_id": 338,
+      "name": "Swamy Vivekananda Road",
+      "lat": 12.99402336888889,
+      "lng": 77.66326784851852,
+      "avg_virs": 0.8423,
+      "severity_index": 74,
       "max_virs": 0.9999,
-      "count": 14,
+      "count": 270,
+      "peak_share": 0.0556,
+      "top_vehicle": "SCOOTER",
+      "vehicle_mix": {
+        "SCOOTER": 0.6333,
+        "MOTOR CYCLE": 0.2667,
+        "PASSENGER AUTO": 0.037,
+        "CAR": 0.0259,
+        "MAXI-CAB": 0.0185,
+        "MOPED": 0.0148,
+        "GOODS AUTO": 0.0037
+      }
+    },
+    {
+      "cluster_id": 954,
+      "name": "Mekhri Circle Underpass",
+      "lat": 13.01160075,
+      "lng": 77.585008875,
+      "avg_virs": 0.8365,
+      "severity_index": 71,
+      "max_virs": 1,
+      "count": 4,
+      "peak_share": 0,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.75,
+        "LGV": 0.25
+      }
+    },
+    {
+      "cluster_id": 956,
+      "name": "8th Main Road",
+      "lat": 13.010380025,
+      "lng": 77.583453625,
+      "avg_virs": 0.8357,
+      "severity_index": 67,
+      "max_virs": 0.9997,
+      "count": 4,
+      "peak_share": 0,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.75,
+        "PASSENGER AUTO": 0.25
+      }
+    },
+    {
+      "cluster_id": 1630,
+      "name": "Magadi Road",
+      "lat": 12.989113833333334,
+      "lng": 77.50762526666666,
+      "avg_virs": 0.8335,
+      "severity_index": 74,
+      "max_virs": 0.9999,
+      "count": 9,
+      "peak_share": 0.1111,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.7778,
+        "SCOOTER": 0.1111,
+        "JEEP": 0.1111
+      }
+    },
+    {
+      "cluster_id": 969,
+      "name": "9th Cross Road",
+      "lat": 12.911320900000002,
+      "lng": 77.57401275,
+      "avg_virs": 0.8251,
+      "severity_index": 66,
+      "max_virs": 0.9995,
+      "count": 4,
+      "peak_share": 0,
+      "top_vehicle": "MOTOR CYCLE",
+      "vehicle_mix": {
+        "MOTOR CYCLE": 0.25,
+        "CAR": 0.25,
+        "TEMPO": 0.25,
+        "PASSENGER AUTO": 0.25
+      }
+    },
+    {
+      "cluster_id": 292,
+      "name": "Bellary Road",
+      "lat": 13.035530246774195,
+      "lng": 77.58894175967741,
+      "avg_virs": 0.8221,
+      "severity_index": 70,
+      "max_virs": 0.9999,
+      "count": 62,
+      "peak_share": 0.0968,
+      "top_vehicle": "SCOOTER",
+      "vehicle_mix": {
+        "SCOOTER": 0.4194,
+        "MOTOR CYCLE": 0.3387,
+        "PASSENGER AUTO": 0.129,
+        "CAR": 0.1129
+      }
+    },
+    {
+      "cluster_id": 1322,
+      "name": "Kengeri Main Road",
+      "lat": 12.935468133333334,
+      "lng": 77.49109645555556,
+      "avg_virs": 0.8204,
+      "severity_index": 74,
+      "max_virs": 0.9999,
+      "count": 9,
+      "peak_share": 0.2222,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.6667,
+        "MOPED": 0.2222,
+        "VAN": 0.1111
+      }
+    },
+    {
+      "cluster_id": 155,
+      "name": "Service Road",
+      "lat": 12.926871129411765,
+      "lng": 77.67832901176472,
+      "avg_virs": 0.8203,
+      "severity_index": 50,
+      "max_virs": 0.971,
+      "count": 17,
+      "peak_share": 0,
+      "top_vehicle": "MAXI-CAB",
+      "vehicle_mix": {
+        "MAXI-CAB": 0.4118,
+        "CAR": 0.2353,
+        "PASSENGER AUTO": 0.1176,
+        "OTHERS": 0.1176,
+        "LORRY/GOODS VEHICLE": 0.0588,
+        "MOTOR CYCLE": 0.0588
+      }
+    },
+    {
+      "cluster_id": 1830,
+      "name": "Mysore Road",
+      "lat": 12.949352408695654,
+      "lng": 77.5371962826087,
+      "avg_virs": 0.8166,
+      "severity_index": 74,
+      "max_virs": 1,
+      "count": 23,
+      "peak_share": 0.1304,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.3478,
+        "GOODS AUTO": 0.1739,
+        "LORRY/GOODS VEHICLE": 0.087,
+        "HGV": 0.087,
+        "VAN": 0.087,
+        "PASSENGER AUTO": 0.087,
+        "TEMPO": 0.0435,
+        "TOURIST BUS": 0.0435,
+        "PRIVATE BUS": 0.0435
+      }
+    },
+    {
+      "cluster_id": 249,
+      "name": "Sampige Road",
+      "lat": 12.999914860227273,
+      "lng": 77.57133174318182,
+      "avg_virs": 0.9051,
+      "severity_index": 49,
+      "max_virs": 0.9412,
+      "count": 88,
+      "peak_share": 0.5795,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.5568,
+        "PASSENGER AUTO": 0.2045,
+        "SCOOTER": 0.1705,
+        "MAXI-CAB": 0.0341,
+        "JEEP": 0.0114,
+        "MOTOR CYCLE": 0.0114,
+        "VAN": 0.0114
+      }
+    },
+    {
+      "cluster_id": 652,
+      "name": "D V Gundappa Road",
+      "lat": 12.943800226666665,
+      "lng": 77.57099552666666,
+      "avg_virs": 0.8895,
+      "severity_index": 49,
+      "max_virs": 0.9533,
+      "count": 15,
+      "peak_share": 0.2,
+      "top_vehicle": "SCOOTER",
+      "vehicle_mix": {
+        "SCOOTER": 0.6667,
+        "CAR": 0.2667,
+        "PASSENGER AUTO": 0.0667
+      }
+    },
+    {
+      "cluster_id": 724,
+      "name": "Kundalahalli Main Road",
+      "lat": 12.962532115384615,
+      "lng": 77.71698721538462,
+      "avg_virs": 0.8307,
+      "severity_index": 45,
+      "max_virs": 0.8872,
+      "count": 13,
+      "peak_share": 0.3077,
+      "top_vehicle": "MAXI-CAB",
+      "vehicle_mix": {
+        "MAXI-CAB": 0.6154,
+        "SCOOTER": 0.1538,
+        "PASSENGER AUTO": 0.0769,
+        "MOTOR CYCLE": 0.0769,
+        "CAR": 0.0769
+      }
+    },
+    {
+      "cluster_id": 1552,
+      "name": "Outer Ring Road",
+      "lat": 13.007340211764706,
+      "lng": 77.52676323529413,
+      "avg_virs": 0.7778,
+      "severity_index": 49,
+      "max_virs": 1,
+      "count": 17,
+      "peak_share": 0.1176,
+      "top_vehicle": "PRIVATE BUS",
+      "vehicle_mix": {
+        "PRIVATE BUS": 0.4118,
+        "HGV": 0.2353,
+        "LGV": 0.1765,
+        "CAR": 0.0588,
+        "FACTORY BUS": 0.0588,
+        "VAN": 0.0588
+      }
+    },
+    {
+      "cluster_id": 74,
+      "name": "Service Road",
+      "lat": 12.937037774444446,
+      "lng": 77.69279443222223,
+      "avg_virs": 0.7767,
+      "severity_index": 48,
+      "max_virs": 1,
+      "count": 90,
+      "peak_share": 0.1111,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.3,
+        "PASSENGER AUTO": 0.2778,
+        "MAXI-CAB": 0.2111,
+        "SCOOTER": 0.0889,
+        "MOTOR CYCLE": 0.0889,
+        "TOURIST BUS": 0.0222,
+        "LGV": 0.0111
+      }
+    },
+    {
+      "cluster_id": 1550,
+      "name": "Outer Ring Road",
+      "lat": 13.007421711111112,
+      "lng": 77.52682270000001,
+      "avg_virs": 0.7563,
+      "severity_index": 43,
+      "max_virs": 0.8617,
+      "count": 9,
+      "peak_share": 0.1111,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.2222,
+        "LGV": 0.2222,
+        "HGV": 0.2222,
+        "PRIVATE BUS": 0.2222,
+        "TOURIST BUS": 0.1111
+      }
+    },
+    {
+      "cluster_id": 683,
+      "name": "Service Road",
+      "lat": 12.979027136842106,
+      "lng": 77.69459533947368,
+      "avg_virs": 0.7211,
+      "severity_index": 44,
+      "max_virs": 1,
+      "count": 38,
+      "peak_share": 0.0789,
+      "top_vehicle": "MAXI-CAB",
+      "vehicle_mix": {
+        "MAXI-CAB": 0.5,
+        "CAR": 0.2632,
+        "TEMPO": 0.0789,
+        "MOPED": 0.0789,
+        "SCOOTER": 0.0526,
+        "HGV": 0.0263
+      }
+    },
+    {
+      "cluster_id": 845,
+      "name": "Service Road",
+      "lat": 13.097314533333332,
+      "lng": 77.59894226060604,
+      "avg_virs": 0.7112,
+      "severity_index": 41,
+      "max_virs": 0.7979,
+      "count": 33,
+      "peak_share": 0.0303,
+      "top_vehicle": "MAXI-CAB",
+      "vehicle_mix": {
+        "MAXI-CAB": 0.7273,
+        "LGV": 0.0606,
+        "SCOOTER": 0.0606,
+        "BUS (BMTC/KSRTC)": 0.0606,
+        "MOTOR CYCLE": 0.0303,
+        "OTHERS": 0.0303,
+        "CAR": 0.0303
+      }
+    },
+    {
+      "cluster_id": 1373,
+      "name": "Tumkur Road",
+      "lat": 13.01913335,
+      "lng": 77.55332675,
+      "avg_virs": 0.7049,
+      "severity_index": 41,
+      "max_virs": 0.7133,
+      "count": 4,
+      "peak_share": 0,
+      "top_vehicle": "PRIVATE BUS",
+      "vehicle_mix": {
+        "PRIVATE BUS": 0.5,
+        "PASSENGER AUTO": 0.25,
+        "CAR": 0.25
+      }
+    },
+    {
+      "cluster_id": 246,
+      "name": "Sampige Road",
+      "lat": 13.00011994814815,
+      "lng": 77.5718340074074,
+      "avg_virs": 0.6829,
+      "severity_index": 42,
+      "max_virs": 0.9412,
+      "count": 27,
+      "peak_share": 0.4444,
+      "top_vehicle": "PASSENGER AUTO",
+      "vehicle_mix": {
+        "PASSENGER AUTO": 0.3704,
+        "CAR": 0.3333,
+        "SCOOTER": 0.1481,
+        "MOTOR CYCLE": 0.1111,
+        "MAXI-CAB": 0.037
+      }
+    },
+    {
+      "cluster_id": 228,
+      "name": "9th Main Road",
+      "lat": 12.929408341666663,
+      "lng": 77.58381981666665,
+      "avg_virs": 0.6805,
+      "severity_index": 43,
+      "max_virs": 0.9672,
+      "count": 60,
+      "peak_share": 0.2333,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.4667,
+        "SCOOTER": 0.3,
+        "MOTOR CYCLE": 0.2,
+        "LGV": 0.0167,
+        "PASSENGER AUTO": 0.0167
+      }
+    },
+    {
+      "cluster_id": 51,
+      "name": "Old Madras Road",
+      "lat": 13.008504883333332,
+      "lng": 77.695437575,
+      "avg_virs": 0.6799,
+      "severity_index": 41,
+      "max_virs": 0.8885,
+      "count": 12,
       "peak_share": 0,
       "top_vehicle": "PASSENGER AUTO",
       "vehicle_mix": {
-        "PASSENGER AUTO": 0.5714,
-        "MAXI-CAB": 0.2857,
-        "SCOOTER": 0.0714,
-        "MOTOR CYCLE": 0.0714
+        "PASSENGER AUTO": 0.5,
+        "MOTOR CYCLE": 0.25,
+        "LGV": 0.1667,
+        "SCOOTER": 0.0833
       }
     },
     {
-      "cluster_id": 487,
-      "name": "17th Cross Road",
-      "lat": 12.911997184615386,
-      "lng": 77.6515355923077,
-      "avg_virs": 0.9999,
-      "severity_index": 89,
-      "max_virs": 0.9999,
-      "count": 13,
-      "peak_share": 0.6154,
+      "cluster_id": 1549,
+      "name": "Outer Ring Road",
+      "lat": 13.0074672,
+      "lng": 77.52696569999999,
+      "avg_virs": 0.6523,
+      "severity_index": 40,
+      "max_virs": 0.8617,
+      "count": 12,
+      "peak_share": 0.1667,
+      "top_vehicle": "VAN",
+      "vehicle_mix": {
+        "VAN": 0.25,
+        "LGV": 0.25,
+        "CAR": 0.1667,
+        "SCHOOL VEHICLE": 0.1667,
+        "TEMPO": 0.0833,
+        "PRIVATE BUS": 0.0833
+      }
+    },
+    {
+      "cluster_id": 514,
+      "name": "Mangammapalaya Road",
+      "lat": 12.906498740476192,
+      "lng": 77.63051383095238,
+      "avg_virs": 0.6516,
+      "severity_index": 40,
+      "max_virs": 0.7844,
+      "count": 42,
+      "peak_share": 0,
       "top_vehicle": "SCOOTER",
       "vehicle_mix": {
-        "SCOOTER": 0.8462,
-        "CAR": 0.1538
+        "SCOOTER": 0.4286,
+        "MOTOR CYCLE": 0.2857,
+        "CAR": 0.0952,
+        "LGV": 0.0952,
+        "PASSENGER AUTO": 0.0476,
+        "GOODS AUTO": 0.0238,
+        "HGV": 0.0238
       }
     },
     {
-      "cluster_id": 1259,
-      "name": "Banaswadi Road",
-      "lat": 12.9992356,
-      "lng": 77.62475478461539,
-      "avg_virs": 0.9999,
-      "severity_index": 90,
-      "max_virs": 1,
-      "count": 13,
-      "peak_share": 0.1538,
+      "cluster_id": 247,
+      "name": "Sampige Road",
+      "lat": 13.000887766326532,
+      "lng": 77.57130280102041,
+      "avg_virs": 0.6479,
+      "severity_index": 40,
+      "max_virs": 0.9265,
+      "count": 98,
+      "peak_share": 0.4898,
       "top_vehicle": "CAR",
       "vehicle_mix": {
-        "CAR": 0.9231,
-        "PASSENGER AUTO": 0.0769
+        "CAR": 0.4898,
+        "PASSENGER AUTO": 0.2449,
+        "SCOOTER": 0.1633,
+        "MOTOR CYCLE": 0.051,
+        "LGV": 0.0204,
+        "GOODS AUTO": 0.0102,
+        "VAN": 0.0102,
+        "JEEP": 0.0102
       }
     },
     {
-      "cluster_id": 988,
-      "name": "Doctor B R Ambedkar Veedhi",
-      "lat": 12.979029949999997,
-      "lng": 77.59176942500001,
-      "avg_virs": 0.9999,
-      "severity_index": 89,
-      "max_virs": 0.9999,
-      "count": 12,
-      "peak_share": 0.25,
-      "top_vehicle": "MOTOR CYCLE",
+      "cluster_id": 37,
+      "name": "Coles Road",
+      "lat": 12.99607772129964,
+      "lng": 77.61396246714803,
+      "avg_virs": 0.1509,
+      "severity_index": 24,
+      "max_virs": 0.35,
+      "count": 277,
+      "peak_share": 0.0217,
+      "top_vehicle": "SCOOTER",
       "vehicle_mix": {
-        "MOTOR CYCLE": 0.3333,
-        "CAR": 0.25,
-        "SCOOTER": 0.25,
-        "MOPED": 0.1667
+        "SCOOTER": 0.7256,
+        "MOTOR CYCLE": 0.1588,
+        "CAR": 0.1083,
+        "JEEP": 0.0036,
+        "PASSENGER AUTO": 0.0036
       }
     },
     {
-      "cluster_id": 1111,
-      "name": "Kengeri Main Road",
-      "lat": 12.914074942265046,
-      "lng": 77.48129214809117,
-      "avg_virs": 0.9999,
-      "severity_index": 87,
-      "max_virs": 0.9999,
-      "count": 12,
-      "peak_share": 0.0833,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.5,
-        "PASSENGER AUTO": 0.25,
-        "TEMPO": 0.1667,
-        "SCOOTER": 0.0833
-      }
-    },
-    {
-      "cluster_id": 1255,
-      "name": "Banaswadi Road",
-      "lat": 12.999504475,
-      "lng": 77.62509994166668,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 12,
-      "peak_share": 0.0833,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.5,
-        "PASSENGER AUTO": 0.4167,
-        "SCOOTER": 0.0833
-      }
-    },
-    {
-      "cluster_id": 1311,
-      "name": "Vidyaranyapura Road",
-      "lat": 13.056393590909089,
-      "lng": 77.55737823636363,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 11,
-      "peak_share": 0,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.6364,
-        "SCOOTER": 0.1818,
-        "VAN": 0.0909,
-        "MOTOR CYCLE": 0.0909
-      }
-    },
-    {
-      "cluster_id": 456,
-      "name": "Outer Ring Road",
-      "lat": 13.01729192,
-      "lng": 77.53156249,
-      "avg_virs": 0.9999,
-      "severity_index": 91,
-      "max_virs": 1,
-      "count": 10,
-      "peak_share": 0.1,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.6,
-        "LGV": 0.1,
-        "HGV": 0.1,
-        "PASSENGER AUTO": 0.1,
-        "MOTOR CYCLE": 0.1
-      }
-    },
-    {
-      "cluster_id": 994,
-      "name": "Bellary Road",
-      "lat": 13.02186911,
-      "lng": 77.58434589999999,
-      "avg_virs": 0.9999,
-      "severity_index": 89,
-      "max_virs": 0.9999,
-      "count": 10,
-      "peak_share": 0.1,
+      "cluster_id": 229,
+      "name": "9th Main Road",
+      "lat": 12.9276733,
+      "lng": 77.58347793333333,
+      "avg_virs": 0.1418,
+      "severity_index": 23,
+      "max_virs": 0.2322,
+      "count": 3,
+      "peak_share": 1,
       "top_vehicle": "CAR",
       "vehicle_mix": {
         "CAR": 1
       }
     },
     {
-      "cluster_id": 1196,
-      "name": "Netta Kalappa Circle",
-      "lat": 12.940292349999998,
-      "lng": 77.57296638999999,
-      "avg_virs": 0.9999,
-      "severity_index": 87,
-      "max_virs": 0.9999,
-      "count": 10,
-      "peak_share": 0.6,
-      "top_vehicle": "SCOOTER",
+      "cluster_id": 1339,
+      "name": "Anepalaya Main Road",
+      "lat": 12.951797200000001,
+      "lng": 77.60690629999999,
+      "avg_virs": 0.1305,
+      "severity_index": 24,
+      "max_virs": 0.1826,
+      "count": 5,
+      "peak_share": 0.2,
+      "top_vehicle": "CAR",
       "vehicle_mix": {
-        "SCOOTER": 0.6,
-        "MOTOR CYCLE": 0.3,
-        "PASSENGER AUTO": 0.1
+        "CAR": 0.8,
+        "PASSENGER AUTO": 0.2
       }
     },
     {
-      "cluster_id": 522,
-      "name": "Mysore Road",
-      "lat": 12.953576993148147,
-      "lng": 77.54258197128559,
-      "avg_virs": 0.9998,
-      "severity_index": 85,
+      "cluster_id": 1157,
+      "name": "Gangamma Temple road",
+      "lat": 13.056884278947368,
+      "lng": 77.54686465789474,
+      "avg_virs": 0.1297,
+      "severity_index": 23,
       "max_virs": 0.9999,
-      "count": 54,
-      "peak_share": 0.4815,
-      "top_vehicle": "PASSENGER AUTO",
+      "count": 19,
+      "peak_share": 0.0526,
+      "top_vehicle": "CAR",
       "vehicle_mix": {
-        "PASSENGER AUTO": 0.3333,
-        "SCOOTER": 0.2778,
-        "CAR": 0.1481,
-        "MOTOR CYCLE": 0.1296,
-        "MAXI-CAB": 0.0741,
-        "GOODS AUTO": 0.0185,
-        "MOPED": 0.0185
+        "CAR": 0.7895,
+        "MOTOR CYCLE": 0.1053,
+        "SCOOTER": 0.0526,
+        "PASSENGER AUTO": 0.0526
       }
     },
     {
-      "cluster_id": 1276,
-      "name": "Sarjapura Road",
-      "lat": 12.913024033333333,
-      "lng": 77.68063347619048,
-      "avg_virs": 0.9998,
-      "severity_index": 85,
-      "max_virs": 0.9999,
-      "count": 21,
+      "cluster_id": 1417,
+      "name": "North Park Road",
+      "lat": 12.986809954166667,
+      "lng": 77.58026972083333,
+      "avg_virs": 0.1273,
+      "severity_index": 23,
+      "max_virs": 0.6126,
+      "count": 24,
+      "peak_share": 0.2917,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.7917,
+        "SCOOTER": 0.125,
+        "MOTOR CYCLE": 0.0417,
+        "OTHERS": 0.0417
+      }
+    },
+    {
+      "cluster_id": 600,
+      "name": "Railway Parallel Road",
+      "lat": 12.9969136,
+      "lng": 77.58332643333334,
+      "avg_virs": 0.1266,
+      "severity_index": 24,
+      "max_virs": 0.2116,
+      "count": 3,
       "peak_share": 0.6667,
       "top_vehicle": "CAR",
       "vehicle_mix": {
-        "CAR": 0.6667,
-        "MOTOR CYCLE": 0.0952,
-        "SCOOTER": 0.0952,
-        "GOODS AUTO": 0.0476,
-        "PASSENGER AUTO": 0.0476,
-        "LORRY/GOODS VEHICLE": 0.0476
+        "CAR": 1
       }
     },
     {
-      "cluster_id": 562,
-      "name": "Kasturba Road",
-      "lat": 12.967975323076924,
-      "lng": 77.58832406923077,
-      "avg_virs": 0.9998,
-      "severity_index": 83,
-      "max_virs": 0.9998,
-      "count": 13,
-      "peak_share": 0.3077,
+      "cluster_id": 193,
+      "name": "Vittal Mallya Road",
+      "lat": 12.971684411111111,
+      "lng": 77.59522785555556,
+      "avg_virs": 0.1229,
+      "severity_index": 24,
+      "max_virs": 0.2007,
+      "count": 9,
+      "peak_share": 0.3333,
       "top_vehicle": "CAR",
       "vehicle_mix": {
-        "CAR": 0.3846,
-        "PASSENGER AUTO": 0.3077,
-        "SCOOTER": 0.2308,
-        "MOTOR CYCLE": 0.0769
+        "CAR": 0.4444,
+        "PASSENGER AUTO": 0.4444,
+        "MAXI-CAB": 0.1111
       }
     },
     {
-      "cluster_id": 1714,
-      "name": "Rajaram Mohan Roy Road",
-      "lat": 12.96751734166667,
-      "lng": 77.59407542500001,
-      "avg_virs": 0.9998,
-      "severity_index": 85,
-      "max_virs": 0.9999,
-      "count": 12,
-      "peak_share": 0,
+      "cluster_id": 385,
+      "name": "Ali Asker Road",
+      "lat": 12.986264690000002,
+      "lng": 77.5946189,
+      "avg_virs": 0.1203,
+      "severity_index": 23,
+      "max_virs": 0.2958,
+      "count": 10,
+      "peak_share": 0.2,
       "top_vehicle": "CAR",
       "vehicle_mix": {
-        "CAR": 0.4167,
-        "TEMPO": 0.25,
-        "PASSENGER AUTO": 0.1667,
-        "JEEP": 0.0833,
-        "MOTOR CYCLE": 0.0833
+        "CAR": 0.7,
+        "SCOOTER": 0.3
       }
     },
     {
-      "cluster_id": 1147,
-      "name": "Bull Temple Road",
-      "lat": 12.94165565625,
-      "lng": 77.56688220000001,
-      "avg_virs": 0.9997,
-      "severity_index": 81,
-      "max_virs": 0.9997,
-      "count": 16,
-      "peak_share": 0.375,
+      "cluster_id": 465,
+      "name": "60 Feet Road",
+      "lat": 13.063325851707317,
+      "lng": 77.59124807707317,
+      "avg_virs": 0.12,
+      "severity_index": 23,
+      "max_virs": 0.429,
+      "count": 205,
+      "peak_share": 0.0341,
       "top_vehicle": "CAR",
       "vehicle_mix": {
-        "CAR": 0.8125,
-        "SCOOTER": 0.125,
-        "PASSENGER AUTO": 0.0625
+        "CAR": 0.5171,
+        "SCOOTER": 0.2293,
+        "MOTOR CYCLE": 0.1659,
+        "LGV": 0.0439,
+        "PASSENGER AUTO": 0.0195,
+        "VAN": 0.0146,
+        "MOPED": 0.0049,
+        "GOODS AUTO": 0.0049
       }
     },
     {
-      "cluster_id": 349,
-      "name": "Residency Road",
-      "lat": 12.971975640000004,
-      "lng": 77.60692659333333,
-      "avg_virs": 0.9996,
-      "severity_index": 82,
-      "max_virs": 0.9999,
-      "count": 15,
-      "peak_share": 0.0667,
+      "cluster_id": 66,
+      "name": "Central Jail Road",
+      "lat": 12.899432725,
+      "lng": 77.67543250499999,
+      "avg_virs": 0.1188,
+      "severity_index": 24,
+      "max_virs": 0.2923,
+      "count": 20,
+      "peak_share": 0.35,
       "top_vehicle": "SCOOTER",
       "vehicle_mix": {
-        "SCOOTER": 0.3333,
-        "CAR": 0.3333,
-        "MOTOR CYCLE": 0.2667,
-        "PASSENGER AUTO": 0.0667
+        "SCOOTER": 0.3,
+        "PASSENGER AUTO": 0.3,
+        "CAR": 0.3,
+        "MOTOR CYCLE": 0.05,
+        "LGV": 0.05
       }
     }
   ],
@@ -760,12 +1146,35 @@
       "roi_basis": "interim"
     },
     {
+      "cluster_id": 249,
+      "name": "Sampige Road",
+      "lat": 12.999914860227273,
+      "lng": 77.57133174318182,
+      "avg_virs": 0.9051,
+      "severity_index": 49,
+      "max_virs": 0.9412,
+      "count": 88,
+      "peak_share": 0.5795,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.5568,
+        "PASSENGER AUTO": 0.2045,
+        "SCOOTER": 0.1705,
+        "MAXI-CAB": 0.0341,
+        "JEEP": 0.0114,
+        "MOTOR CYCLE": 0.0114,
+        "VAN": 0.0114
+      },
+      "roi": 3.2085,
+      "roi_basis": "interim"
+    },
+    {
       "cluster_id": 405,
       "name": "Gubbi Thotadappa Road",
       "lat": 12.97725085064935,
       "lng": 77.5707397077922,
       "avg_virs": 0.9999,
-      "severity_index": 86,
+      "severity_index": 87,
       "max_virs": 1,
       "count": 77,
       "peak_share": 0.3636,
@@ -776,29 +1185,6 @@
         "CAR": 0.013
       },
       "roi": 2.9701,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 522,
-      "name": "Mysore Road",
-      "lat": 12.953576993148147,
-      "lng": 77.54258197128559,
-      "avg_virs": 0.9998,
-      "severity_index": 85,
-      "max_virs": 0.9999,
-      "count": 54,
-      "peak_share": 0.4815,
-      "top_vehicle": "PASSENGER AUTO",
-      "vehicle_mix": {
-        "PASSENGER AUTO": 0.3333,
-        "SCOOTER": 0.2778,
-        "CAR": 0.1481,
-        "MOTOR CYCLE": 0.1296,
-        "MAXI-CAB": 0.0741,
-        "GOODS AUTO": 0.0185,
-        "MOPED": 0.0185
-      },
-      "roi": 2.9678,
       "roi_basis": "interim"
     },
     {
@@ -867,28 +1253,6 @@
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 1276,
-      "name": "Sarjapura Road",
-      "lat": 12.913024033333333,
-      "lng": 77.68063347619048,
-      "avg_virs": 0.9998,
-      "severity_index": 85,
-      "max_virs": 0.9999,
-      "count": 21,
-      "peak_share": 0.6667,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.6667,
-        "MOTOR CYCLE": 0.0952,
-        "SCOOTER": 0.0952,
-        "GOODS AUTO": 0.0476,
-        "PASSENGER AUTO": 0.0476,
-        "LORRY/GOODS VEHICLE": 0.0476
-      },
-      "roi": 2.5754,
-      "roi_basis": "interim"
-    },
-    {
       "cluster_id": 404,
       "name": "Gubbi Thotadappa Road",
       "lat": 12.977117833333331,
@@ -905,6 +1269,29 @@
         "CAR": 0.0167
       },
       "roi": 2.5347,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 338,
+      "name": "Swamy Vivekananda Road",
+      "lat": 12.99402336888889,
+      "lng": 77.66326784851852,
+      "avg_virs": 0.8423,
+      "severity_index": 74,
+      "max_virs": 0.9999,
+      "count": 270,
+      "peak_share": 0.0556,
+      "top_vehicle": "SCOOTER",
+      "vehicle_mix": {
+        "SCOOTER": 0.6333,
+        "MOTOR CYCLE": 0.2667,
+        "PASSENGER AUTO": 0.037,
+        "CAR": 0.0259,
+        "MAXI-CAB": 0.0185,
+        "MOPED": 0.0148,
+        "GOODS AUTO": 0.0037
+      },
+      "roi": 2.4905,
       "roi_basis": "interim"
     },
     {
@@ -930,22 +1317,51 @@
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 400,
-      "name": "Gubbi Thotadappa Road",
-      "lat": 12.977181127586205,
-      "lng": 77.57084956896551,
-      "avg_virs": 0.9999,
-      "severity_index": 90,
+      "cluster_id": 154,
+      "name": "Outer Ring Road",
+      "lat": 12.926905503333332,
+      "lng": 77.67900204444443,
+      "avg_virs": 0.9542,
+      "severity_index": 55,
       "max_virs": 1,
-      "count": 29,
-      "peak_share": 0.3448,
-      "top_vehicle": "PASSENGER AUTO",
+      "count": 90,
+      "peak_share": 0.0667,
+      "top_vehicle": "CAR",
       "vehicle_mix": {
-        "PASSENGER AUTO": 0.8966,
-        "CAR": 0.069,
-        "SCOOTER": 0.0345
+        "CAR": 0.2889,
+        "PASSENGER AUTO": 0.2889,
+        "MAXI-CAB": 0.2,
+        "SCOOTER": 0.0889,
+        "MOTOR CYCLE": 0.0667,
+        "MOPED": 0.0333,
+        "OTHERS": 0.0222,
+        "VAN": 0.0111
       },
-      "roi": 2.2867,
+      "roi": 2.2957,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 247,
+      "name": "Sampige Road",
+      "lat": 13.000887766326532,
+      "lng": 77.57130280102041,
+      "avg_virs": 0.6479,
+      "severity_index": 40,
+      "max_virs": 0.9265,
+      "count": 98,
+      "peak_share": 0.4898,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.4898,
+        "PASSENGER AUTO": 0.2449,
+        "SCOOTER": 0.1633,
+        "MOTOR CYCLE": 0.051,
+        "LGV": 0.0204,
+        "GOODS AUTO": 0.0102,
+        "VAN": 0.0102,
+        "JEEP": 0.0102
+      },
+      "roi": 2.2177,
       "roi_basis": "interim"
     },
     {
@@ -969,33 +1385,12 @@
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 1313,
-      "name": "BEL Road",
-      "lat": 13.051600483870965,
-      "lng": 77.55213993548386,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 31,
-      "peak_share": 0.2581,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.6129,
-        "SCOOTER": 0.1935,
-        "MOTOR CYCLE": 0.129,
-        "OTHERS": 0.0323,
-        "PASSENGER AUTO": 0.0323
-      },
-      "roi": 2.1799,
-      "roi_basis": "interim"
-    },
-    {
       "cluster_id": 139,
       "name": "Whitefield Road",
       "lat": 12.99582957696026,
       "lng": 77.69506349913065,
       "avg_virs": 0.9999,
-      "severity_index": 87,
+      "severity_index": 88,
       "max_virs": 0.9999,
       "count": 46,
       "peak_share": 0.1304,
@@ -1010,62 +1405,25 @@
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 487,
-      "name": "17th Cross Road",
-      "lat": 12.911997184615386,
-      "lng": 77.6515355923077,
-      "avg_virs": 0.9999,
-      "severity_index": 89,
-      "max_virs": 0.9999,
-      "count": 13,
-      "peak_share": 0.6154,
-      "top_vehicle": "SCOOTER",
+      "cluster_id": 73,
+      "name": "Service Road",
+      "lat": 12.936327643243246,
+      "lng": 77.6924630063063,
+      "avg_virs": 0.8792,
+      "severity_index": 51,
+      "max_virs": 1,
+      "count": 111,
+      "peak_share": 0.009,
+      "top_vehicle": "MAXI-CAB",
       "vehicle_mix": {
-        "SCOOTER": 0.8462,
-        "CAR": 0.1538
+        "MAXI-CAB": 0.2432,
+        "SCOOTER": 0.2342,
+        "PASSENGER AUTO": 0.2342,
+        "MOTOR CYCLE": 0.1712,
+        "CAR": 0.1081,
+        "MOPED": 0.009
       },
-      "roi": 2.1314,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 762,
-      "name": "Outer Ring Road",
-      "lat": 12.996315640496464,
-      "lng": 77.6685342751578,
-      "avg_virs": 0.9999,
-      "severity_index": 87,
-      "max_virs": 0.9999,
-      "count": 18,
-      "peak_share": 0.3889,
-      "top_vehicle": "SCOOTER",
-      "vehicle_mix": {
-        "SCOOTER": 0.3889,
-        "CAR": 0.3333,
-        "PASSENGER AUTO": 0.1667,
-        "PRIVATE BUS": 0.0556,
-        "MOTOR CYCLE": 0.0556
-      },
-      "roi": 2.0446,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 334,
-      "name": "Swamy Vivekananda Road",
-      "lat": 12.993470417647059,
-      "lng": 77.66237252352941,
-      "avg_virs": 0.9999,
-      "severity_index": 89,
-      "max_virs": 0.9999,
-      "count": 17,
-      "peak_share": 0.4118,
-      "top_vehicle": "SCOOTER",
-      "vehicle_mix": {
-        "SCOOTER": 0.5294,
-        "MOTOR CYCLE": 0.3529,
-        "PASSENGER AUTO": 0.0588,
-        "LGV": 0.0588
-      },
-      "roi": 2.0401,
+      "roi": 2.0929,
       "roi_basis": "interim"
     },
     {
@@ -1132,78 +1490,46 @@
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 1147,
-      "name": "Bull Temple Road",
-      "lat": 12.94165565625,
-      "lng": 77.56688220000001,
-      "avg_virs": 0.9997,
-      "severity_index": 81,
-      "max_virs": 0.9997,
-      "count": 16,
-      "peak_share": 0.375,
+      "cluster_id": 74,
+      "name": "Service Road",
+      "lat": 12.937037774444446,
+      "lng": 77.69279443222223,
+      "avg_virs": 0.7767,
+      "severity_index": 48,
+      "max_virs": 1,
+      "count": 90,
+      "peak_share": 0.1111,
       "top_vehicle": "CAR",
       "vehicle_mix": {
-        "CAR": 0.8125,
-        "SCOOTER": 0.125,
-        "PASSENGER AUTO": 0.0625
+        "CAR": 0.3,
+        "PASSENGER AUTO": 0.2778,
+        "MAXI-CAB": 0.2111,
+        "SCOOTER": 0.0889,
+        "MOTOR CYCLE": 0.0889,
+        "TOURIST BUS": 0.0222,
+        "LGV": 0.0111
       },
-      "roi": 1.9472,
+      "roi": 1.9464,
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 1196,
-      "name": "Netta Kalappa Circle",
-      "lat": 12.940292349999998,
-      "lng": 77.57296638999999,
-      "avg_virs": 0.9999,
-      "severity_index": 87,
+      "cluster_id": 292,
+      "name": "Bellary Road",
+      "lat": 13.035530246774195,
+      "lng": 77.58894175967741,
+      "avg_virs": 0.8221,
+      "severity_index": 70,
       "max_virs": 0.9999,
-      "count": 10,
-      "peak_share": 0.6,
+      "count": 62,
+      "peak_share": 0.0968,
       "top_vehicle": "SCOOTER",
       "vehicle_mix": {
-        "SCOOTER": 0.6,
-        "MOTOR CYCLE": 0.3,
-        "PASSENGER AUTO": 0.1
+        "SCOOTER": 0.4194,
+        "MOTOR CYCLE": 0.3387,
+        "PASSENGER AUTO": 0.129,
+        "CAR": 0.1129
       },
-      "roi": 1.9181,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 12,
-      "name": "Gandhi Marg",
-      "lat": 12.957235152380953,
-      "lng": 77.51862588095238,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 21,
-      "peak_share": 0.2381,
-      "top_vehicle": "SCOOTER",
-      "vehicle_mix": {
-        "SCOOTER": 0.619,
-        "MOTOR CYCLE": 0.2381,
-        "CAR": 0.1429
-      },
-      "roi": 1.9133,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 1254,
-      "name": "Banaswadi Road",
-      "lat": 12.999629347619045,
-      "lng": 77.62520291428571,
-      "avg_virs": 0.9999,
-      "severity_index": 90,
-      "max_virs": 1,
-      "count": 21,
-      "peak_share": 0.2381,
-      "top_vehicle": "PASSENGER AUTO",
-      "vehicle_mix": {
-        "PASSENGER AUTO": 0.7143,
-        "CAR": 0.2857
-      },
-      "roi": 1.9133,
+      "roi": 1.8679,
       "roi_basis": "interim"
     },
     {
@@ -1226,161 +1552,214 @@
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 877,
-      "name": "Tumkur Road",
-      "lat": 13.030014324000001,
-      "lng": 77.53815191199999,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 25,
-      "peak_share": 0.08,
+      "cluster_id": 157,
+      "name": null,
+      "lat": 12.926761864705883,
+      "lng": 77.67873526470588,
+      "avg_virs": 0.9388,
+      "severity_index": 53,
+      "max_virs": 0.971,
+      "count": 17,
+      "peak_share": 0.2941,
+      "top_vehicle": "MAXI-CAB",
+      "vehicle_mix": {
+        "MAXI-CAB": 0.4118,
+        "CAR": 0.2353,
+        "PASSENGER AUTO": 0.1765,
+        "MOTOR CYCLE": 0.0588,
+        "SCOOTER": 0.0588,
+        "LGV": 0.0588
+      },
+      "roi": 1.7558,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 228,
+      "name": "9th Main Road",
+      "lat": 12.929408341666663,
+      "lng": 77.58381981666665,
+      "avg_virs": 0.6805,
+      "severity_index": 43,
+      "max_virs": 0.9672,
+      "count": 60,
+      "peak_share": 0.2333,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.4667,
+        "SCOOTER": 0.3,
+        "MOTOR CYCLE": 0.2,
+        "LGV": 0.0167,
+        "PASSENGER AUTO": 0.0167
+      },
+      "roi": 1.725,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 246,
+      "name": "Sampige Road",
+      "lat": 13.00011994814815,
+      "lng": 77.5718340074074,
+      "avg_virs": 0.6829,
+      "severity_index": 42,
+      "max_virs": 0.9412,
+      "count": 27,
+      "peak_share": 0.4444,
       "top_vehicle": "PASSENGER AUTO",
       "vehicle_mix": {
-        "PASSENGER AUTO": 0.52,
-        "CAR": 0.2,
-        "MOTOR CYCLE": 0.12,
-        "LGV": 0.04,
-        "MINI LORRY": 0.04,
-        "PRIVATE BUS": 0.04,
-        "VAN": 0.04
-      },
-      "roi": 1.7592,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 562,
-      "name": "Kasturba Road",
-      "lat": 12.967975323076924,
-      "lng": 77.58832406923077,
-      "avg_virs": 0.9998,
-      "severity_index": 83,
-      "max_virs": 0.9998,
-      "count": 13,
-      "peak_share": 0.3077,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.3846,
-        "PASSENGER AUTO": 0.3077,
-        "SCOOTER": 0.2308,
-        "MOTOR CYCLE": 0.0769
-      },
-      "roi": 1.7252,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 402,
-      "name": "Gubbi Thotadappa Road",
-      "lat": 12.977181414285715,
-      "lng": 77.57073318571429,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 21,
-      "peak_share": 0.0952,
-      "top_vehicle": "PASSENGER AUTO",
-      "vehicle_mix": {
-        "PASSENGER AUTO": 0.9048,
-        "MOTOR CYCLE": 0.0476,
-        "CAR": 0.0476
-      },
-      "roi": 1.6925,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 988,
-      "name": "Doctor B R Ambedkar Veedhi",
-      "lat": 12.979029949999997,
-      "lng": 77.59176942500001,
-      "avg_virs": 0.9999,
-      "severity_index": 89,
-      "max_virs": 0.9999,
-      "count": 12,
-      "peak_share": 0.25,
-      "top_vehicle": "MOTOR CYCLE",
-      "vehicle_mix": {
-        "MOTOR CYCLE": 0.3333,
-        "CAR": 0.25,
-        "SCOOTER": 0.25,
-        "MOPED": 0.1667
-      },
-      "roi": 1.6029,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 1195,
-      "name": "Netta Kalappa Circle",
-      "lat": 12.940250775,
-      "lng": 77.57291892500001,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 16,
-      "peak_share": 0.125,
-      "top_vehicle": "SCOOTER",
-      "vehicle_mix": {
-        "SCOOTER": 0.6875,
-        "CAR": 0.3125
-      },
-      "roi": 1.5935,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 1905,
-      "name": "Swamy Vivekananda Road",
-      "lat": 12.984061300000002,
-      "lng": 77.64075735909091,
-      "avg_virs": 0.9999,
-      "severity_index": 87,
-      "max_virs": 0.9999,
-      "count": 22,
-      "peak_share": 0,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.5,
-        "SCOOTER": 0.2727,
-        "MOTOR CYCLE": 0.1818,
-        "OTHERS": 0.0455
-      },
-      "roi": 1.5676,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 1259,
-      "name": "Banaswadi Road",
-      "lat": 12.9992356,
-      "lng": 77.62475478461539,
-      "avg_virs": 0.9999,
-      "severity_index": 90,
-      "max_virs": 1,
-      "count": 13,
-      "peak_share": 0.1538,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.9231,
-        "PASSENGER AUTO": 0.0769
-      },
-      "roi": 1.5223,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 349,
-      "name": "Residency Road",
-      "lat": 12.971975640000004,
-      "lng": 77.60692659333333,
-      "avg_virs": 0.9996,
-      "severity_index": 82,
-      "max_virs": 0.9999,
-      "count": 15,
-      "peak_share": 0.0667,
-      "top_vehicle": "SCOOTER",
-      "vehicle_mix": {
-        "SCOOTER": 0.3333,
+        "PASSENGER AUTO": 0.3704,
         "CAR": 0.3333,
-        "MOTOR CYCLE": 0.2667,
+        "SCOOTER": 0.1481,
+        "MOTOR CYCLE": 0.1111,
+        "MAXI-CAB": 0.037
+      },
+      "roi": 1.6434,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 652,
+      "name": "D V Gundappa Road",
+      "lat": 12.943800226666665,
+      "lng": 77.57099552666666,
+      "avg_virs": 0.8895,
+      "severity_index": 49,
+      "max_virs": 0.9533,
+      "count": 15,
+      "peak_share": 0.2,
+      "top_vehicle": "SCOOTER",
+      "vehicle_mix": {
+        "SCOOTER": 0.6667,
+        "CAR": 0.2667,
         "PASSENGER AUTO": 0.0667
       },
-      "roi": 1.4782,
+      "roi": 1.4797,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1830,
+      "name": "Mysore Road",
+      "lat": 12.949352408695654,
+      "lng": 77.5371962826087,
+      "avg_virs": 0.8166,
+      "severity_index": 74,
+      "max_virs": 1,
+      "count": 23,
+      "peak_share": 0.1304,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.3478,
+        "GOODS AUTO": 0.1739,
+        "LORRY/GOODS VEHICLE": 0.087,
+        "HGV": 0.087,
+        "VAN": 0.087,
+        "PASSENGER AUTO": 0.087,
+        "TEMPO": 0.0435,
+        "TOURIST BUS": 0.0435,
+        "PRIVATE BUS": 0.0435
+      },
+      "roi": 1.4668,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 499,
+      "name": "Kengeri Main Road",
+      "lat": 12.909901227359736,
+      "lng": 77.47927482382768,
+      "avg_virs": 0.8467,
+      "severity_index": 71,
+      "max_virs": 1,
+      "count": 18,
+      "peak_share": 0.1667,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.6667,
+        "PASSENGER AUTO": 0.1111,
+        "SCOOTER": 0.1111,
+        "MOTOR CYCLE": 0.0556,
+        "VAN": 0.0556
+      },
+      "roi": 1.4543,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1025,
+      "name": "Devaraj Urs Road",
+      "lat": 12.98101390251903,
+      "lng": 77.58869394964451,
+      "avg_virs": 0.8495,
+      "severity_index": 74,
+      "max_virs": 0.9998,
+      "count": 12,
+      "peak_share": 0.3333,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.6667,
+        "MAXI-CAB": 0.0833,
+        "SCOOTER": 0.0833,
+        "PASSENGER AUTO": 0.0833,
+        "MOTOR CYCLE": 0.0833
+      },
+      "roi": 1.4526,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 525,
+      "name": "Mysore Road",
+      "lat": 12.95338648,
+      "lng": 77.54212142000002,
+      "avg_virs": 1,
+      "severity_index": 94,
+      "max_virs": 1,
+      "count": 5,
+      "peak_share": 0.6,
+      "top_vehicle": "PASSENGER AUTO",
+      "vehicle_mix": {
+        "PASSENGER AUTO": 0.8,
+        "MAXI-CAB": 0.2
+      },
+      "roi": 1.4334,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 724,
+      "name": "Kundalahalli Main Road",
+      "lat": 12.962532115384615,
+      "lng": 77.71698721538462,
+      "avg_virs": 0.8307,
+      "severity_index": 45,
+      "max_virs": 0.8872,
+      "count": 13,
+      "peak_share": 0.3077,
+      "top_vehicle": "MAXI-CAB",
+      "vehicle_mix": {
+        "MAXI-CAB": 0.6154,
+        "SCOOTER": 0.1538,
+        "PASSENGER AUTO": 0.0769,
+        "MOTOR CYCLE": 0.0769,
+        "CAR": 0.0769
+      },
+      "roi": 1.4334,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 683,
+      "name": "Service Road",
+      "lat": 12.979027136842106,
+      "lng": 77.69459533947368,
+      "avg_virs": 0.7211,
+      "severity_index": 44,
+      "max_virs": 1,
+      "count": 38,
+      "peak_share": 0.0789,
+      "top_vehicle": "MAXI-CAB",
+      "vehicle_mix": {
+        "MAXI-CAB": 0.5,
+        "CAR": 0.2632,
+        "TEMPO": 0.0789,
+        "MOPED": 0.0789,
+        "SCOOTER": 0.0526,
+        "HGV": 0.0263
+      },
+      "roi": 1.4251,
       "roi_basis": "interim"
     },
     {
@@ -1389,7 +1768,7 @@
       "lat": 12.982350342815291,
       "lng": 77.56290456746166,
       "avg_virs": 1,
-      "severity_index": 92,
+      "severity_index": 93,
       "max_virs": 1,
       "count": 13,
       "peak_share": 0.0769,
@@ -1404,141 +1783,574 @@
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 1111,
-      "name": "Kengeri Main Road",
-      "lat": 12.914074942265046,
-      "lng": 77.48129214809117,
-      "avg_virs": 0.9999,
-      "severity_index": 87,
-      "max_virs": 0.9999,
-      "count": 12,
-      "peak_share": 0.0833,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.5,
-        "PASSENGER AUTO": 0.25,
-        "TEMPO": 0.1667,
-        "SCOOTER": 0.0833
-      },
-      "roi": 1.3892,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 1255,
-      "name": "Banaswadi Road",
-      "lat": 12.999504475,
-      "lng": 77.62509994166668,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 12,
-      "peak_share": 0.0833,
-      "top_vehicle": "CAR",
-      "vehicle_mix": {
-        "CAR": 0.5,
-        "PASSENGER AUTO": 0.4167,
-        "SCOOTER": 0.0833
-      },
-      "roi": 1.3892,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 527,
-      "name": "Mysore Road",
-      "lat": 12.953266164285711,
-      "lng": 77.54205889285716,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 14,
-      "peak_share": 0,
-      "top_vehicle": "PASSENGER AUTO",
-      "vehicle_mix": {
-        "PASSENGER AUTO": 0.5714,
-        "MAXI-CAB": 0.2857,
-        "SCOOTER": 0.0714,
-        "MOTOR CYCLE": 0.0714
-      },
-      "roi": 1.3539,
-      "roi_basis": "interim"
-    },
-    {
-      "cluster_id": 456,
-      "name": "Outer Ring Road",
-      "lat": 13.01729192,
-      "lng": 77.53156249,
-      "avg_virs": 0.9999,
-      "severity_index": 91,
+      "cluster_id": 88,
+      "name": "27th Main Road",
+      "lat": 12.9171732,
+      "lng": 77.6517319,
+      "avg_virs": 1,
+      "severity_index": 92,
       "max_virs": 1,
-      "count": 10,
-      "peak_share": 0.1,
-      "top_vehicle": "CAR",
+      "count": 3,
+      "peak_share": 1,
+      "top_vehicle": "MOTOR CYCLE",
       "vehicle_mix": {
-        "CAR": 0.6,
-        "LGV": 0.1,
-        "HGV": 0.1,
-        "PASSENGER AUTO": 0.1,
-        "MOTOR CYCLE": 0.1
+        "MOTOR CYCLE": 1
       },
-      "roi": 1.3187,
+      "roi": 1.3863,
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 994,
-      "name": "Bellary Road",
-      "lat": 13.02186911,
-      "lng": 77.58434589999999,
-      "avg_virs": 0.9999,
-      "severity_index": 89,
+      "cluster_id": 2108,
+      "name": null,
+      "lat": 12.856745466666666,
+      "lng": 77.66353045,
+      "avg_virs": 1,
+      "severity_index": 97,
+      "max_virs": 1,
+      "count": 6,
+      "peak_share": 0.3333,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.5,
+        "LGV": 0.1667,
+        "GOODS AUTO": 0.1667,
+        "SCOOTER": 0.1667
+      },
+      "roi": 1.2972,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 845,
+      "name": "Service Road",
+      "lat": 13.097314533333332,
+      "lng": 77.59894226060604,
+      "avg_virs": 0.7112,
+      "severity_index": 41,
+      "max_virs": 0.7979,
+      "count": 33,
+      "peak_share": 0.0303,
+      "top_vehicle": "MAXI-CAB",
+      "vehicle_mix": {
+        "MAXI-CAB": 0.7273,
+        "LGV": 0.0606,
+        "SCOOTER": 0.0606,
+        "BUS (BMTC/KSRTC)": 0.0606,
+        "MOTOR CYCLE": 0.0303,
+        "OTHERS": 0.0303,
+        "CAR": 0.0303
+      },
+      "roi": 1.292,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1552,
+      "name": "Outer Ring Road",
+      "lat": 13.007340211764706,
+      "lng": 77.52676323529413,
+      "avg_virs": 0.7778,
+      "severity_index": 49,
+      "max_virs": 1,
+      "count": 17,
+      "peak_share": 0.1176,
+      "top_vehicle": "PRIVATE BUS",
+      "vehicle_mix": {
+        "PRIVATE BUS": 0.4118,
+        "HGV": 0.2353,
+        "LGV": 0.1765,
+        "CAR": 0.0588,
+        "FACTORY BUS": 0.0588,
+        "VAN": 0.0588
+      },
+      "roi": 1.2563,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 514,
+      "name": "Mangammapalaya Road",
+      "lat": 12.906498740476192,
+      "lng": 77.63051383095238,
+      "avg_virs": 0.6516,
+      "severity_index": 40,
+      "max_virs": 0.7844,
+      "count": 42,
+      "peak_share": 0,
+      "top_vehicle": "SCOOTER",
+      "vehicle_mix": {
+        "SCOOTER": 0.4286,
+        "MOTOR CYCLE": 0.2857,
+        "CAR": 0.0952,
+        "LGV": 0.0952,
+        "PASSENGER AUTO": 0.0476,
+        "GOODS AUTO": 0.0238,
+        "HGV": 0.0238
+      },
+      "roi": 1.2254,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1250,
+      "name": "Mysore Road",
+      "lat": 12.9557819,
+      "lng": 77.54605652500001,
+      "avg_virs": 1,
+      "severity_index": 94,
+      "max_virs": 1,
+      "count": 4,
+      "peak_share": 0.5,
+      "top_vehicle": "HGV",
+      "vehicle_mix": {
+        "HGV": 0.25,
+        "LGV": 0.25,
+        "CAR": 0.25,
+        "TEMPO": 0.25
+      },
+      "roi": 1.2071,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 155,
+      "name": "Service Road",
+      "lat": 12.926871129411765,
+      "lng": 77.67832901176472,
+      "avg_virs": 0.8203,
+      "severity_index": 50,
+      "max_virs": 0.971,
+      "count": 17,
+      "peak_share": 0,
+      "top_vehicle": "MAXI-CAB",
+      "vehicle_mix": {
+        "MAXI-CAB": 0.4118,
+        "CAR": 0.2353,
+        "PASSENGER AUTO": 0.1176,
+        "OTHERS": 0.1176,
+        "LORRY/GOODS VEHICLE": 0.0588,
+        "MOTOR CYCLE": 0.0588
+      },
+      "roi": 1.1855,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1322,
+      "name": "Kengeri Main Road",
+      "lat": 12.935468133333334,
+      "lng": 77.49109645555556,
+      "avg_virs": 0.8204,
+      "severity_index": 74,
       "max_virs": 0.9999,
-      "count": 10,
-      "peak_share": 0.1,
+      "count": 9,
+      "peak_share": 0.2222,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.6667,
+        "MOPED": 0.2222,
+        "VAN": 0.1111
+      },
+      "roi": 1.1544,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1630,
+      "name": "Magadi Road",
+      "lat": 12.989113833333334,
+      "lng": 77.50762526666666,
+      "avg_virs": 0.8335,
+      "severity_index": 74,
+      "max_virs": 0.9999,
+      "count": 9,
+      "peak_share": 0.1111,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.7778,
+        "SCOOTER": 0.1111,
+        "JEEP": 0.1111
+      },
+      "roi": 1.0662,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1549,
+      "name": "Outer Ring Road",
+      "lat": 13.0074672,
+      "lng": 77.52696569999999,
+      "avg_virs": 0.6523,
+      "severity_index": 40,
+      "max_virs": 0.8617,
+      "count": 12,
+      "peak_share": 0.1667,
+      "top_vehicle": "VAN",
+      "vehicle_mix": {
+        "VAN": 0.25,
+        "LGV": 0.25,
+        "CAR": 0.1667,
+        "SCHOOL VEHICLE": 0.1667,
+        "TEMPO": 0.0833,
+        "PRIVATE BUS": 0.0833
+      },
+      "roi": 0.976,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1550,
+      "name": "Outer Ring Road",
+      "lat": 13.007421711111112,
+      "lng": 77.52682270000001,
+      "avg_virs": 0.7563,
+      "severity_index": 43,
+      "max_virs": 0.8617,
+      "count": 9,
+      "peak_share": 0.1111,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.2222,
+        "LGV": 0.2222,
+        "HGV": 0.2222,
+        "PRIVATE BUS": 0.2222,
+        "TOURIST BUS": 0.1111
+      },
+      "roi": 0.9675,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 409,
+      "name": "Lalbagh Road",
+      "lat": 12.956316333333334,
+      "lng": 77.58600726666667,
+      "avg_virs": 1,
+      "severity_index": 95,
+      "max_virs": 1,
+      "count": 3,
+      "peak_share": 0.3333,
       "top_vehicle": "CAR",
       "vehicle_mix": {
         "CAR": 1
       },
-      "roi": 1.3187,
+      "roi": 0.9242,
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 1714,
-      "name": "Rajaram Mohan Roy Road",
-      "lat": 12.96751734166667,
-      "lng": 77.59407542500001,
-      "avg_virs": 0.9998,
-      "severity_index": 85,
-      "max_virs": 0.9999,
+      "cluster_id": 51,
+      "name": "Old Madras Road",
+      "lat": 13.008504883333332,
+      "lng": 77.695437575,
+      "avg_virs": 0.6799,
+      "severity_index": 41,
+      "max_virs": 0.8885,
       "count": 12,
       "peak_share": 0,
-      "top_vehicle": "CAR",
+      "top_vehicle": "PASSENGER AUTO",
       "vehicle_mix": {
-        "CAR": 0.4167,
-        "TEMPO": 0.25,
-        "PASSENGER AUTO": 0.1667,
-        "JEEP": 0.0833,
-        "MOTOR CYCLE": 0.0833
+        "PASSENGER AUTO": 0.5,
+        "MOTOR CYCLE": 0.25,
+        "LGV": 0.1667,
+        "SCOOTER": 0.0833
       },
-      "roi": 1.2822,
+      "roi": 0.872,
       "roi_basis": "interim"
     },
     {
-      "cluster_id": 1311,
-      "name": "Vidyaranyapura Road",
-      "lat": 13.056393590909089,
-      "lng": 77.55737823636363,
-      "avg_virs": 0.9999,
-      "severity_index": 88,
-      "max_virs": 0.9999,
-      "count": 11,
+      "cluster_id": 332,
+      "name": "Swamy Vivekananda Road",
+      "lat": 12.9936557,
+      "lng": 77.66245006666666,
+      "avg_virs": 1,
+      "severity_index": 95,
+      "max_virs": 1,
+      "count": 3,
+      "peak_share": 0,
+      "top_vehicle": "SCOOTER",
+      "vehicle_mix": {
+        "SCOOTER": 0.6667,
+        "MAXI-CAB": 0.3333
+      },
+      "roi": 0.6931,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 156,
+      "name": "Service Road",
+      "lat": 12.927174466666669,
+      "lng": 77.6784258,
+      "avg_virs": 0.9734,
+      "severity_index": 57,
+      "max_virs": 0.9894,
+      "count": 3,
       "peak_share": 0,
       "top_vehicle": "CAR",
       "vehicle_mix": {
-        "CAR": 0.6364,
-        "SCOOTER": 0.1818,
-        "VAN": 0.0909,
-        "MOTOR CYCLE": 0.0909
+        "CAR": 0.6667,
+        "PASSENGER AUTO": 0.3333
       },
-      "roi": 1.2423,
+      "roi": 0.6747,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 954,
+      "name": "Mekhri Circle Underpass",
+      "lat": 13.01160075,
+      "lng": 77.585008875,
+      "avg_virs": 0.8365,
+      "severity_index": 71,
+      "max_virs": 1,
+      "count": 4,
+      "peak_share": 0,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.75,
+        "LGV": 0.25
+      },
+      "roi": 0.6731,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 956,
+      "name": "8th Main Road",
+      "lat": 13.010380025,
+      "lng": 77.583453625,
+      "avg_virs": 0.8357,
+      "severity_index": 67,
+      "max_virs": 0.9997,
+      "count": 4,
+      "peak_share": 0,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.75,
+        "PASSENGER AUTO": 0.25
+      },
+      "roi": 0.6725,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 969,
+      "name": "9th Cross Road",
+      "lat": 12.911320900000002,
+      "lng": 77.57401275,
+      "avg_virs": 0.8251,
+      "severity_index": 66,
+      "max_virs": 0.9995,
+      "count": 4,
+      "peak_share": 0,
+      "top_vehicle": "MOTOR CYCLE",
+      "vehicle_mix": {
+        "MOTOR CYCLE": 0.25,
+        "CAR": 0.25,
+        "TEMPO": 0.25,
+        "PASSENGER AUTO": 0.25
+      },
+      "roi": 0.664,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1373,
+      "name": "Tumkur Road",
+      "lat": 13.01913335,
+      "lng": 77.55332675,
+      "avg_virs": 0.7049,
+      "severity_index": 41,
+      "max_virs": 0.7133,
+      "count": 4,
+      "peak_share": 0,
+      "top_vehicle": "PRIVATE BUS",
+      "vehicle_mix": {
+        "PRIVATE BUS": 0.5,
+        "PASSENGER AUTO": 0.25,
+        "CAR": 0.25
+      },
+      "roi": 0.5672,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 37,
+      "name": "Coles Road",
+      "lat": 12.99607772129964,
+      "lng": 77.61396246714803,
+      "avg_virs": 0.1509,
+      "severity_index": 24,
+      "max_virs": 0.35,
+      "count": 277,
+      "peak_share": 0.0217,
+      "top_vehicle": "SCOOTER",
+      "vehicle_mix": {
+        "SCOOTER": 0.7256,
+        "MOTOR CYCLE": 0.1588,
+        "CAR": 0.1083,
+        "JEEP": 0.0036,
+        "PASSENGER AUTO": 0.0036
+      },
+      "roi": 0.4338,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 465,
+      "name": "60 Feet Road",
+      "lat": 13.063325851707317,
+      "lng": 77.59124807707317,
+      "avg_virs": 0.12,
+      "severity_index": 23,
+      "max_virs": 0.429,
+      "count": 205,
+      "peak_share": 0.0341,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.5171,
+        "SCOOTER": 0.2293,
+        "MOTOR CYCLE": 0.1659,
+        "LGV": 0.0439,
+        "PASSENGER AUTO": 0.0195,
+        "VAN": 0.0146,
+        "MOPED": 0.0049,
+        "GOODS AUTO": 0.0049
+      },
+      "roi": 0.3306,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1417,
+      "name": "North Park Road",
+      "lat": 12.986809954166667,
+      "lng": 77.58026972083333,
+      "avg_virs": 0.1273,
+      "severity_index": 23,
+      "max_virs": 0.6126,
+      "count": 24,
+      "peak_share": 0.2917,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.7917,
+        "SCOOTER": 0.125,
+        "MOTOR CYCLE": 0.0417,
+        "OTHERS": 0.0417
+      },
+      "roi": 0.2646,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 66,
+      "name": "Central Jail Road",
+      "lat": 12.899432725,
+      "lng": 77.67543250499999,
+      "avg_virs": 0.1188,
+      "severity_index": 24,
+      "max_virs": 0.2923,
+      "count": 20,
+      "peak_share": 0.35,
+      "top_vehicle": "SCOOTER",
+      "vehicle_mix": {
+        "SCOOTER": 0.3,
+        "PASSENGER AUTO": 0.3,
+        "CAR": 0.3,
+        "MOTOR CYCLE": 0.05,
+        "LGV": 0.05
+      },
+      "roi": 0.2441,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1157,
+      "name": "Gangamma Temple road",
+      "lat": 13.056884278947368,
+      "lng": 77.54686465789474,
+      "avg_virs": 0.1297,
+      "severity_index": 23,
+      "max_virs": 0.9999,
+      "count": 19,
+      "peak_share": 0.0526,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.7895,
+        "MOTOR CYCLE": 0.1053,
+        "SCOOTER": 0.0526,
+        "PASSENGER AUTO": 0.0526
+      },
+      "roi": 0.2045,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 229,
+      "name": "9th Main Road",
+      "lat": 12.9276733,
+      "lng": 77.58347793333333,
+      "avg_virs": 0.1418,
+      "severity_index": 23,
+      "max_virs": 0.2322,
+      "count": 3,
+      "peak_share": 1,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 1
+      },
+      "roi": 0.1966,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 193,
+      "name": "Vittal Mallya Road",
+      "lat": 12.971684411111111,
+      "lng": 77.59522785555556,
+      "avg_virs": 0.1229,
+      "severity_index": 24,
+      "max_virs": 0.2007,
+      "count": 9,
+      "peak_share": 0.3333,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.4444,
+        "PASSENGER AUTO": 0.4444,
+        "MAXI-CAB": 0.1111
+      },
+      "roi": 0.1887,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 385,
+      "name": "Ali Asker Road",
+      "lat": 12.986264690000002,
+      "lng": 77.5946189,
+      "avg_virs": 0.1203,
+      "severity_index": 23,
+      "max_virs": 0.2958,
+      "count": 10,
+      "peak_share": 0.2,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.7,
+        "SCOOTER": 0.3
+      },
+      "roi": 0.1731,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 600,
+      "name": "Railway Parallel Road",
+      "lat": 12.9969136,
+      "lng": 77.58332643333334,
+      "avg_virs": 0.1266,
+      "severity_index": 24,
+      "max_virs": 0.2116,
+      "count": 3,
+      "peak_share": 0.6667,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 1
+      },
+      "roi": 0.1463,
+      "roi_basis": "interim"
+    },
+    {
+      "cluster_id": 1339,
+      "name": "Anepalaya Main Road",
+      "lat": 12.951797200000001,
+      "lng": 77.60690629999999,
+      "avg_virs": 0.1305,
+      "severity_index": 24,
+      "max_virs": 0.1826,
+      "count": 5,
+      "peak_share": 0.2,
+      "top_vehicle": "CAR",
+      "vehicle_mix": {
+        "CAR": 0.8,
+        "PASSENGER AUTO": 0.2
+      },
+      "roi": 0.1403,
       "roi_basis": "interim"
     }
   ],
@@ -1561,6 +2373,36 @@
     {
       "lat": 12.982350342815291,
       "lng": 77.56290456746166,
+      "weight": 1
+    },
+    {
+      "lat": 12.856745466666666,
+      "lng": 77.66353045,
+      "weight": 1
+    },
+    {
+      "lat": 12.95338648,
+      "lng": 77.54212142000002,
+      "weight": 1
+    },
+    {
+      "lat": 12.9557819,
+      "lng": 77.54605652500001,
+      "weight": 1
+    },
+    {
+      "lat": 12.9171732,
+      "lng": 77.6517319,
+      "weight": 1
+    },
+    {
+      "lat": 12.9936557,
+      "lng": 77.66245006666666,
+      "weight": 1
+    },
+    {
+      "lat": 12.956316333333334,
+      "lng": 77.58600726666667,
       "weight": 1
     },
     {
@@ -1614,134 +2456,204 @@
       "weight": 0.9999
     },
     {
-      "lat": 13.051600483870965,
-      "lng": 77.55213993548386,
-      "weight": 0.9999
+      "lat": 12.927174466666669,
+      "lng": 77.6784258,
+      "weight": 0.9734
     },
     {
-      "lat": 12.977181127586205,
-      "lng": 77.57084956896551,
-      "weight": 0.9999
+      "lat": 12.926905503333332,
+      "lng": 77.67900204444443,
+      "weight": 0.9542
     },
     {
-      "lat": 13.030014324000001,
-      "lng": 77.53815191199999,
-      "weight": 0.9999
+      "lat": 12.926761864705883,
+      "lng": 77.67873526470588,
+      "weight": 0.9388
     },
     {
-      "lat": 12.984061300000002,
-      "lng": 77.64075735909091,
-      "weight": 0.9999
+      "lat": 12.936327643243246,
+      "lng": 77.6924630063063,
+      "weight": 0.8792
     },
     {
-      "lat": 12.957235152380953,
-      "lng": 77.51862588095238,
-      "weight": 0.9999
+      "lat": 12.98101390251903,
+      "lng": 77.58869394964451,
+      "weight": 0.8495
     },
     {
-      "lat": 12.977181414285715,
-      "lng": 77.57073318571429,
-      "weight": 0.9999
+      "lat": 12.909901227359736,
+      "lng": 77.47927482382768,
+      "weight": 0.8467
     },
     {
-      "lat": 12.999629347619045,
-      "lng": 77.62520291428571,
-      "weight": 0.9999
+      "lat": 12.99402336888889,
+      "lng": 77.66326784851852,
+      "weight": 0.8423
     },
     {
-      "lat": 12.996315640496464,
-      "lng": 77.6685342751578,
-      "weight": 0.9999
+      "lat": 13.01160075,
+      "lng": 77.585008875,
+      "weight": 0.8365
     },
     {
-      "lat": 12.993470417647059,
-      "lng": 77.66237252352941,
-      "weight": 0.9999
+      "lat": 13.010380025,
+      "lng": 77.583453625,
+      "weight": 0.8357
     },
     {
-      "lat": 12.940250775,
-      "lng": 77.57291892500001,
-      "weight": 0.9999
+      "lat": 12.989113833333334,
+      "lng": 77.50762526666666,
+      "weight": 0.8335
     },
     {
-      "lat": 12.953266164285711,
-      "lng": 77.54205889285716,
-      "weight": 0.9999
+      "lat": 12.911320900000002,
+      "lng": 77.57401275,
+      "weight": 0.8251
     },
     {
-      "lat": 12.911997184615386,
-      "lng": 77.6515355923077,
-      "weight": 0.9999
+      "lat": 13.035530246774195,
+      "lng": 77.58894175967741,
+      "weight": 0.8221
     },
     {
-      "lat": 12.9992356,
-      "lng": 77.62475478461539,
-      "weight": 0.9999
+      "lat": 12.935468133333334,
+      "lng": 77.49109645555556,
+      "weight": 0.8204
     },
     {
-      "lat": 12.979029949999997,
-      "lng": 77.59176942500001,
-      "weight": 0.9999
+      "lat": 12.926871129411765,
+      "lng": 77.67832901176472,
+      "weight": 0.8203
     },
     {
-      "lat": 12.914074942265046,
-      "lng": 77.48129214809117,
-      "weight": 0.9999
+      "lat": 12.949352408695654,
+      "lng": 77.5371962826087,
+      "weight": 0.8166
     },
     {
-      "lat": 12.999504475,
-      "lng": 77.62509994166668,
-      "weight": 0.9999
+      "lat": 12.999914860227273,
+      "lng": 77.57133174318182,
+      "weight": 0.9051
     },
     {
-      "lat": 13.056393590909089,
-      "lng": 77.55737823636363,
-      "weight": 0.9999
+      "lat": 12.943800226666665,
+      "lng": 77.57099552666666,
+      "weight": 0.8895
     },
     {
-      "lat": 13.01729192,
-      "lng": 77.53156249,
-      "weight": 0.9999
+      "lat": 12.962532115384615,
+      "lng": 77.71698721538462,
+      "weight": 0.8307
     },
     {
-      "lat": 13.02186911,
-      "lng": 77.58434589999999,
-      "weight": 0.9999
+      "lat": 13.007340211764706,
+      "lng": 77.52676323529413,
+      "weight": 0.7778
     },
     {
-      "lat": 12.940292349999998,
-      "lng": 77.57296638999999,
-      "weight": 0.9999
+      "lat": 12.937037774444446,
+      "lng": 77.69279443222223,
+      "weight": 0.7767
     },
     {
-      "lat": 12.953576993148147,
-      "lng": 77.54258197128559,
-      "weight": 0.9998
+      "lat": 13.007421711111112,
+      "lng": 77.52682270000001,
+      "weight": 0.7563
     },
     {
-      "lat": 12.913024033333333,
-      "lng": 77.68063347619048,
-      "weight": 0.9998
+      "lat": 12.979027136842106,
+      "lng": 77.69459533947368,
+      "weight": 0.7211
     },
     {
-      "lat": 12.967975323076924,
-      "lng": 77.58832406923077,
-      "weight": 0.9998
+      "lat": 13.097314533333332,
+      "lng": 77.59894226060604,
+      "weight": 0.7112
     },
     {
-      "lat": 12.96751734166667,
-      "lng": 77.59407542500001,
-      "weight": 0.9998
+      "lat": 13.01913335,
+      "lng": 77.55332675,
+      "weight": 0.7049
     },
     {
-      "lat": 12.94165565625,
-      "lng": 77.56688220000001,
-      "weight": 0.9997
+      "lat": 13.00011994814815,
+      "lng": 77.5718340074074,
+      "weight": 0.6829
     },
     {
-      "lat": 12.971975640000004,
-      "lng": 77.60692659333333,
-      "weight": 0.9996
+      "lat": 12.929408341666663,
+      "lng": 77.58381981666665,
+      "weight": 0.6805
+    },
+    {
+      "lat": 13.008504883333332,
+      "lng": 77.695437575,
+      "weight": 0.6799
+    },
+    {
+      "lat": 13.0074672,
+      "lng": 77.52696569999999,
+      "weight": 0.6523
+    },
+    {
+      "lat": 12.906498740476192,
+      "lng": 77.63051383095238,
+      "weight": 0.6516
+    },
+    {
+      "lat": 13.000887766326532,
+      "lng": 77.57130280102041,
+      "weight": 0.6479
+    },
+    {
+      "lat": 12.99607772129964,
+      "lng": 77.61396246714803,
+      "weight": 0.1509
+    },
+    {
+      "lat": 12.9276733,
+      "lng": 77.58347793333333,
+      "weight": 0.1418
+    },
+    {
+      "lat": 12.951797200000001,
+      "lng": 77.60690629999999,
+      "weight": 0.1305
+    },
+    {
+      "lat": 13.056884278947368,
+      "lng": 77.54686465789474,
+      "weight": 0.1297
+    },
+    {
+      "lat": 12.986809954166667,
+      "lng": 77.58026972083333,
+      "weight": 0.1273
+    },
+    {
+      "lat": 12.9969136,
+      "lng": 77.58332643333334,
+      "weight": 0.1266
+    },
+    {
+      "lat": 12.971684411111111,
+      "lng": 77.59522785555556,
+      "weight": 0.1229
+    },
+    {
+      "lat": 12.986264690000002,
+      "lng": 77.5946189,
+      "weight": 0.1203
+    },
+    {
+      "lat": 13.063325851707317,
+      "lng": 77.59124807707317,
+      "weight": 0.12
+    },
+    {
+      "lat": 12.899432725,
+      "lng": 77.67543250499999,
+      "weight": 0.1188
     }
   ],
   "modelCard": {
