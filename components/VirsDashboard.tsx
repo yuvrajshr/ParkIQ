@@ -41,13 +41,13 @@ export default function VirsDashboard({ aiOpen, onAiClose }: Props) {
       ) : (
         <main className="grid min-h-0 flex-1 grid-cols-[320px_minmax(0,1fr)_360px] gap-6 overflow-hidden px-8 py-6">
           {/* Left — model coverage KPIs + highest-risk clusters */}
-          <aside className="scroll-quiet flex min-h-0 flex-col gap-4 overflow-y-auto">
+          <aside id="tour-virs-kpis" className="scroll-quiet flex min-h-0 flex-col gap-4 overflow-y-auto">
             <VirsKpis summary={data.summary} roi={data.roi} />
           </aside>
 
           {/* Center — heatmap + cluster detail / model card */}
           <section className="flex min-h-0 min-w-0 flex-col gap-4">
-            <div className="panel relative min-h-0 flex-1 overflow-hidden rounded-2xl">
+            <div id="tour-virs-map" className="panel relative min-h-0 flex-1 overflow-hidden rounded-2xl">
               <VirsMap
                 clusters={data.clusters}
                 selectedClusterId={selectedClusterId}
@@ -63,7 +63,7 @@ export default function VirsDashboard({ aiOpen, onAiClose }: Props) {
           </section>
 
           {/* Right — dispatch ROI ranking */}
-          <aside className="flex min-h-0 flex-col gap-4">
+          <aside id="tour-dispatch-queue" className="flex min-h-0 flex-col gap-4">
             <DispatchRoiQueue
               items={data.roi}
               selectedClusterId={selectedClusterId}

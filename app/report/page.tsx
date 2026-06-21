@@ -127,7 +127,7 @@ export default function ReportPage() {
     : { initial: false, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -8 } };
 
   return (
-    <main className="flex min-h-[100dvh] w-full flex-col items-center px-4 pb-12 pt-5">
+    <main id="tour-citizen-form" className="flex min-h-[100dvh] w-full flex-col items-center px-4 pb-12 pt-5">
       <div className="flex w-full max-w-[480px] flex-col">
         {/* Top bar */}
         <header className="mb-6 flex items-center justify-between">

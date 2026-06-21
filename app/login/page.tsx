@@ -148,6 +148,7 @@ export default function LoginPage() {
 
           {/* Card */}
           <form
+            id="tour-login-form"
             onSubmit={handleSubmit}
             noValidate
             className="rounded-3xl bg-neutral-900 border border-white/10 p-8 flex flex-col gap-6"
@@ -291,6 +292,7 @@ export default function LoginPage() {
 
             {/* Submit */}
             <button
+              id="tour-login-submit"
               type="submit"
               disabled={isSubmitting}
               className="rounded-2xl bg-neutral-200 text-neutral-900 w-full h-12 flex items-center justify-center gap-2 font-medium text-sm hover:bg-white transition-colors disabled:opacity-60 disabled:cursor-not-allowed"

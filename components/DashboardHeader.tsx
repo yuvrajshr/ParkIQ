@@ -93,11 +93,12 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
             )}
           </AnimatePresence>
 
-          <ModeToggle />
+          <div id="tour-mode-toggle"><ModeToggle /></div>
 
           <SettingsMenu variant="header" />
 
           <button
+            id="tour-ai-button"
             onClick={onAiToggle}
             aria-label={aiOpen ? t("ai.closeInsights") : t("ai.openInsights")}
             className="flex items-center gap-2 rounded-full px-4 h-9 font-medium text-sm transition-colors"
@@ -185,6 +186,7 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
 
           {/* Real destination — the public reporting channel, with a live new-count badge. */}
           <Link
+            id="tour-reports-link"
             href="/reports"
             className="nav-reports-pill ml-auto flex items-center gap-2 rounded-full px-4 py-2 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >

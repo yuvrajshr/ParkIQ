@@ -8,6 +8,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import LangBootstrap from "@/components/LangBootstrap";
+import OnboardingTour from "@/components/OnboardingTour";
 
 const display = Hanken_Grotesk({
   subsets: ["latin"],
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className="min-h-full" suppressHydrationWarning>
         <LangBootstrap />
+        <OnboardingTour />
         {children}
       </body>
     </html>
