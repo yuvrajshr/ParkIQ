@@ -107,30 +107,43 @@ def _survivors() -> list[dict[str, Any]]:
     return out
 
 
-def clusters() -> list[dict[str, Any]]:
-    """Stratified selection across severity tiers so the dispatch queue always shows a full
-    Critical / High / Medium / Low spread rather than only the top-N by score.
+def _bengaluru_zone(lat: float, lng: float) -> str:
+    if lat > 13.0:   return "North"
+    if lat < 12.93:  return "South"
+    if lng > 77.65:  return "East"
+    if lng < 77.55:  return "West"
+    return "CBD"
 
-    Allocation for TOP_N_CLUSTERS=60: ~20 Critical + 15 High + 15 Medium + 10 Low.
-    Each tier is already sorted by (avg_virs, count) desc from _survivors(), so the
-    most impactful cluster within each tier ranks first.
+
+def clusters() -> list[dict[str, Any]]:
+    """Per-zone stratified selection so every Bengaluru area shows a full
+    Critical / High / Medium / Low spread in the dispatch queue.
+
+    For TOP_N_CLUSTERS=60 across 5 zones: 3 clusters per severity tier per zone
+    (3 × 4 tiers × 5 zones = 60). Within each tier, the highest-impact cluster
+    is taken first (already sorted by avg_virs × count in _survivors).
+    Falls back gracefully when a zone has fewer clusters in a tier.
     """
     survivors = _survivors()
     n = config.TOP_N_CLUSTERS
+    zone_keys = ["CBD", "North", "South", "East", "West"]
 
-    tiers = {
-        "critical": [c for c in survivors if c["severity_index"] >= 75],
-        "high":     [c for c in survivors if 50 <= c["severity_index"] < 75],
-        "mid":      [c for c in survivors if 25 <= c["severity_index"] < 50],
-        "low":      [c for c in survivors if c["severity_index"] < 25],
-    }
+    # Group all survivors by zone
+    by_zone: dict[str, list] = {z: [] for z in zone_keys}
+    for c in survivors:
+        by_zone[_bengaluru_zone(c["lat"], c["lng"])].append(c)
 
-    # Proportional allocation: 33% critical, 25% high, 25% mid, 17% low
-    alloc = [n // 3, n // 4, n // 4, n // 6]
+    # How many clusters to pick per tier per zone
+    n_zones    = len(zone_keys)
+    n_tiers    = 4
+    per_slot   = max(1, n // (n_zones * n_tiers))   # 3 for n=60
 
     result: list[dict[str, Any]] = []
-    for tier_key, slots in zip(["critical", "high", "mid", "low"], alloc):
-        result.extend(tiers[tier_key][: max(1, slots)])
+    for zone in zone_keys:
+        zc = by_zone[zone]
+        for lo, hi in [(75, 101), (50, 75), (25, 50), (0, 25)]:
+            tier = [c for c in zc if lo <= c["severity_index"] < hi]
+            result.extend(tier[:per_slot])
 
     return result[:n]
 
