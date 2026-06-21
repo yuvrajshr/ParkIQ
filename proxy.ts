@@ -14,6 +14,18 @@ function isPublic(pathname: string) {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Citizen-only deployment (parkiq-report.vercel.app): the entire site is the report portal.
+  // Set APP_MODE=citizen on that Vercel project; leave it unset on the dashboard project for the
+  // full auth-gated app. Server-side (not NEXT_PUBLIC_) so it's read at runtime — no rebuild needed.
+  if (process.env.APP_MODE === "citizen") {
+    if (pathname === "/report" || pathname.startsWith("/api/citizen")) {
+      return NextResponse.next();
+    }
+    const url = request.nextUrl.clone();
+    url.pathname = "/report"; // root + every other path serves the report page (no redirect flash)
+    return NextResponse.rewrite(url);
+  }
+
   if (isPublic(pathname)) return NextResponse.next();
 
   // 1. Check Supabase session

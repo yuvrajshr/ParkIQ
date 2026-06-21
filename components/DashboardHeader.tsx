@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { LayoutDashboard, Plus, LogOut, Camera } from "lucide-react";
 import SimClock from "./SimClock";
 import SettingsMenu from "./SettingsMenu";
+import ModeToggle from "./ModeToggle";
 import { useTranslation } from "@/lib/hooks/useTranslation";
 import { useNewReportsCount } from "@/lib/hooks/useNewReportsCount";
+import { useModeStore } from "@/store/useModeStore";
 
 interface Props {
   aiOpen: boolean;
@@ -18,6 +21,7 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
   const [loggingOut, setLoggingOut] = useState(false);
   const { t } = useTranslation();
   const newReports = useNewReportsCount();
+  const mode = useModeStore((s) => s.mode);
 
   const NAV_ITEMS = [
     { id: "command", label: t("nav.command") },
@@ -71,9 +75,25 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
           </div>
         </div>
 
-        {/* Right: sim controls + language + dark toggle + dispatch + logout */}
+        {/* Right: sim controls → mode toggle → settings → ai → dispatch → logout */}
         <div className="flex items-center gap-3">
-          <SimClock />
+          <AnimatePresence initial={false}>
+            {mode === "sim" && (
+              <motion.div
+                key="sim-clock"
+                initial={{ width: 0, opacity: 0, x: 16 }}
+                animate={{ width: "auto", opacity: 1, x: 0 }}
+                exit={{ width: 0, opacity: 0, x: 16 }}
+                transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                style={{ overflow: "hidden" }}
+                className="flex items-center"
+              >
+                <SimClock />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <ModeToggle />
 
           <SettingsMenu variant="header" />
 
@@ -166,8 +186,7 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
           {/* Real destination — the public reporting channel, with a live new-count badge. */}
           <Link
             href="/reports"
-            className="ml-auto flex items-center gap-2 rounded-full px-4 py-2 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-primary"
-            style={{ color: "var(--hdr-nav-inactive)" }}
+            className="nav-reports-pill ml-auto flex items-center gap-2 rounded-full px-4 py-2 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             <Camera className="size-4" />
             {t("nav.reports")}

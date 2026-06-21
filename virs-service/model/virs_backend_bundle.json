@@ -1,0 +1,66 @@
+{
+  "model_file": "/content/virs_model_xgb_semi.json",
+  "model_type": "xgboost.XGBClassifier",
+  "xgboost_version": "3.2.0",
+  "feature_order": [
+    "vt_main_road",
+    "est_vehicle_width",
+    "hour_sin",
+    "hour_cos",
+    "is_peak",
+    "is_weekend",
+    "cluster_density_norm",
+    "frc_vulnerability",
+    "road_vulnerability_score",
+    "junction_degree",
+    "road_effective_lanes",
+    "road_effective_width_m"
+  ],
+  "feature_count": 12,
+  "preprocessing": {
+    "map_weight_function": "Maps vehicle_weight (numeric 0.2-1.0 in this pipeline) to est_vehicle_width via substring checks for 'heavy'/'medium'/'two' -- NOTE: on the current numeric vehicle_weight column this always falls through to the 1.8 default, so est_vehicle_width is effectively constant for all rows in the current dataset.",
+    "highway_to_frc_vuln_lookup": {
+      "motorway": 0.1,
+      "motorway_link": 0.15,
+      "trunk": 0.2,
+      "trunk_link": 0.25,
+      "primary": 0.4,
+      "primary_link": 0.45,
+      "secondary": 0.55,
+      "secondary_link": 0.58,
+      "tertiary": 0.7,
+      "tertiary_link": 0.72,
+      "unclassified": 0.7,
+      "residential": 0.85,
+      "living_street": 0.95,
+      "service": 0.9,
+      "busway": 0.6,
+      "road": 0.7
+    },
+    "frc_vulnerability_default": 0.55,
+    "missing_value_strategy": "median fill, per-column, from training set",
+    "median_fill_values": {
+      "vt_main_road": 0.0,
+      "est_vehicle_width": 1.8,
+      "hour_sin": 0.7071067811865475,
+      "hour_cos": -0.4999999999999998,
+      "is_peak": 0.0,
+      "is_weekend": 0.0,
+      "cluster_density_norm": 0.006837,
+      "frc_vulnerability": 0.7,
+      "road_vulnerability_score": 0.6666666666666667,
+      "junction_degree": 3.0,
+      "road_effective_lanes": 2.0,
+      "road_effective_width_m": 7.0
+    }
+  },
+  "target_definition": "Binary target_class derived from impact_label (Stage 3 unsupervised Isolation Forest score, built from road_vulnerability_score, vehicle_weight, junction_degree): 1 = top 20% (Bottleneck), 0 = bottom 20% (Harmless), middle 60% excluded from training.",
+  "output_score": "Final_VIRS_Score = predict_proba(...)[:, 1], range 0.0-1.0",
+  "validation_auc": 0.9145264729739311,
+  "known_caveats": [
+    "road_vulnerability_score and junction_degree are DIRECT inputs to the impact_label target this model was trained to predict -- validation AUC is inflated by this overlap, not purely a discovered relationship between violation patterns and severity.",
+    "est_vehicle_width is constant (1.8) for all rows on the current numeric vehicle_weight data -- contributes no real signal.",
+    "frc_vulnerability is a hardcoded lookup table, not measured from live TomTom/OSM data, despite earlier code comments.",
+    "Train/test split was a random stratified split, not grouped by cluster_id -- some leakage across nearby/same-location violations between train and validation is possible."
+  ]
+}

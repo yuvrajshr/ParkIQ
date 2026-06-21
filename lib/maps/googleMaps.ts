@@ -24,6 +24,16 @@ export function loadGoogleMaps(): Promise<google.maps.MapsLibrary> {
   return loadPromise;
 }
 
+let visualizationPromise: Promise<google.maps.VisualizationLibrary> | null = null;
+
+/** Load the `visualization` library (HeatmapLayer) once. Used by the VIRS heat layer. */
+export function loadGoogleMapsVisualization(): Promise<google.maps.VisualizationLibrary> {
+  if (visualizationPromise) return visualizationPromise;
+  setOptions({ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "", v: "weekly" });
+  visualizationPromise = importLibrary("visualization");
+  return visualizationPromise;
+}
+
 /** Options common to both maps. Per-map zoom caps and styles are merged on top at creation. */
 export const SHARED_MAP_OPTIONS = {
   center: { lat: 12.955, lng: 77.64 },

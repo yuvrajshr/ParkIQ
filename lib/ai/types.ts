@@ -1,4 +1,4 @@
-import type { ImpactLevel, WardenStatus } from "@/lib/types";
+import type { ImpactLevel, WardenStatus, VirsCluster, VirsSummary, DispatchRoiItem, VirsModelCard } from "@/lib/types";
 
 export interface SnapshotHotspot {
   roadId: string;
@@ -72,5 +72,17 @@ export interface ChatRequest {
   message: string;
   history: ChatMessage[];
   snapshot: SimSnapshot;
+  sessionId?: string;
+}
+
+export interface VirsChatRequest {
+  message: string;
+  history: ChatMessage[];
+  virsContext: {
+    summary: VirsSummary | null;
+    clusters: VirsCluster[];
+    roi: DispatchRoiItem[];
+    modelCard: VirsModelCard | null;
+  };
   sessionId?: string;
 }

@@ -1,0 +1,15 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Real scored dataset — large, dropped in locally (the synthetic fixture IS committed)
+data/virs_final_scored_all.csv
+
+# Cluster road-name lookup — derived from the real CSV + labels parquet via make_cluster_names.py
+# (regenerate after dropping in a new CSV; the service falls back to "Cluster N" if absent)
+data/cluster_names.json
+
+# Local uvicorn log
+_serve.log

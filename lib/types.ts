@@ -150,3 +150,58 @@ export interface CitizenReport {
   /** Top class label for display (violation or top vehicle class). */
   aiLabel: string | null;
 }
+
+// ── VIRS (Violation Impact Risk Score) — served by the Python microservice ──────────────────────
+// The ML model scores individual violations; the dashboard consumes them as per-cluster aggregates.
+// These mirror the FastAPI service responses (lib/virs/client.ts fetches them via /api/virs/*).
+
+/** Which impact engine the dashboard is showing. VIRS is the default; "sim" is the legacy heuristic. */
+export type DashboardMode = "virs" | "sim";
+
+/** One ST-DBSCAN cluster of violations, aggregated from per-violation Final_VIRS_Score. */
+export interface VirsCluster {
+  clusterId: number;
+  name: string | null; // dominant road name for the cluster, null if unknown
+  lat: number;
+  lng: number;
+  avgVirs: number; // mean Final_VIRS_Score across the cluster, 0..1
+  severityIndex: number; // de-saturated VIRS severity 0..100 (mean log-odds scaled across survivors)
+  maxVirs: number;
+  count: number; // violations in the cluster
+  peakShare: number; // fraction during peak hours, 0..1
+  topVehicle: string | null;
+  vehicleMix: Record<string, number>; // vehicle type → share, 0..1
+}
+
+/** A cluster ranked for warden dispatch. `roi` is interim (see service roi.py) until Prophet/travel-time land. */
+export interface DispatchRoiItem extends VirsCluster {
+  roi: number;
+  roiBasis: string; // "interim" until the full formula is wired
+}
+
+/** A weighted point for the map heat layer (cluster centroid weighted by avg VIRS). */
+export interface HeatPoint {
+  lat: number;
+  lng: number;
+  weight: number;
+}
+
+/** City-wide VIRS KPIs (replaces the sim's km/h·parked·rupees row in VIRS mode). */
+export interface VirsSummary {
+  rows: number;
+  clusters: number; // hotspot zones passing the violation floor (the analyzed universe)
+  surfaced: number; // how many of those are plotted/queued (top-N)
+  meanVirs: number;
+  highRiskClusters: number;
+  peakShare: number;
+  dataSource: "real" | "fixture";
+}
+
+/** Honest model metadata shown in the UI (from the bundle's known_caveats). */
+export interface VirsModelCard {
+  modelType: string;
+  xgboostVersion: string;
+  validationAuc: number;
+  targetDefinition: string;
+  knownCaveats: string[];
+}

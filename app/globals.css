@@ -325,6 +325,13 @@ html[lang="kn"] select {
   --hdr-ai-border: rgba(27, 95, 176, 0.22);
   --hdr-ai-fg: var(--color-primary);
   --hdr-ai-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  /* Citizen Reports pill — tinted to match its own live-count badge (accent). */
+  --hdr-reports-bg: rgba(242, 169, 0, 0.12);
+  --hdr-reports-bg-hover: rgba(242, 169, 0, 0.2);
+  --hdr-reports-border: rgba(242, 169, 0, 0.45);
+  --hdr-reports-border-hover: rgba(242, 169, 0, 0.65);
+  --hdr-reports-fg: #8a5e00;
+  --hdr-reports-shadow: 0 4px 14px -5px rgba(242, 169, 0, 0.5);
 }
 
 html.dark {
@@ -343,6 +350,37 @@ html.dark {
   --hdr-ai-border: rgba(255, 255, 255, 0.18);
   --hdr-ai-fg: #fafafa;
   --hdr-ai-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --hdr-reports-bg: rgba(242, 169, 0, 0.16);
+  --hdr-reports-bg-hover: rgba(242, 169, 0, 0.26);
+  --hdr-reports-border: rgba(242, 169, 0, 0.45);
+  --hdr-reports-border-hover: rgba(242, 169, 0, 0.65);
+  --hdr-reports-fg: #f2a900;
+  --hdr-reports-shadow: 0 4px 16px -6px rgba(242, 169, 0, 0.55);
+}
+
+/* Citizen Reports nav pill — the one non-tab destination, raised off the bar so
+   it reads as a call to action rather than another tab. */
+.nav-reports-pill {
+  background: var(--hdr-reports-bg);
+  border: 1px solid var(--hdr-reports-border);
+  color: var(--hdr-reports-fg);
+  box-shadow: var(--hdr-reports-shadow);
+}
+.nav-reports-pill:hover {
+  background: var(--hdr-reports-bg-hover);
+  border-color: var(--hdr-reports-border-hover);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nav-reports-pill {
+    transition: background-color 180ms ease, border-color 180ms ease,
+      box-shadow 180ms ease, transform 180ms ease;
+  }
+  .nav-reports-pill:hover {
+    transform: translateY(-1px);
+  }
+  .nav-reports-pill:active {
+    transform: translateY(0);
+  }
 }
 
 /* Theme-conditional elements (e.g. sun/moon icon) — both render server-side,

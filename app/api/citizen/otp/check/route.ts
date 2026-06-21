@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     sameSite: "lax",
     path: "/",
     maxAge: 60 * 60,
-    secure: false,
+    secure: process.env.NODE_ENV === "production",
   });
   // Consume the challenge so the code can't be replayed.
   response.cookies.set(OTP_CHALLENGE_COOKIE, "", { path: "/", maxAge: 0 });

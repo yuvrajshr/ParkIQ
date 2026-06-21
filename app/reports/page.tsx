@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Radio, Inbox } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { mapReport, type CitizenReportRow } from "@/lib/citizen/mapReport";
+import { dateGroup } from "@/lib/citizen/timeAgo";
 import { REPORT_STATUSES, canTransition } from "@/lib/citizen/reportStatus";
 import type { CitizenReport, ReportStatus } from "@/lib/types";
 import ReportCard from "@/components/reports/ReportCard";
@@ -175,7 +176,8 @@ export default function ReportsPage() {
                 </span>
                 <p className="text-[13px] leading-relaxed text-muted">{t("reports.empty")}</p>
               </div>
-            ) : (
+            ) : filter === "new" ? (
+              /* New tab — flat chronological list */
               <ul className="flex flex-col gap-2">
                 <AnimatePresence initial={false}>
                   {filtered.map((r) => (
@@ -192,6 +194,9 @@ export default function ReportsPage() {
                   ))}
                 </AnimatePresence>
               </ul>
+            ) : (
+              /* Reviewed / Resolved / Dismissed — grouped by date */
+              <DateGroupedList reports={filtered} selectedId={selectedId} onSelect={setSelectedId} />
             )}
           </div>
         </aside>
@@ -274,5 +279,69 @@ function FilterChip({
         </span>
       )}
     </button>
+  );
+}
+
+/** Groups reports by date and renders section headers between groups. */
+function DateGroupedList({
+  reports,
+  selectedId,
+  onSelect,
+}: {
+  reports: CitizenReport[];
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+}) {
+  const { t } = useTranslation();
+
+  // Build ordered groups. Reports are already sorted by createdAt desc from the query.
+  const groups = useMemo(() => {
+    const map = new Map<string, CitizenReport[]>();
+    for (const r of reports) {
+      const g = dateGroup(r.createdAt);
+      const label = g.key ? g.key : g.label!;
+      if (!map.has(label)) map.set(label, []);
+      map.get(label)!.push(r);
+    }
+    return Array.from(map.entries());
+  }, [reports]);
+
+  return (
+    <div className="flex flex-col gap-3">
+      {groups.map(([groupKey, items]) => {
+        // If groupKey is an i18n key (starts with "reports."), translate it; otherwise use as-is.
+        const heading = groupKey.startsWith("reports.")
+          ? t(groupKey as Parameters<typeof t>[0])
+          : groupKey;
+
+        return (
+          <section key={groupKey}>
+            <div className="sticky top-0 z-10 flex items-center gap-2 px-1 pb-1.5 pt-1">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+                {heading}
+              </span>
+              <span className="tnum text-[10px] text-faint">{items.length}</span>
+              <span className="h-px flex-1 bg-line" />
+            </div>
+            <ul className="flex flex-col gap-2">
+              <AnimatePresence initial={false}>
+                {items.map((r) => (
+                  <motion.li
+                    key={r.id}
+                    layout
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 480, damping: 38 }}
+                  >
+                    <ReportCard report={r} selected={r.id === selectedId} onSelect={onSelect} />
+                  </motion.li>
+                ))}
+              </AnimatePresence>
+            </ul>
+          </section>
+        );
+      })}
+    </div>
   );
 }
