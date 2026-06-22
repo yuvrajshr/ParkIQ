@@ -15,9 +15,11 @@ DATA_DIR = Path(os.environ.get("VIRS_DATA_DIR", SERVICE_ROOT / "data"))
 MODEL_PATH = MODEL_DIR / "virs_model_xgb_semi.json"
 BUNDLE_PATH = MODEL_DIR / "virs_backend_bundle.json"
 
-# Real scored dataset (dropped in when ready); fixture is the committed dev stand-in.
-REAL_SCORED_PATH = DATA_DIR / "virs_final_scored_all.csv"
-FIXTURE_SCORED_PATH = DATA_DIR / "fixture_scored.csv"
+# Real scored dataset — parquet preferred (smaller, faster); CSV kept as legacy fallback.
+REAL_SCORED_PARQUET = DATA_DIR / "virs_final_scored_all.parquet"
+REAL_SCORED_PATH    = DATA_DIR / "virs_final_scored_all.csv"
+FIXTURE_SCORED_PARQUET = DATA_DIR / "fixture_scored.parquet"
+FIXTURE_SCORED_PATH    = DATA_DIR / "fixture_scored.csv"
 
 # Static cluster_id -> road name lookup (built by make_cluster_names.py from the labels parquet).
 CLUSTER_NAMES_PATH = DATA_DIR / "cluster_names.json"

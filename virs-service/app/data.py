@@ -23,9 +23,13 @@ HIGH_RISK_THRESHOLD = 0.70
 
 
 def _resolve_path() -> tuple[str, str]:
-    """Return (path, source) — prefer the real scored dataset, fall back to the fixture."""
+    """Return (path, source) — parquet preferred over CSV; real data over fixture."""
+    if config.REAL_SCORED_PARQUET.exists():
+        return str(config.REAL_SCORED_PARQUET), "real"
     if config.REAL_SCORED_PATH.exists():
         return str(config.REAL_SCORED_PATH), "real"
+    if config.FIXTURE_SCORED_PARQUET.exists():
+        return str(config.FIXTURE_SCORED_PARQUET), "fixture"
     return str(config.FIXTURE_SCORED_PATH), "fixture"
 
 
@@ -40,7 +44,7 @@ def _names() -> dict[str, str]:
 @lru_cache(maxsize=1)
 def _load() -> tuple[pd.DataFrame, str]:
     path, source = _resolve_path()
-    df = pd.read_csv(path)
+    df = pd.read_parquet(path) if path.endswith(".parquet") else pd.read_csv(path)
     missing = [c for c in REQUIRED_COLS if c not in df.columns]
     if missing:
         raise ValueError(f"Scored dataset {path} missing columns: {missing}")
