@@ -332,6 +332,12 @@ html[lang="kn"] select {
   --hdr-reports-border-hover: rgba(242, 169, 0, 0.65);
   --hdr-reports-fg: #8a5e00;
   --hdr-reports-shadow: 0 4px 14px -5px rgba(242, 169, 0, 0.5);
+
+  --hdr-report-bg: var(--color-primary);
+  --hdr-report-bg-hover: var(--color-primary-ink);
+  --hdr-report-fg: #ffffff;
+  --hdr-report-shadow: 0 6px 18px -6px rgba(27, 95, 176, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 html.dark {
@@ -356,6 +362,12 @@ html.dark {
   --hdr-reports-border-hover: rgba(242, 169, 0, 0.65);
   --hdr-reports-fg: #f2a900;
   --hdr-reports-shadow: 0 4px 16px -6px rgba(242, 169, 0, 0.55);
+
+  --hdr-report-bg: var(--color-primary);
+  --hdr-report-bg-hover: var(--color-primary-ink);
+  --hdr-report-fg: #ffffff;
+  --hdr-report-shadow: 0 6px 20px -7px rgba(59, 130, 212, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
 /* Citizen Reports nav pill — the one non-tab destination, raised off the bar so
@@ -379,6 +391,30 @@ html.dark {
     transform: translateY(-1px);
   }
   .nav-reports-pill:active {
+    transform: translateY(0);
+  }
+}
+
+/* Generate Report — primary tool action, filled brand-blue so it reads as the
+   main call to action, distinct from the amber Citizen Reports alert pill. */
+.nav-report-pill {
+  background: var(--hdr-report-bg);
+  color: var(--hdr-report-fg);
+  border: 1px solid transparent;
+  box-shadow: var(--hdr-report-shadow);
+}
+.nav-report-pill:hover {
+  background: var(--hdr-report-bg-hover);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nav-report-pill {
+    transition: background-color 180ms ease, box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+  .nav-report-pill:hover {
+    transform: translateY(-1px);
+  }
+  .nav-report-pill:active {
     transform: translateY(0);
   }
 }

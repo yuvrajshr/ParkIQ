@@ -188,7 +188,7 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
           <Link
             id="tour-report-builder-link"
             href="/report-builder"
-            className="ml-auto flex items-center gap-2 rounded-full border border-line px-4 py-2 font-semibold text-ink-soft transition-colors hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="nav-report-pill ml-auto flex items-center gap-2 rounded-full px-4 py-2 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             <FileText className="size-4" />
             {t("nav.generateReport")}
