@@ -1,0 +1,31 @@
+services:
+  virs:
+    build: ./virs-service
+    expose:
+      - "8000"
+    volumes:
+      - ./virs-service/data:/app/data
+    networks:
+      - parkiq-net
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+    env_file: .env
+    environment:
+      VIRS_SERVICE_URL: http://virs:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - virs
+    networks:
+      - parkiq-net
+    restart: unless-stopped
+
+networks:
+  parkiq-net:

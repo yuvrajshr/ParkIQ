@@ -91,6 +91,7 @@
   "wardens.statusOnSite": "On site",
   "wardens.statusOff": "Off duty",
   "nav.reports": "Citizen Reports",
+  "nav.generateReport": "Generate Report",
   "map.seeViolations": "See violations",
   "violations.eyebrow": "Live Camera Feed",
   "violations.all": "All",

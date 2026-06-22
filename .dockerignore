@@ -1,0 +1,12 @@
+node_modules
+.next
+.env*
+*.log
+.git
+.gitignore
+virs-service
+temporary screenshots
+verify-*.mjs
+shoot-*.mjs
+*.png
+README.md

@@ -1,7 +1,9 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useMemo, useRef, useState } from "react";
-import dynamic from "next/dynamic";
+import dynamicImport from "next/dynamic";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Radio, Inbox } from "lucide-react";
@@ -15,7 +17,7 @@ import ReportDetail from "@/components/reports/ReportDetail";
 import SettingsMenu from "@/components/SettingsMenu";
 import { useTranslation } from "@/lib/hooks/useTranslation";
 
-const ReportsMap = dynamic(() => import("@/components/reports/ReportsMap"), {
+const ReportsMap = dynamicImport(() => import("@/components/reports/ReportsMap"), {
   ssr: false,
   loading: () => <div className="h-full w-full bg-surface-2" />,
 });
