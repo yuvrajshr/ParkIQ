@@ -1,14 +1,15 @@
 import type { CitizenReport } from "@/lib/types";
 
 /** Demo citizen reports seeded at real Bengaluru road coordinates.
- *  Shown on the Reports map when no live Supabase data exists yet. */
+ *  Photos use Google Street View Static API at the exact lat/lng — real street-level imagery. */
 
 function hoursAgo(h: number): string {
   return new Date(Date.now() - h * 60 * 60 * 1000).toISOString();
 }
 
-function photo(label: string, bg = "111827", fg = "4ade80"): string {
-  return `https://placehold.co/800x600/${bg}/${fg}?text=${encodeURIComponent(label)}`;
+function streetView(lat: number, lng: number, heading: number, pitch = 10): string {
+  const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
+  return `https://maps.googleapis.com/maps/api/streetview?size=800x600&location=${lat},${lng}&heading=${heading}&fov=90&pitch=${pitch}&key=${key}`;
 }
 
 export const DEMO_REPORTS: CitizenReport[] = [
@@ -20,7 +21,7 @@ export const DEMO_REPORTS: CitizenReport[] = [
     lat: 12.9758,
     lng: 77.6096,
     accuracyM: 8,
-    photoUrl: photo("Double Parking\nMG Road", "0f172a", "f97316"),
+    photoUrl: streetView(12.9758, 77.6096, 90),
     snappedRoadId: "mg-road-metro",
     snappedRoadName: "MG Road",
     snappedZone: "Central",
@@ -40,7 +41,7 @@ export const DEMO_REPORTS: CitizenReport[] = [
     lat: 12.9831,
     lng: 77.6089,
     accuracyM: 12,
-    photoUrl: photo("Bus Stop Blocked\nCommercial Street", "0f172a", "ef4444"),
+    photoUrl: streetView(12.9831, 77.6089, 180),
     snappedRoadId: "commercial-street",
     snappedRoadName: "Commercial Street",
     snappedZone: "Central",
@@ -60,7 +61,7 @@ export const DEMO_REPORTS: CitizenReport[] = [
     lat: 12.9720,
     lng: 77.6415,
     accuracyM: 15,
-    photoUrl: photo("Wrong Parking\nIndiranagar 100ft Road", "0f172a", "facc15"),
+    photoUrl: streetView(12.9720, 77.6415, 270),
     snappedRoadId: "indiranagar-100ft",
     snappedRoadName: "Indiranagar 100 Feet Road",
     snappedZone: "East",
@@ -80,7 +81,7 @@ export const DEMO_REPORTS: CitizenReport[] = [
     lat: 12.9752,
     lng: 77.6049,
     accuracyM: 10,
-    photoUrl: photo("Footpath Blocked\nChurch Street", "0f172a", "a78bfa"),
+    photoUrl: streetView(12.9752, 77.6049, 0),
     snappedRoadId: "church-street",
     snappedRoadName: "Church Street",
     snappedZone: "Central",
@@ -100,7 +101,7 @@ export const DEMO_REPORTS: CitizenReport[] = [
     lat: 12.9354,
     lng: 77.6228,
     accuracyM: 20,
-    photoUrl: photo("Wrong Parking\nKoramangala 80ft Road", "0f172a", "34d399"),
+    photoUrl: streetView(12.9354, 77.6228, 90),
     snappedRoadId: "koramangala-80ft",
     snappedRoadName: "Koramangala 80 Feet Road",
     snappedZone: "South East",
@@ -120,7 +121,7 @@ export const DEMO_REPORTS: CitizenReport[] = [
     lat: 12.9785,
     lng: 77.6383,
     accuracyM: 9,
-    photoUrl: photo("Driveway Blocked\nCMH Road", "0f172a", "38bdf8"),
+    photoUrl: streetView(12.9785, 77.6383, 90),
     snappedRoadId: "cmh-road",
     snappedRoadName: "CMH Road",
     snappedZone: "East",
@@ -140,7 +141,7 @@ export const DEMO_REPORTS: CitizenReport[] = [
     lat: 12.9721,
     lng: 77.6071,
     accuracyM: 11,
-    photoUrl: photo("Double Parking\nBrigade Road", "0f172a", "f97316"),
+    photoUrl: streetView(12.9721, 77.6071, 270),
     snappedRoadId: "brigade-road",
     snappedRoadName: "Brigade Road",
     snappedZone: "Central",
@@ -160,7 +161,7 @@ export const DEMO_REPORTS: CitizenReport[] = [
     lat: 12.9252,
     lng: 77.5832,
     accuracyM: 16,
-    photoUrl: photo("Wrong Parking\nJayanagar 4th Block", "0f172a", "4ade80"),
+    photoUrl: streetView(12.9252, 77.5832, 180),
     snappedRoadId: "jayanagar-4th",
     snappedRoadName: "Jayanagar 4th Block",
     snappedZone: "South",
