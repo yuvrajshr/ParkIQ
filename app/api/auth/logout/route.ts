@@ -11,9 +11,7 @@ export async function POST() {
     await supabase.auth.signOut();
   }
 
-  const response = NextResponse.redirect(
-    new URL("/login", process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  );
+  const response = NextResponse.json({ ok: true });
   response.cookies.set("auth-token", "", {
     httpOnly: true,
     sameSite: "strict",
