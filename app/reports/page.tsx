@@ -47,7 +47,8 @@ export default function ReportsPage() {
       .then(({ data }) => {
         if (!active) return;
         const live = data ? (data as CitizenReportRow[]).map(mapReport) : [];
-        setReports(live.length > 0 ? live : DEMO_REPORTS);
+        const liveIds = new Set(live.map((r) => r.id));
+        setReports([...live, ...DEMO_REPORTS.filter((d) => !liveIds.has(d.id))]);
       });
 
     const channel = supabase
@@ -55,10 +56,12 @@ export default function ReportsPage() {
       .on("postgres_changes", { event: "*", schema: "public", table: "citizen_reports" }, (payload) => {
         if (payload.eventType === "INSERT") {
           const rep = mapReport(payload.new as CitizenReportRow);
-          // On first real INSERT, drop demo data and switch to live-only feed.
           setReports((prev) => {
-            const withoutDemo = prev.filter((p) => !p.id.startsWith("demo-"));
-            return withoutDemo.some((p) => p.id === rep.id) ? withoutDemo : [rep, ...withoutDemo];
+            if (prev.some((p) => p.id === rep.id)) return prev;
+            // Prepend real report; keep demo reports at the end
+            const demos = prev.filter((p) => p.id.startsWith("demo-"));
+            const live = prev.filter((p) => !p.id.startsWith("demo-"));
+            return [rep, ...live, ...demos];
           });
           setToast(t("reports.newReportToast", { road: rep.snappedRoadName ?? "—" }));
         } else if (payload.eventType === "UPDATE") {
