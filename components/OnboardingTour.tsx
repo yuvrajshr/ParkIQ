@@ -188,7 +188,13 @@ export function startDashboardTour() {
     },
   ];
 
-  active = driver({ ...COMMON, steps });
+  // Skip steps whose target isn't mounted (e.g. VIRS-only panels while in Sim mode),
+  // so a manually triggered tour never highlights an empty region.
+  const present = steps.filter(
+    (s) => !s.element || typeof s.element !== "string" || !!document.querySelector(s.element),
+  );
+
+  active = driver({ ...COMMON, steps: present });
   active.drive();
 }
 

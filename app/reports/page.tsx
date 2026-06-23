@@ -9,7 +9,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Radio, Inbox } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { mapReport, type CitizenReportRow } from "@/lib/citizen/mapReport";
-import { DEMO_REPORTS } from "@/lib/seed/demoReports";
 import { dateGroup } from "@/lib/citizen/timeAgo";
 import { REPORT_STATUSES, canTransition } from "@/lib/citizen/reportStatus";
 import type { CitizenReport, ReportStatus } from "@/lib/types";
@@ -45,10 +44,7 @@ export default function ReportsPage() {
       .order("created_at", { ascending: false })
       .limit(100)
       .then(({ data }) => {
-        if (!active) return;
-        const live = data ? (data as CitizenReportRow[]).map(mapReport) : [];
-        const liveIds = new Set(live.map((r) => r.id));
-        setReports([...live, ...DEMO_REPORTS.filter((d) => !liveIds.has(d.id))]);
+        if (active && data) setReports((data as CitizenReportRow[]).map(mapReport));
       });
 
     const channel = supabase
@@ -56,13 +52,7 @@ export default function ReportsPage() {
       .on("postgres_changes", { event: "*", schema: "public", table: "citizen_reports" }, (payload) => {
         if (payload.eventType === "INSERT") {
           const rep = mapReport(payload.new as CitizenReportRow);
-          setReports((prev) => {
-            if (prev.some((p) => p.id === rep.id)) return prev;
-            // Prepend real report; keep demo reports at the end
-            const demos = prev.filter((p) => p.id.startsWith("demo-"));
-            const live = prev.filter((p) => !p.id.startsWith("demo-"));
-            return [rep, ...live, ...demos];
-          });
+          setReports((prev) => (prev.some((p) => p.id === rep.id) ? prev : [rep, ...prev]));
           setToast(t("reports.newReportToast", { road: rep.snappedRoadName ?? "—" }));
         } else if (payload.eventType === "UPDATE") {
           const rep = mapReport(payload.new as CitizenReportRow);
