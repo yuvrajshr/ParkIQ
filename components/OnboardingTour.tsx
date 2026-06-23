@@ -112,7 +112,7 @@ function startLoginTour() {
 
 // ── Tour: police dashboard ────────────────────────────────────────────────────
 
-function startDashboardTour() {
+export function startDashboardTour() {
   destroyActive();
 
   const steps: DriveStep[] = [

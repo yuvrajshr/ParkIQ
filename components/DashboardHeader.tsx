@@ -7,6 +7,7 @@ import { LayoutDashboard, Plus, LogOut, Camera, FileText } from "lucide-react";
 import SimClock from "./SimClock";
 import SettingsMenu from "./SettingsMenu";
 import ModeToggle from "./ModeToggle";
+import { startDashboardTour } from "./OnboardingTour";
 import { useTranslation } from "@/lib/hooks/useTranslation";
 import { useNewReportsCount } from "@/lib/hooks/useNewReportsCount";
 import { useModeStore } from "@/store/useModeStore";
@@ -92,7 +93,7 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
 
           <div id="tour-mode-toggle"><ModeToggle /></div>
 
-          <SettingsMenu variant="header" />
+          <SettingsMenu variant="header" onTour={startDashboardTour} />
 
           <button
             id="tour-ai-button"

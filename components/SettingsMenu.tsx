@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, MapPin } from "lucide-react";
 import { useLangStore, type Lang } from "@/lib/store/langStore";
 
 const LANGS: { value: Lang; label: string }[] = [
@@ -22,9 +22,10 @@ const getDarkSsr = () => false;
 interface Props {
   /** "header" uses the DashboardHeader's --hdr-* token set for the trigger button. */
   variant?: "header" | "page";
+  onTour?: () => void;
 }
 
-export default function SettingsMenu({ variant = "page" }: Props) {
+export default function SettingsMenu({ variant = "page", onTour }: Props) {
   const [open, setOpen] = useState(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -130,6 +131,21 @@ export default function SettingsMenu({ variant = "page" }: Props) {
           );
         })}
       </div>
+
+      {onTour && (
+        <>
+          <div className="my-2.5" style={{ borderTop: "1px solid var(--color-line)" }} />
+          <button
+            type="button"
+            onClick={() => { setOpen(false); onTour(); }}
+            className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-[12.5px] font-medium transition-colors hover:bg-[var(--color-surface-2)] focus-visible:outline-2 focus-visible:outline-primary"
+            style={{ color: "var(--color-ink-soft)" }}
+          >
+            <MapPin className="size-3.5 shrink-0" style={{ color: "var(--color-primary)" }} />
+            Take a tour
+          </button>
+        </>
+      )}
 
       <div className="my-2.5" style={{ borderTop: "1px solid var(--color-line)" }} />
 
