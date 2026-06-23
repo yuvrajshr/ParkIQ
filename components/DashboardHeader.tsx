@@ -25,9 +25,6 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
 
   const NAV_ITEMS = [
     { id: "command", label: t("nav.command") },
-    { id: "map", label: t("nav.liveMap") },
-    { id: "forecast", label: t("nav.forecast") },
-    { id: "review", label: t("nav.afterAction") },
   ];
 
   async function handleLogout() {
@@ -183,6 +180,14 @@ export default function DashboardHeader({ aiOpen, onAiToggle }: Props) {
               </button>
             );
           })}
+
+          <Link
+            href="/violations"
+            className="rounded-full px-4 py-2 font-medium transition-colors"
+            style={{ color: "var(--hdr-nav-inactive)" }}
+          >
+            Violations
+          </Link>
 
           {/* On-demand PDF intelligence report builder. */}
           <Link
