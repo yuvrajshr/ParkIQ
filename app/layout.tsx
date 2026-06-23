@@ -49,6 +49,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // The citizen portal (parkiq-report deployment, or the /report page) defaults to dark;
+  // the police dashboard defaults to light. An explicit user toggle still wins on both.
+  const citizenDefaultDark = process.env.APP_MODE === "citizen";
+
   return (
     <html
       lang="en"
@@ -59,7 +63,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {/* Runs before paint — sets dark class and language from localStorage */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{if(localStorage.getItem('parkiq-dark')==='true')document.documentElement.classList.add('dark')}catch(e){}try{var l=localStorage.getItem('parkiq-lang');if(l==='hi'||l==='kn'||l==='en')document.documentElement.lang=l}catch(e){}})()`,
+            __html: `(function(){try{var d=localStorage.getItem('parkiq-dark');var c=${citizenDefaultDark}||location.pathname==='/report';if(c?d!=='false':d==='true')document.documentElement.classList.add('dark')}catch(e){}try{var l=localStorage.getItem('parkiq-lang');if(l==='hi'||l==='kn'||l==='en')document.documentElement.lang=l}catch(e){}})()`,
           }}
         />
       </head>

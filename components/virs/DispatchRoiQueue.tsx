@@ -47,7 +47,7 @@ const BAND_PRIORITY: Record<Band, number> = { critical: 0, high: 1, mid: 2, low:
 
 export default function DispatchRoiQueue({ items, selectedClusterId, onSelect }: Props) {
   const { t } = useTranslation();
-  const [activeZone, setActiveZone] = useState<Zone>("All");
+  const [activeZone, setActiveZone] = useState<Zone>("CBD");
   const [dropOpen, setDropOpen] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
 

@@ -376,16 +376,36 @@ export default function OnboardingTour() {
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
 
-    if (pathname === "/login" && !localStorage.getItem(KEY_LOGIN)) {
-      localStorage.setItem(KEY_LOGIN, "1");
-      timer = setTimeout(startLoginTour, 700);
-    } else if (pathname === "/" && !localStorage.getItem(KEY_DASH)) {
-      localStorage.setItem(KEY_DASH, "1");
-      // Delay lets the dashboard panels finish rendering their async data
-      timer = setTimeout(startDashboardTour, 1400);
-    } else if (pathname === "/report" && !localStorage.getItem(KEY_CITIZEN)) {
-      localStorage.setItem(KEY_CITIZEN, "1");
-      timer = setTimeout(startCitizenTour, 700);
+    // Login is unambiguous by URL.
+    if (pathname === "/login") {
+      if (!localStorage.getItem(KEY_LOGIN)) {
+        localStorage.setItem(KEY_LOGIN, "1");
+        timer = setTimeout(startLoginTour, 700);
+      }
+      return () => {
+        clearTimeout(timer);
+        destroyActive();
+      };
+    }
+
+    // For "/" and "/report" the rendered experience depends on the deployment:
+    // the citizen project (APP_MODE=citizen) rewrites every route to the report
+    // form, so the browser path is "/" while the page is actually the citizen
+    // portal. Decide by what's on the page, not the URL — otherwise the dashboard
+    // tour leaks onto the citizen site (and the citizen tour never fires there).
+    if (pathname === "/" || pathname === "/report") {
+      // Delay lets the dashboard panels / citizen form finish mounting.
+      timer = setTimeout(() => {
+        const isCitizen = !!document.getElementById("tour-citizen-form");
+        const isDashboard = !!document.getElementById("tour-mode-toggle");
+        if (isCitizen && !localStorage.getItem(KEY_CITIZEN)) {
+          localStorage.setItem(KEY_CITIZEN, "1");
+          startCitizenTour();
+        } else if (isDashboard && !localStorage.getItem(KEY_DASH)) {
+          localStorage.setItem(KEY_DASH, "1");
+          startDashboardTour();
+        }
+      }, 1400);
     }
 
     return () => {
