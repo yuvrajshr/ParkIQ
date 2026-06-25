@@ -19,7 +19,7 @@ Every road has a `sensitivityKmphPerVehicle` — how much speed it loses per ill
 | What | How |
 |---|---|
 | **Score** | Live heat map of hotspots ranked by CIS |
-| **Predict** | XGBoost ML model (AUC 0.9145) flags clusters likely to bottleneck *before* they do |
+| **Predict** | XGBoost ML model (AUC 0.9614) flags clusters likely to bottleneck *before* they do |
 | **Dispatch** | Send the nearest warden to the highest-impact spot first, not the closest complaint |
 | **Learn** | Measure whether speed recovered after dispatch; flag chronic relapses |
 
@@ -28,7 +28,7 @@ Every road has a `sensitivityKmphPerVehicle` — how much speed it loses per ill
 ## Features
 
 ### VIRS — Violation Impact & Risk Scoring
-- **XGBoost ML model** trained on 119,418 real violations across Bengaluru (AUC 0.9145)
+- **XGBoost ML model** trained on 119,418 real violations across Bengaluru (AUC 0.9614)
 - 1,061 violation clusters scored; top 60 surfaced with per-zone stratification (3 Critical · 3 High · 3 Medium · 3 Low per zone × 5 zones)
 - Severity de-saturated via log-odds rescaling — no more "everything is Critical"
 - Native road names from OSM labels parquet (Gubbi Thotadappa Road, Lalbagh Road, etc.)
