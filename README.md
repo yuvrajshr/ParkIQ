@@ -91,7 +91,7 @@ Every road has a `sensitivityKmphPerVehicle` — how much speed it loses per ill
 ┌────────────────────────────────┐
 │  DigitalOcean App Platform     │
 │  FastAPI + XGBoost 3.2.0       │
-│  119,418 rows · AUC 0.9145    │
+│  119,418 rows · AUC 0.9614    │
 │  /health /clusters /score      │
 └────────────────────────────────┘
              +
