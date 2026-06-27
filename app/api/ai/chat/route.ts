@@ -244,7 +244,7 @@ export async function POST(req: Request) {
   const cappedHistory = (body.history ?? []).slice(-8);
 
   const chat = ai.chats.create({
-    model: process.env.GEMINI_MODEL ?? 'gemini-2.0-flash-lite',
+    model: process.env.GEMINI_MODEL ?? 'gemini-3.1-flash-lite',
     config: {
       tools: [{ functionDeclarations: FUNCTION_DECLARATIONS }],
     },

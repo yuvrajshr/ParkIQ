@@ -53,7 +53,7 @@ Note: """${text}"""`;
 
     const result = await Promise.race([
       ai.models.generateContent({
-        model: process.env.GEMINI_MODEL ?? "gemini-2.0-flash-lite",
+        model: process.env.GEMINI_MODEL ?? "gemini-3.1-flash-lite",
         contents: prompt,
         config: { temperature: 0, responseMimeType: "application/json" },
       }),

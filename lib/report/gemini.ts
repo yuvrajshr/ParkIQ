@@ -89,7 +89,7 @@ export async function generateNarrative(data: ReportData): Promise<ReportNarrati
     const ai = new GoogleGenAI({ apiKey });
 
     const result = await ai.models.generateContent({
-      model: process.env.GEMINI_MODEL ?? "gemini-2.0-flash-lite",
+      model: process.env.GEMINI_MODEL ?? "gemini-3.1-flash-lite",
       contents: buildPrompt(data),
     });
     const text = result.text ?? '';
