@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, Type } from '@google/genai';
 import type { FunctionDeclaration, Part } from '@google/genai';
 import type { ChatRequest, SimSnapshot, SnapshotHotspot, SnapshotOutcome } from '@/lib/ai/types';
 import { createClient } from '@/lib/supabase/server';
@@ -110,18 +110,18 @@ const FUNCTION_DECLARATIONS: FunctionDeclaration[] = [
     description:
       'Retrieve historical dispatch events from past sessions. Use when the user asks about past performance, which roads frequently have issues, warden effectiveness, or comparisons across sessions.',
     parameters: {
-      type: 'object',
+      type: Type.OBJECT,
       properties: {
         limit: {
-          type: 'number',
+          type: Type.NUMBER,
           description: 'Number of events to retrieve (default 20, max 50)',
         },
         road_name: {
-          type: 'string',
+          type: Type.STRING,
           description: 'Filter by specific road name (partial match)',
         },
         event_type: {
-          type: 'string',
+          type: Type.STRING,
           enum: ['all', 'cleared', 'relapsed'],
           description: 'Filter by outcome: all (default), cleared, or relapsed',
         },
@@ -133,10 +133,10 @@ const FUNCTION_DECLARATIONS: FunctionDeclaration[] = [
     description:
       'Retrieve KPI snapshots from past sessions to analyse trends in violations, speed loss, and economic impact over time.',
     parameters: {
-      type: 'object',
+      type: Type.OBJECT,
       properties: {
         limit: {
-          type: 'number',
+          type: Type.NUMBER,
           description: 'Number of snapshots to retrieve (default 10)',
         },
       },
@@ -147,10 +147,10 @@ const FUNCTION_DECLARATIONS: FunctionDeclaration[] = [
     description:
       'Retrieve past conversation messages from previous sessions when the user asks what was discussed before.',
     parameters: {
-      type: 'object',
+      type: Type.OBJECT,
       properties: {
         limit: {
-          type: 'number',
+          type: Type.NUMBER,
           description: 'Number of messages to retrieve (default 20)',
         },
       },
@@ -301,7 +301,7 @@ export async function POST(req: Request) {
         let fnResult: unknown;
         try {
           fnResult = await executeFunction(
-            fc.name,
+            fc.name ?? '',
             (fc.args ?? {}) as Record<string, unknown>,
           );
         } catch {
