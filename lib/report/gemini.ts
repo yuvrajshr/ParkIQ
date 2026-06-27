@@ -3,7 +3,7 @@
 // (quota, network, missing key) returns null and the PDF renders a neutral fallback line —
 // generating a report must never hard-fail on the AI step.
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import type { DeltaValue, ReportData, ReportNarrative } from "./types";
 
 function fmtDate(iso: string): string {
@@ -86,13 +86,13 @@ export async function generateNarrative(data: ReportData): Promise<ReportNarrati
   if (!apiKey) return null;
 
   try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: process.env.GEMINI_MODEL ?? "gemini-1.5-flash",
-    });
+    const ai = new GoogleGenAI({ apiKey });
 
-    const result = await model.generateContent(buildPrompt(data));
-    const text = result.response.text();
+    const result = await ai.models.generateContent({
+      model: process.env.GEMINI_MODEL ?? "gemini-2.0-flash-lite",
+      contents: buildPrompt(data),
+    });
+    const text = result.text ?? '';
     if (!text.trim()) return null;
 
     const executiveSummary = extractSection(text, "[EXECUTIVE_SUMMARY]", [

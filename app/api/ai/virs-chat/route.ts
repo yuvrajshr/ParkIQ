@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 import type { VirsChatRequest } from '@/lib/ai/types';
 import type { VirsCluster, DispatchRoiItem, VirsSummary, VirsModelCard } from '@/lib/types';
 
@@ -103,14 +103,12 @@ export async function POST(req: Request) {
   const { summary, clusters, roi, modelCard } = body.virsContext;
   const systemPrompt = buildSystemPrompt(summary, clusters, roi, modelCard);
 
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({
-    model: process.env.GEMINI_MODEL ?? 'gemini-1.5-flash',
-  });
+  const ai = new GoogleGenAI({ apiKey });
 
   const cappedHistory = (body.history ?? []).slice(-8);
 
-  const chat = model.startChat({
+  const chat = ai.chats.create({
+    model: process.env.GEMINI_MODEL ?? 'gemini-2.0-flash-lite',
     history: [
       { role: 'user', parts: [{ text: systemPrompt }] },
       {
@@ -141,17 +139,12 @@ export async function POST(req: Request) {
 
   let result;
   try {
-    result = await chat.sendMessage(body.message);
+    result = await chat.sendMessage({ message: body.message });
   } catch (err) {
     return geminiErrorResponse(err);
   }
 
-  let finalText = '';
-  try {
-    finalText = result.response.text();
-  } catch {
-    finalText = '';
-  }
+  let finalText = result.text ?? '';
   if (!finalText.trim()) {
     finalText = 'I could not generate a response. Please try again.';
   }

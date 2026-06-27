@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 export type ModerationResult =
   | { ok: true }
@@ -38,11 +38,7 @@ export async function moderateNote(note: string | null): Promise<ModerationResul
   if (!apiKey) return { ok: true };
 
   try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: process.env.GEMINI_MODEL ?? "gemini-1.5-flash",
-      generationConfig: { temperature: 0, responseMimeType: "application/json" },
-    });
+    const ai = new GoogleGenAI({ apiKey });
 
     const prompt = `You are a content filter for a Bengaluru traffic-police app where citizens report illegal parking. A citizen attached this optional free-text note to a parking-violation report. The note may be in English, Hindi, or Kannada, in any script or romanized.
 
@@ -56,13 +52,17 @@ Respond with ONLY this JSON and nothing else: {"verdict":"ok"|"profanity"|"irrel
 Note: """${text}"""`;
 
     const result = await Promise.race([
-      model.generateContent(prompt),
+      ai.models.generateContent({
+        model: process.env.GEMINI_MODEL ?? "gemini-2.0-flash-lite",
+        contents: prompt,
+        config: { temperature: 0, responseMimeType: "application/json" },
+      }),
       new Promise<never>((_, reject) =>
         setTimeout(() => reject(new Error("moderation timeout")), AI_TIMEOUT_MS),
       ),
     ]);
 
-    const raw = result.response.text();
+    const raw = result.text ?? '';
     const match = raw.match(/"verdict"\s*:\s*"(ok|profanity|irrelevant)"/i);
     const verdict = match?.[1]?.toLowerCase();
     if (verdict === "profanity") return { ok: false, reason: "profanity" };

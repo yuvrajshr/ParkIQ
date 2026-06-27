@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
-import type { FunctionDeclaration } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
+import type { FunctionDeclaration, Part } from '@google/genai';
 import type { ChatRequest, SimSnapshot, SnapshotHotspot, SnapshotOutcome } from '@/lib/ai/types';
 import { createClient } from '@/lib/supabase/server';
 import {
@@ -110,19 +110,18 @@ const FUNCTION_DECLARATIONS: FunctionDeclaration[] = [
     description:
       'Retrieve historical dispatch events from past sessions. Use when the user asks about past performance, which roads frequently have issues, warden effectiveness, or comparisons across sessions.',
     parameters: {
-      type: SchemaType.OBJECT,
+      type: 'object',
       properties: {
         limit: {
-          type: SchemaType.NUMBER,
+          type: 'number',
           description: 'Number of events to retrieve (default 20, max 50)',
         },
         road_name: {
-          type: SchemaType.STRING,
+          type: 'string',
           description: 'Filter by specific road name (partial match)',
         },
         event_type: {
-          type: SchemaType.STRING,
-          format: 'enum' as const,
+          type: 'string',
           enum: ['all', 'cleared', 'relapsed'],
           description: 'Filter by outcome: all (default), cleared, or relapsed',
         },
@@ -134,10 +133,10 @@ const FUNCTION_DECLARATIONS: FunctionDeclaration[] = [
     description:
       'Retrieve KPI snapshots from past sessions to analyse trends in violations, speed loss, and economic impact over time.',
     parameters: {
-      type: SchemaType.OBJECT,
+      type: 'object',
       properties: {
         limit: {
-          type: SchemaType.NUMBER,
+          type: 'number',
           description: 'Number of snapshots to retrieve (default 10)',
         },
       },
@@ -148,10 +147,10 @@ const FUNCTION_DECLARATIONS: FunctionDeclaration[] = [
     description:
       'Retrieve past conversation messages from previous sessions when the user asks what was discussed before.',
     parameters: {
-      type: SchemaType.OBJECT,
+      type: 'object',
       properties: {
         limit: {
-          type: SchemaType.NUMBER,
+          type: 'number',
           description: 'Number of messages to retrieve (default 20)',
         },
       },
@@ -240,15 +239,15 @@ export async function POST(req: Request) {
     // Non-critical — proceed without history
   }
 
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({
-    model: process.env.GEMINI_MODEL ?? 'gemini-1.5-flash',
-    tools: [{ functionDeclarations: FUNCTION_DECLARATIONS }],
-  });
+  const ai = new GoogleGenAI({ apiKey });
 
   const cappedHistory = (body.history ?? []).slice(-8);
 
-  const chat = model.startChat({
+  const chat = ai.chats.create({
+    model: process.env.GEMINI_MODEL ?? 'gemini-2.0-flash-lite',
+    config: {
+      tools: [{ functionDeclarations: FUNCTION_DECLARATIONS }],
+    },
     history: [
       { role: 'user', parts: [{ text: buildSystemPrompt(body.snapshot, historySummary) }] },
       {
@@ -286,18 +285,18 @@ export async function POST(req: Request) {
 
   let result;
   try {
-    result = await chat.sendMessage(body.message);
+    result = await chat.sendMessage({ message: body.message });
   } catch (err) {
     return geminiErrorResponse(err);
   }
 
   let rounds = 0;
   while (rounds < MAX_FUNCTION_ROUNDS) {
-    const calls = result.response.functionCalls?.() ?? [];
+    const calls = result.functionCalls ?? [];
     if (calls.length === 0) break;
 
     // Execute every function the model requested this round, in parallel.
-    const responseParts = await Promise.all(
+    const responseParts: Part[] = await Promise.all(
       calls.map(async (fc) => {
         let fnResult: unknown;
         try {
@@ -313,7 +312,7 @@ export async function POST(req: Request) {
     );
 
     try {
-      result = await chat.sendMessage(responseParts);
+      result = await chat.sendMessage({ message: responseParts });
     } catch (err) {
       return geminiErrorResponse(err);
     }
@@ -323,12 +322,7 @@ export async function POST(req: Request) {
   // The model may still be requesting tools after the cap (e.g. repeatedly
   // querying empty history). Reading .text() then throws or returns "", so guard
   // it and fall back to an honest message — the client must always get prose.
-  let finalText = '';
-  try {
-    finalText = result.response.text();
-  } catch {
-    finalText = '';
-  }
+  let finalText = result.text ?? '';
   if (!finalText.trim()) {
     finalText =
       "I couldn't pull that from the historical record — there may be no past session data stored yet. Ask me about the live situation and I can help right now.";
