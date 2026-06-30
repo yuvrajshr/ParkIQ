@@ -41,7 +41,7 @@ Every road has a `sensitivityKmphPerVehicle` — how much speed it loses per ill
 
 ### Citizen Violation Reporting
 - Phone OTP → camera capture → GPS snap → Supabase Realtime
-- **Roboflow YOLO** two-model pipeline: vehicle presence gate (YOLOv8n-640) + illegal parking detection (0.91 max confidence)
+- **Roboflow YOLO** two-model pipeline: vehicle presence gate (YOLOv8n-640) + illegal parking detection (0.96 max confidence)
 - **Gemini moderation**: offline blocklist pre-guard + AI classify before any upload
 - Live `NewReportAlert` stacks in the dashboard top-right with amber countdown bar
 
@@ -127,7 +127,7 @@ The VIRS model is an **XGBoost binary classifier** (`binary:logistic`) predictin
 
 - **Training data:** 119,418 georeferenced parking violations, Bengaluru
 - **Features (12):** cluster density, peak-hour share, road FRC vulnerability, estimated vehicle width, and spatial/temporal aggregates
-- **Validation AUC:** 0.9145
+- **Validation AUC:** 0.9645
 - **Severity scoring:** raw sigmoid output de-saturated via log-odds → min-max scaled to 0–100
 - **Clustering:** HDBSCAN spatial clusters, noise-filtered (≥3 violations), per-zone stratified selection
 
